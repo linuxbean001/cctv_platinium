@@ -74,9 +74,8 @@ export default function Home(props) {
       <Container
         maxWidth="xl"
         style={{
-          background: "rgba(181, 225, 243, 0.28)",
+          background: "#f6fcff",
           height: "100vh",
-          padding: "30px",
         }}
       >
         <Box
@@ -93,7 +92,7 @@ export default function Home(props) {
           <Paper variant="outlined" square={true} color="red">
             <h1>PLEASE CHOOSE OPTION</h1>
 
-            <div style={{ display: "inline-block" }}>
+            <div className="MuiFormControl" style={{ display: "block" }}>
               <div className="spceItem">
                 <TextField
                   id="filled-basic"
@@ -144,7 +143,7 @@ export default function Home(props) {
                 return (
                   <Button
                     key={button_name}
-                    style={{ margin: "0 5px" }}
+                    style={{ margin: "0" }}
                     onClick={handleOpen}
                     variant="contained"
                     name={button_name}
