@@ -71,7 +71,7 @@ function Cabling() {
           <Button>CMX</Button>
           <br/>
          
-          <Button variant="contained" onClick={handleClickOpen}>Next</Button>
+          <Button variant="contained" onClick={()=>navigate("/extra_hardware")}>Next</Button>
         </Paper>
       </Box>
 

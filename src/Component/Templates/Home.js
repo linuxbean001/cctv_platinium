@@ -24,17 +24,11 @@ const style = {
 };
 
 export default function Home(props) {
-  console.log("porps", props);
+  console.log("props", props);
   const [open, setOpen] = React.useState(false);
-  const [card, setCard] = React.useState(false);
   const [customerDetails, setCustomerDetail] = React.useState({});
   const [tempButton, setTempButton] = React.useState({});
   const handleClose = () => setOpen(false);
-
-  const csvData = [
-    ["Customer Name", "Business", "email", "address"],
-    [customerDetails.name],
-  ];
 
   const temp_Button = [
     "Home",
@@ -62,7 +56,10 @@ export default function Home(props) {
     setTempButton({ temp_btn: e.target.name });
     // updateData(customerDetails);
     props.addToCartHandler(customerDetails);
+    props.addToLocationHandler(tempButton);
   };
+
+ 
 
   const submitButton = (e) => {
     e.preventDefault();
@@ -153,9 +150,6 @@ export default function Home(props) {
                 );
               })}
             </Stack>
-            <div>
-              <Button onClick={() => setCard(true)}>Card Items</Button>
-            </div>
           </Paper>
           <Modal
             open={open}
@@ -179,32 +173,10 @@ export default function Home(props) {
                 <Button
                   variant="contained"
                   style={{ margin: "0 5px", background: "red" }}
-                  onClick={()=>navigate("/recorder")}
+                  onClick={() => navigate("recorder")}
                 >
                   No
                 </Button>
-              </Box>
-            </Box>
-          </Modal>
-
-          <Modal
-            open={card}
-            onClose={() => setCard(false)}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                color={"red"}
-              >
-                Add Items
-              </Typography>
-              <Box>
-                <p>{props.data.length}</p>
-                <Button>added</Button>
               </Box>
             </Box>
           </Modal>

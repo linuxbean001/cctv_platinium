@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 
 function Templates(props) {
+  console.log(props)
   const [open, setOpen] = React.useState(false);
   const [numValues, setNumValues] = React.useState({});
 

@@ -30,6 +30,8 @@ function Recorder(props) {
 
   const nextPage = (e) => {
     setOpen(false);
+    props.addNvrType(cameraNumbers.value)
+    console.log('cameraNUmber',cameraNumbers.value)
   };
 
   const handleRecorder = (e) => {
@@ -128,7 +130,7 @@ function Recorder(props) {
               <Button
                 variant="contained"
                 disabled={!recorder}
-                onClick={() => navigate("/templates")}
+                onClick={() => navigate("/add_to_cart")}
               >
                 Next
               </Button>

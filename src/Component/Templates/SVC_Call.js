@@ -8,7 +8,7 @@ function SVCCall() {
      const navigate = useNavigate();
   return (
      <Paper variant="outlined" square={true} color="red">
-     <Button variant="contained" onClick={() => navigate("/labor_rate")}>Next</Button>
+     <Button variant="contained" onClick={() => navigate("/add_to_cart")}>Next</Button>
      </Paper>
      )
 }
