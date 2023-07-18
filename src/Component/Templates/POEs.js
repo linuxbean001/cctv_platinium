@@ -4,13 +4,20 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-
 import { useNavigate } from "react-router-dom";
 import Grid from '@mui/material/Grid';
 import Stack from "@mui/material/Stack";
-function POEs() {
+function POEs(props) {
+  const [ports ,setPorts]=React.useState([])
+  console.log(props)
   const navigate = useNavigate();
-
+   console.log(ports)
+   
+  //  console.log('presists',nvrInfoReducer)
+  const  handlePorts=(e)=>{
+    const btnName = e.target.name
+   setPorts(props.getPortsDetails({portsName:btnName}))
+   }
   return (
     <React.Fragment>
       <Container
@@ -52,10 +59,10 @@ function POEs() {
            
             </Grid>
             <Stack spacing={2} direction="row" m={2}>
-             <Button> 4 Port </Button>
-             <Button> 8 Port </Button>
-             <Button> 16 Port </Button>
-             <Button> 24 Port </Button>
+             <Button name=' 4 ports' onClick={handlePorts}> 4 Port </Button>
+             <Button name=' 8 ports' onClick={handlePorts}> 8 Port </Button>
+             <Button name=' 16 ports' onClick={handlePorts}> 16 Port </Button>
+             <Button name=' 24 ports' onClick={handlePorts} > 24 Port </Button>
              </Stack>
             <Button variant="contained" onClick={() => navigate("/hardware")}>
               Next

@@ -39,7 +39,12 @@ export default function Home(props) {
     "Custom",
     "Business",
     "Property Management",
+    'Open Existing'
   ];
+
+  React.useEffect(() => {
+    // localStorage.setItem("userItem", JSON.stringify(customerDetails));
+  }, []);
 
   const handleSubmit = (e) => {
     const { name, value } = e.target;
@@ -49,18 +54,18 @@ export default function Home(props) {
         [name]: value,
       };
     });
+    
   };
   const handleOpen = (e) => {
     e.preventDefault();
-    setOpen(true);
-    setTempButton({ temp_btn: e.target.name });
-    // updateData(customerDetails);
     props.addToCartHandler(customerDetails);
-    props.addToLocationHandler(tempButton);
+    setTempButton({ temp_btn: e.target.name });
+    setOpen(true);
+    console.log(tempButton);
+    props.camera_Location.push(tempButton);
   };
-
- 
-
+  
+  
   const submitButton = (e) => {
     e.preventDefault();
   };

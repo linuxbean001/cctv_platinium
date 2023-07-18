@@ -10,28 +10,51 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
+import { Modal } from "@mui/material/Modal";
 
-function Cameras() {
+function Cameras(props) {
+  console.log(props);
   const [open, setOpen] = React.useState(false);
   const [openNest, setOpenNest] = React.useState(false);
-
-  const cameras_Option = ["PTZ", "NDAA", "Wifi", "Bullets", "LPRS"];
+  const [openInnerModal, setInnerModal] = React.useState(false);
+  const [cameraDetail, setCamerDetail] = React.useState([]);
+  const [cameraModal, setCameraModal] = React.useState([]);
+  const cameras_Option = [
+    "PTZ",
+    "NDAA",
+    "Wifi",
+    "Bullets",
+    "LPRS",
+    "Demo",
+    "Doorbells",
+  ];
 
   const handleClose = () => {
     setOpen(false);
   };
-  const handleOpen = () => {
-    setOpen(true);
+  const handleOpen = (e) => {
+    setCamerDetail({ cameraType: e.target.value });
   };
-  
+
   const handleNestClose = () => {
-    setOpen(false);
+    setOpenNest(true);
   };
   const handleNestOpen = () => {
     setOpen(true);
   };
+  const handleInnerNestClose = () => {
+    setInnerModal(false);
+  };
+  const handleInnerNestOpen = () => {
+    setInnerModal(true);
+  };
+  console.log("cameraDetail", cameraDetail);
 
   const navigate = useNavigate();
+  const navigateNextPage = () => {
+    props.getCameraType(cameraDetail);
+    navigate("/poe_s");
+  };
 
   return (
     <React.Fragment>
@@ -43,14 +66,22 @@ function Cameras() {
           padding: "30px",
         }}
       >
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog open={openNest} onClose={handleClose}>
           <DialogTitle> Tuesstes</DialogTitle>
           <DialogContent>
             <DialogContentText>Total Camera</DialogContentText>
-            <Button color="secondary" onClick={handleNestClose}>Modal 1</Button>
-            <Button color="secondary">Modal 2</Button>
-            <Button color="secondary">Modal 3</Button>
-            <Button color="secondary">Modal 4</Button>
+            <Button color="secondary" onClick={handleNestOpen}>
+              Modal 1
+            </Button>
+            <Button color="secondary" onClick={handleNestOpen}>
+              Modal 2
+            </Button>
+            <Button color="secondary" onClick={handleNestOpen}>
+              Modal 3
+            </Button>
+            <Button color="secondary" onClick={handleNestOpen}>
+              Modal 4
+            </Button>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
@@ -58,20 +89,6 @@ function Cameras() {
           </DialogActions>
         </Dialog>
 
-        <Dialog open={open} onClose={handleClose}>
-        <DialogTitle> Tuesstes</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Total Camera</DialogContentText>
-          <Button color="secondary">Modal 1</Button>
-          <Button color="secondary">Modal 2</Button>
-          <Button color="secondary">Modal 3</Button>
-          <Button color="secondary">Modal 4</Button>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Next</Button>
-        </DialogActions>
-      </Dialog>
         <Box
           sx={{
             marginLeft: 20,
@@ -85,18 +102,64 @@ function Cameras() {
         >
           <Paper variant="outlined" square={true} color="red">
             <h1>Cameras</h1>
-            <Button variant="contained" onClick={() => navigate("/")}>Edit</Button>
-            {cameras_Option.map((types) => {
-              return (
-               <Button onClick={handleOpen} >{types}</Button>
-              );
-            })}
+            <div
+              style={{
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            >
+              <Button variant="contained" onClick={() => navigate("/")}>
+                Edit
+              </Button>
+              {cameras_Option.map((types) => {
+                return (
+                  <Button onClick={handleOpen} value={types} name={types}>
+                    {types}
+                  </Button>
+                );
+              })}
 
-            <Button variant="contained" onClick={() => navigate("/poe_s")}>
-              Next
-            </Button>
+              <Button variant="contained" onClick={navigateNextPage}>
+                Next
+              </Button>
+            </div>
           </Paper>
         </Box>
+
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle> Tuesstes</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Total Camera</DialogContentText>
+            <Button color="secondary" onClick={handleNestClose}>
+              Modal 4
+            </Button>
+            <br />
+            <TextField id="standard-basic" label="QTY" variant="standard" />
+            <TextField id="standard-basic" label="WALL" variant="standard" />
+            <TextField
+              id="standard-basic"
+              label="Junction"
+              variant="standard"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleInnerNestOpen}>Add</Button>
+          </DialogActions>
+        </Dialog>
+
+        {/*add button Modal//nested Modal*/}
+        <Dialog open={openInnerModal} onClose={handleInnerNestClose}>
+          <DialogTitle> Warning </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Less button Brackets than Camera
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Continue Anyway</Button>
+            <Button onClick={handleNestOpen}>Go Back</Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </React.Fragment>
   );

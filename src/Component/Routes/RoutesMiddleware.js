@@ -1,8 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React from "react";
-import Cameras from "./../Templates/Cameras";
-import POEs from "./../Templates/POEs";
-import Hardware from "./../Templates/Hardware";
+
 import Cabling from "../Templates/Cabling";
 import ExtraHardware from "../Templates/ExtraHardware";
 import Special from "../Templates/Special";
@@ -22,10 +20,10 @@ function RoutesMiddleware() {
         <Routes>
           <Route exact path="/" element={<HomeContainer.Home />} />
           <Route exact path="/recorder" element={<HomeContainer.Recorder/>} />
-          <Route exact path="/templates" element={<HomeContainer.Templates />} />
-          <Route exact path="/cameras" element={<Cameras />} />
-          <Route exact path="/poe_s" element={<POEs />} />
-          <Route exact path="/hardware" element={<Hardware />} />
+          <Route exact path="/nvr_info" element={<HomeContainer.NVRINFO />} />
+          <Route exact path="/cameras" element={<HomeContainer.Cameras />} />
+          <Route exact path="/poe_s" element={<HomeContainer.POEs />} />
+          <Route exact path="/hardware" element={<HomeContainer.Hardware />} />
           <Route exact path="/cabling" element={<Cabling />} />
           <Route exact path="/extra_hardware" element={<ExtraHardware />} />
           <Route exact path="/labor_rate" element={<LaborRate />} />

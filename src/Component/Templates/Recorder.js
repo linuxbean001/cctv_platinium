@@ -29,22 +29,31 @@ function Recorder(props) {
   };
 
   const nextPage = (e) => {
+    props.camera_number.push(cameraNumbers);
     setOpen(false);
-    props.addNvrType(cameraNumbers.value)
-    console.log('cameraNUmber',cameraNumbers.value)
   };
 
   const handleRecorder = (e) => {
-    const { name, value } = e.target;
+    const { name } = e.target;
+
     setRecorderType((prev) => {
-      console.log(prev);
       return {
-        ...prev,
-        [name]: value,
+        name,
       };
     });
-  };
 
+    // const nvrType = e.target.name;
+    // setRecorderType(nvrType);
+  };
+  const handleOpen = (e) => {
+    const nvrType = e.target.name;
+    setRecorderType(nvrType);
+
+    navigate("/nvr_info");
+  };
+  props.nvr_type.push(recorder);
+  console.log(cameraNumbers.value);
+  console.log(recorder);
   const navigate = useNavigate();
 
   return (
@@ -73,6 +82,7 @@ function Recorder(props) {
               fullWidth
               variant="standard"
             />
+            <p>$500 per camera</p>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
@@ -98,32 +108,32 @@ function Recorder(props) {
               style={{ width: "90%", margin: "0 auto", display: "flex" }}
             >
               <div className="checkBox_Recorder">
-                <FormControlLabel
-                  control={<Checkbox defaultChecked />}
-                  label="Micro NVR"
-                  color="success"
+                <Button
+                  style={{ margin: "0" }}
+                  onClick={handleOpen}
+                  variant="contained"
                   name="micro_nvr"
-                  value={recorder.micro_nvr || ""}
-                  onChange={handleRecorder}
-                />
-                <FormControlLabel
-                  required
-                  control={<Checkbox />}
-                  label="Mid NVR"
-                  color="success"
-                  name="mic_nvr"
-                  value={recorder.mic_nvr || ""}
-                  onChange={handleRecorder}
-                />
-                <FormControlLabel
-                  required
-                  control={<Checkbox />}
-                  label="Platinum NVR"
-                  color="success"
+                >
+                  Micro Nvr
+                </Button>
+                <Button
+                  style={{ margin: "0" }}
+                  onClick={handleOpen}
+                  variant="contained"
+                  name="mid_nvr"
+                >
+                  Mid Nvr
+                </Button>
+
+                <Button
+                  key="button_name"
+                  style={{ margin: "0" }}
+                  onClick={handleOpen}
+                  variant="contained"
                   name="platinum_nvr"
-                  value={recorder.platinum_nvr || ""}
-                  onChange={handleRecorder}
-                />
+                >
+                  Platinum Nvr
+                </Button>
               </div>
             </FormGroup>
             <div className="btn_pad">

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@mui/material";
 import Container from "@mui/material/Container";
+import reportWebVitals from "./../../reportWebVitals";
 
 const style = {
   position: "absolute",
@@ -15,8 +16,37 @@ const style = {
 };
 
 function AddCart(props) {
-  console.log(props.data[0].cardData);
+  console.log(props);
+
+  const [cartData, setCartData] = React.useState([]);
   const [cartPaper, setCartPaper] = React.useState(false);
+  const [cartItem, setCartItem] = React.useState([]);
+  const [nvrDetails, setNvrDetail] = React.useState([]);
+  console.log("nvrState", nvrDetails);
+  useEffect(() => {
+    // window.localStorage.setItem("myData", JSON.stringify(props));
+    if (
+      !localStorage.getItem("initData") ||
+      JSON.parse(localStorage.getItem("initData")).length === 0
+    ) {
+      window.localStorage.setItem("initData", JSON.stringify(props));
+    }
+
+    setNvrDetail(
+      JSON.parse(
+        JSON.parse(localStorage.getItem("persist:persist_key")).nvrInfoReducer
+      )
+    );
+
+    if (props.userDetail != null) {
+      setCartData({
+        userDetails: props.userDetail,
+        nvr_type: props.nvr_type,
+        camera_Location: props.camera_Location,
+        camera_number: props.camera_number,
+      });
+    }
+  }, []);
 
   const showPaper = () => {
     if (cartPaper == true) {
@@ -26,42 +56,78 @@ function AddCart(props) {
     }
   };
 
-  const itrateData = () => {
-    for (let i = 0; i <= props.data.data.length; i++) {
-      console.log("item", props.data.data[i]);
-    }
-  };
+  const storedData = JSON.parse(localStorage.getItem("initData"));
+  console.log(storedData.userDetail[0].name);
+
+  // console.log(JSON.parse(persist.nvrInfoReducer))
+
   return (
     <div>
-      <Button onClick={showPaper}>Check Cart Item </Button>
-      {cartPaper && (
-        <Container
-          style={{
-            boxShadow: "10px 10px 10px #6a6363",
-            border: "2px solid black",
-            background: "#f6fcff",
-          }}
-        >
-          <h5> cart Items</h5>
-          <table>
-            <tr>
-              <th>Name</th>
-              <th>Business</th>
-              <th>Phone</th>
-              <th>Email</th>
-              <th>Address</th>
-              <th>Camera Location</th>
-            </tr>
-            <tr>
-              <td>{props.data[0].cardData.name}</td>
-              <td>{props.data[0].cardData.business}</td>
-              <td>{props.data[0].cardData.phone}</td>
-              <td>{props.data[0].cardData.email}</td>
-              <td>{props.data[0].cardData.address}</td>
-            </tr>
-          </table>
-        </Container>
-      )}
+      <h5> cart Items</h5>
+
+      <table
+        style={{
+          border: "2px solid forestgreen",
+          width: "800px",
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
+      >
+        <tbody>
+          <tr>
+            <th
+              style={{
+                border_bottom: "1px solid black",
+              }}
+            >
+              Name
+            </th>
+            <th>Business</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Camera Location</th>
+            <th>Nvr Type</th>
+            <th>Total Camera</th>
+          </tr>
+          <tr>
+            <td>{storedData.userDetail[0].name}</td>
+            <td>{storedData.userDetail[0].business}</td>
+            <td>{storedData.userDetail[0].phone}</td>
+            <td>{storedData.userDetail[0].email}</td>
+            <td>{storedData.userDetail[0].address}</td>
+            <td>{storedData.camera_number[0].value}</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>NVR DETAILS</h3>
+      <table
+        style={{
+          border: "2px solid forestgreen",
+          width: "800px",
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
+      >
+        <tbody>
+          <tr>
+            <th>Num </th>
+            <th>Num 1</th>
+            <th>Num 2</th>
+            <th>HOD</th>
+            <th>CPU</th>
+            <th>Licenses</th>
+          </tr>
+
+          <tr>
+            <td>{storedData.userDetail[0].name}</td>
+            <td>{storedData.userDetail[0].business}</td>
+            <td>{storedData.userDetail[0].phone}</td>
+            <td>{storedData.userDetail[0].email}</td>
+            <td>{storedData.userDetail[0].address}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 }

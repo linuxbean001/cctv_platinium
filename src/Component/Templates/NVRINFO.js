@@ -11,9 +11,8 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
 
-
-function Templates(props) {
-  console.log(props)
+function NVRINFO(props) {
+  console.log(props);
   const [open, setOpen] = React.useState(false);
   const [numValues, setNumValues] = React.useState({});
 
@@ -29,15 +28,19 @@ function Templates(props) {
         [name]: value,
       };
     });
+    
   };
+  //
+  // console.log(numValues);
 
   const handleClickOpen = (e) => {
+    props.getNvrDetails(numValues);
     if (numValues.license === "") {
       return {
         message: "Please enter the number of values",
       };
     }
-    console.log(numValues.license);
+
     setOpen(true);
   };
 
@@ -70,21 +73,21 @@ function Templates(props) {
                 <TextField
                   id="outlined-basic"
                   label="Num"
-                  name='num'
+                  name="num"
                   variant="outlined"
                   error={!numValues.num}
                   helperText="please enter the value"
-                  value={numValues.num||''}
+                  value={numValues.num || ""}
                   onChange={handleValues}
                 />
                 <TextField
                   id="outlined-basic"
                   label="Num 1"
-                  name='num_1'
+                  name="num_1"
                   variant="outlined"
                   error={!numValues.num_1}
                   helperText="please enter the value"
-                  value={numValues.num_1||''}
+                  value={numValues.num_1 || ""}
                   onChange={handleValues}
                 />
                 <TextField
@@ -94,7 +97,7 @@ function Templates(props) {
                   variant="outlined"
                   error={!numValues.num_2}
                   helperText="please enter the value"
-                  value={numValues.num_2||''}
+                  value={numValues.num_2 || ""}
                   onChange={handleValues}
                 />
               </div>
@@ -102,11 +105,11 @@ function Templates(props) {
                 <TextField
                   id="outlined-basic"
                   label="HOD"
-                  name='hod'
+                  name="hod"
                   variant="outlined"
                   error={!numValues.hod}
                   helperText="please enter the value"
-                  value={numValues.name||''}
+                  value={numValues.name || ""}
                   onChange={handleValues}
                 />
                 <TextField
@@ -116,7 +119,7 @@ function Templates(props) {
                   name="cpu"
                   required
                   error={!numValues.cpu}
-                  value={numValues.cpu||''}
+                  value={numValues.cpu || ""}
                   helperText="enter license no"
                   onChange={handleValues}
                 />
@@ -127,7 +130,7 @@ function Templates(props) {
                   required
                   name="license"
                   error={!numValues.license}
-                  value={numValues.license||''}
+                  value={numValues.license || ""}
                   helperText="enter license no"
                   onChange={handleValues}
                 />
@@ -168,4 +171,4 @@ function Templates(props) {
   );
 }
 
-export default Templates;
+export default NVRINFO;

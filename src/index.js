@@ -3,16 +3,29 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { legacy_createStore as createStore, combineReducers } from "redux";
+import { legacy_createStore as createStore, combineReducers ,applyMiddleware} from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "./Services/Reducers/index";
-const store = createStore(rootReducer);
-console.log(store);
+import { persistStore, persistReducer } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
+import storage from 'redux-persist/lib/storage'
+
+const persistConfig = {
+  key: "bill_Details",
+  storage,
+};
+
+
+const persistdReducer = persistReducer(persistConfig, rootReducer);
+const store = createStore(persistdReducer);
+const persister = persistStore(store);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <App />
+    <PersistGate loading={null} persistor={persister}>
+      <App />
+    </PersistGate>
   </Provider>
 );
 

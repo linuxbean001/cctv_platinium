@@ -22,15 +22,24 @@ const style = {
   p: 4,
 };
 
-function Hardware() {
+function Hardware(props) {
+  console.log(props)
   const [open, setOpen] = React.useState(false);
-
+  const [hardwarelevel, SetHardwareLevel] = React.useState([])
   const handleClose = () => {
     setOpen(false);
   };
-  const handleOpen = () => {
+  const handleOpen = (e) => {
+    const modalName = e.target.name;
+    SetHardwareLevel({modalName:modalName ,})
     setOpen(true);
   };
+
+  const naviGateButtn=(e)=>{
+    value = e.target.value
+    props.gethardWareDetails(hardwarelevel)
+    navigate("/cabling")
+  }
 
   const navigate = useNavigate();
 
@@ -57,10 +66,10 @@ function Hardware() {
         >
           <Paper variant="outlined" square={true} color="red">
             <h1>Hardware</h1>
-            <Button onClick={handleOpen}>Level 1</Button>
-            <Button onClick={handleOpen}>Level 2</Button>
-            <Button onClick={handleOpen}>Level 3</Button>
-            <Button onClick={handleOpen}>Level 4</Button>
+            <Button onClick={handleOpen} name ='level_1'>Level 1</Button>
+            <Button onClick={handleOpen} name ='level_2'>Level 2</Button>
+            <Button onClick={handleOpen} name ='level_3'>Level 3</Button>
+            <Button onClick={handleOpen} name ='level_4'>Level 4</Button>
           </Paper>
         </Box>
 
@@ -85,6 +94,8 @@ function Hardware() {
                 startAdornment={
                   <InputAdornment position="start">$</InputAdornment>
                 }
+                value={hardwarelevel.amount||""}
+                onChange={handleOpen}
               />
               <p>/camera</p>
             </Typography>
@@ -92,7 +103,7 @@ function Hardware() {
               <Button
                 variant="contained"
                 style={{ margin: "0 5px" }}
-                onClick={() => navigate("/cabling")}
+                onClick={naviGateButtn}
               >
                 ADD
               </Button>
