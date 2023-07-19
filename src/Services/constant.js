@@ -6,3 +6,4 @@ export const NVR_DETAILS = "NVR_DETAILS";
 export const CAMERA_TYPE_NAME = "CAMERA_TYPE_NAME";
 export const PORTS_REDUCER ='PORTS_REDUCER';
 export const HARDWARE_REDUCER ='HARDWARE_REDUCER';
+export const CABLE_NAME = "CABLE_NAME";

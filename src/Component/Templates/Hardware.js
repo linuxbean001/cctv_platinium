@@ -36,11 +36,11 @@ function Hardware(props) {
   };
 
   const naviGateButtn=(e)=>{
-    value = e.target.value
+  //  const value = e.target.value
     props.gethardWareDetails(hardwarelevel)
     navigate("/cabling")
   }
-
+  console.log(hardwarelevel)
   const navigate = useNavigate();
 
   return (
@@ -94,7 +94,8 @@ function Hardware(props) {
                 startAdornment={
                   <InputAdornment position="start">$</InputAdornment>
                 }
-                value={hardwarelevel.amount||""}
+                name ="amount"
+                // value={hardwarelevel.modalName||""}
                 onChange={handleOpen}
               />
               <p>/camera</p>

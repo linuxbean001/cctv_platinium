@@ -136,6 +136,7 @@ function Recorder(props) {
                 </Button>
               </div>
             </FormGroup>
+            {/*
             <div className="btn_pad">
               <Button
                 variant="contained"
@@ -145,6 +146,7 @@ function Recorder(props) {
                 Next
               </Button>
             </div>
+            */}
           </Paper>
         </Box>
       </Container>

@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React from "react";
 
-import Cabling from "../Templates/Cabling";
+
 import ExtraHardware from "../Templates/ExtraHardware";
 import Special from "../Templates/Special";
 import LaborRate from "./../Templates/LaborRate";
 import SVCCall from "../Templates/SVC_Call";
-import HomeContainer from "../../Container/HomeContainer";
+import HomeContainer from "../../Redux/Container/HomeContainer";
 
 function RoutesMiddleware() {
   const [data, setData] = React.useState({});
@@ -24,7 +24,7 @@ function RoutesMiddleware() {
           <Route exact path="/cameras" element={<HomeContainer.Cameras />} />
           <Route exact path="/poe_s" element={<HomeContainer.POEs />} />
           <Route exact path="/hardware" element={<HomeContainer.Hardware />} />
-          <Route exact path="/cabling" element={<Cabling />} />
+          <Route exact path="/cabling" element={<HomeContainer.Cabling />} />
           <Route exact path="/extra_hardware" element={<ExtraHardware />} />
           <Route exact path="/labor_rate" element={<LaborRate />} />
           <Route exact path="/special" element={<Special />} />

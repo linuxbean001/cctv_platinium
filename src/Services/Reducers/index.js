@@ -7,6 +7,7 @@ import cameraLocation from "./cameraLocation";
 import cameraTypeName from "./camereaTypeName";
 import portsReducer from "./portsReducer";
 import hardWareDetail from "./hardwareReducer";
+import cableName from "./cableName";
 export default combineReducers({
      cardItem:cardItem,
      nvrReducer:nvrData,
@@ -15,5 +16,6 @@ export default combineReducers({
      cameraLocation:cameraLocation,
      cameraTypeName:cameraTypeName,
      portsReducer:portsReducer,
-     hardWareDetail:hardWareDetail
+     hardWareDetail:hardWareDetail,
+     cableName:cableName
 })

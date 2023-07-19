@@ -24,7 +24,7 @@ const style = {
 };
 
 export default function Home(props) {
-  console.log("props", props);
+  console.log("propsss", props);
   const [open, setOpen] = React.useState(false);
   const [customerDetails, setCustomerDetail] = React.useState({});
   const [tempButton, setTempButton] = React.useState({});
