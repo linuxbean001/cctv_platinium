@@ -76,8 +76,10 @@ margin-right: 24pc;
   margin:25px auto;
 }
 .checkBox_Recorder{
+
   display: grid;
   margin: 10px auto;
+
 }
 
 .btn_pad{
@@ -122,6 +124,14 @@ margin-right: 24pc;
   justify-content: center;
 }
 
+.cardItemModal_name{
+  display:flex;
+  justify-content:space-around
+}
+.cardItemModal_para{
+  margin-top:0;
+  text-transform:capitalize
+}
 
 .MuiContainer-root.MuiContainer-maxWidthXl.css-19r6kue-MuiContainer-root {
   background: rgb(246 252 255);

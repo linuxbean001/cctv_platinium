@@ -16,6 +16,7 @@ import { hardwareTypes } from "../../Services/Actions/actions";
 import Hardware from "../../Component/Templates/Hardware";
 import Cabling from "../../Component/Templates/Cabling";
 import { cableName } from "../../Services/Actions/actions";
+import CheckCart from "../../Component/CheckItem/CheckCart";
 const mapStateToProps = state => ({
  
   userDetail: state.cardItem,
@@ -25,7 +26,9 @@ const mapStateToProps = state => ({
   camera_Location: state.cameraLocation,
   ports_Detail: state.portsReducer,
   hardware_Type: state.hardWareDetail,
-  cable_Name:state.cableName
+  cable_Name:state.cableName,
+  camera_Type:state.cameraTypeName
+
 
 });
 

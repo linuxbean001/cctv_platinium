@@ -28,7 +28,6 @@ function NVRINFO(props) {
         [name]: value,
       };
     });
-    
   };
   //
   // console.log(numValues);
@@ -67,62 +66,38 @@ function NVRINFO(props) {
             },
           }}
         >
-          <Paper variant="outlined" square={true} color="red">
-            <div style={{ display: "inline-block", margin: "35px auto" }}>
-              <div className="spceItem">
-                <TextField
-                  id="outlined-basic"
-                  label="Num"
-                  name="num"
-                  variant="outlined"
-                  error={!numValues.num}
-                  helperText="please enter the value"
-                  value={numValues.num || ""}
-                  onChange={handleValues}
-                />
-                <TextField
-                  id="outlined-basic"
-                  label="Num 1"
-                  name="num_1"
-                  variant="outlined"
-                  error={!numValues.num_1}
-                  helperText="please enter the value"
-                  value={numValues.num_1 || ""}
-                  onChange={handleValues}
-                />
-                <TextField
-                  id="outlined-basic"
-                  label="Num 2"
-                  name="num_2"
-                  variant="outlined"
-                  error={!numValues.num_2}
-                  helperText="please enter the value"
-                  value={numValues.num_2 || ""}
-                  onChange={handleValues}
-                />
+          <Paper variant="outlined" square={true} color="red" style={{display:'flex'}}>
+            <div style={{ display: "inline-block", margin: "35px auto" ,}}>
+              <div className="checkBox_Recorder">
+                <Button
+                  style={{ margin: "0" }}
+                  onClick={handleValues}
+                  variant="contained"
+                  name="nvr"
+                >
+                NVR
+                </Button>
+                
+                <Button
+                  style={{margin: '14px 0' }}
+                  onClick={handleValues}
+                  variant="contained"
+                  name="nvr1"
+                >
+                 NVR 1
+                </Button>
+
+                <Button
+                  key="button_name"
+                  style={{ margin: "0" }}
+                  onClick={handleValues}
+                  variant="contained"
+                  name="nvr2"
+                >
+                 NVR 2
+                </Button>
               </div>
-              <div className="spceItem">
-                <TextField
-                  id="outlined-basic"
-                  label="HOD"
-                  name="hod"
-                  variant="outlined"
-                  error={!numValues.hod}
-                  helperText="please enter the value"
-                  value={numValues.name || ""}
-                  onChange={handleValues}
-                />
-                <TextField
-                  id="outlined-basic"
-                  label="CPU"
-                  variant="outlined"
-                  name="cpu"
-                  required
-                  error={!numValues.cpu}
-                  value={numValues.cpu || ""}
-                  helperText="enter license no"
-                  onChange={handleValues}
-                />
+              <div>
                 <TextField
                   id="outlined-basic"
                   label="License"
@@ -134,7 +109,30 @@ function NVRINFO(props) {
                   helperText="enter license no"
                   onChange={handleValues}
                 />
+                <TextField
+                  id="outlined-basic"
+                  label="HDD"
+                  variant="outlined"
+                  required
+                  name="license"
+                  error={!numValues.license}
+                  value={numValues.license || ""}
+                  helperText="enter license no"
+                  onChange={handleValues}
+                />
+                <TextField
+                id="outlined-basic"
+                label="CPM"
+                variant="outlined"
+                required
+                name="license"
+                error={!numValues.license}
+                value={numValues.license || ""}
+                helperText="enter license no"
+                onChange={handleValues}
+              />
               </div>
+
               <br />
               <br />
               <Button variant="contained" onClick={handleClickOpen}>

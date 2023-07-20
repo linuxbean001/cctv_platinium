@@ -10,7 +10,7 @@ export default function cameraTypeName(
   switch (action.type) {
     case CAMERA_TYPE_NAME:
       console.log("nvr reducer", action);
-      return [...state, { cameraTypeName: action }];
+      return [...state, { cameraTypeName: action.data }];
 
       break;
     default:

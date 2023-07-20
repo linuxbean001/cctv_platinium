@@ -28,30 +28,32 @@ function Recorder(props) {
     navigate("/");
   };
 
-  const nextPage = (e) => {
-    props.camera_number.push(cameraNumbers);
-    setOpen(false);
-  };
+  
 
   const handleRecorder = (e) => {
     const { name } = e.target;
 
-    setRecorderType((prev) => {
-      return {
-        name,
-      };
-    });
+    // setRecorderType((prev) => {
+    //   return {
+    //     name,
+    //   };
+    // });
 
     // const nvrType = e.target.name;
     // setRecorderType(nvrType);
   };
   const handleOpen = (e) => {
     const nvrType = e.target.name;
-    setRecorderType(nvrType);
-
-    navigate("/nvr_info");
+    props.addNvrType(nvrType);
+   navigate('/nvr_info')
+    
   };
-  props.nvr_type.push(recorder);
+
+  const nextPage = (e) => {
+    props.getCameraNumber(cameraNumbers.value);
+    setOpen(false);
+  };
+  // props.getNvrDetails(recorder);
   console.log(cameraNumbers.value);
   console.log(recorder);
   const navigate = useNavigate();
@@ -114,7 +116,7 @@ function Recorder(props) {
                   variant="contained"
                   name="micro_nvr"
                 >
-                  Micro Nvr
+                  Micro Nvr / 500$
                 </Button>
                 <Button
                   style={{ margin: "0" }}
@@ -122,7 +124,7 @@ function Recorder(props) {
                   variant="contained"
                   name="mid_nvr"
                 >
-                  Mid Nvr
+                  Mid Nvr /600$
                 </Button>
 
                 <Button
@@ -132,7 +134,7 @@ function Recorder(props) {
                   variant="contained"
                   name="platinum_nvr"
                 >
-                  Platinum Nvr
+                  Platinum Nvr /700$
                 </Button>
               </div>
             </FormGroup>

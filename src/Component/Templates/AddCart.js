@@ -57,7 +57,7 @@ function AddCart(props) {
   };
 
   const storedData = JSON.parse(localStorage.getItem("initData"));
-  console.log(storedData.userDetail[0].name);
+  // console.log(storedData.userDetail[0].name);
 
   // console.log(JSON.parse(persist.nvrInfoReducer))
 
@@ -91,12 +91,7 @@ function AddCart(props) {
             <th>Total Camera</th>
           </tr>
           <tr>
-            <td>{storedData.userDetail[0].name}</td>
-            <td>{storedData.userDetail[0].business}</td>
-            <td>{storedData.userDetail[0].phone}</td>
-            <td>{storedData.userDetail[0].email}</td>
-            <td>{storedData.userDetail[0].address}</td>
-            <td>{storedData.camera_number[0].value}</td>
+           
           </tr>
         </tbody>
       </table>
@@ -120,11 +115,7 @@ function AddCart(props) {
           </tr>
 
           <tr>
-            <td>{storedData.userDetail[0].name}</td>
-            <td>{storedData.userDetail[0].business}</td>
-            <td>{storedData.userDetail[0].phone}</td>
-            <td>{storedData.userDetail[0].email}</td>
-            <td>{storedData.userDetail[0].address}</td>
+           
           </tr>
         </tbody>
       </table>

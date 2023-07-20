@@ -32,7 +32,7 @@ function RoutesMiddleware() {
           <Route
             exact
             path="/add_to_cart"
-            element={<HomeContainer.AddCart />}
+            element={<HomeContainer.CheckCart />}
           />
         </Routes>
       </BrowserRouter>

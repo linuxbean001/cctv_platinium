@@ -62,7 +62,7 @@ export default function Home(props) {
     setTempButton({ temp_btn: e.target.name });
     setOpen(true);
     console.log(tempButton);
-    props.camera_Location.push(tempButton);
+    props.getCameraLocation({ temp_btn: e.target.name });
   };
   
   

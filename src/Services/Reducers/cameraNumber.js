@@ -7,7 +7,7 @@ export default function cameraNumber(state = initialState.cameraNumbers, action)
   switch (action.type) {
     case NUMBER_OF_CAMERA:
       console.log("nvr reducer", action);
-      return [...state, { cameraNumber: action.item }];
+      return [...state, { cameraNumber: action.data }];
   
       break;
     default:

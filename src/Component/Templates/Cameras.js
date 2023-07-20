@@ -27,13 +27,17 @@ function Cameras(props) {
     "LPRS",
     "Demo",
     "Doorbells",
+    'Turrrets'
   ];
 
   const handleClose = () => {
     setOpen(false);
   };
   const handleOpen = (e) => {
+    
     setCamerDetail({ cameraType: e.target.value });
+    props.getCameraType(cameraDetail.cameraType);
+    setOpenNest(true)
   };
 
   const handleNestClose = () => {
@@ -52,7 +56,7 @@ function Cameras(props) {
 
   const navigate = useNavigate();
   const navigateNextPage = () => {
-    props.getCameraType(cameraDetail);
+    
     navigate("/poe_s");
   };
 
