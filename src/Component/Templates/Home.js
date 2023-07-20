@@ -7,9 +7,8 @@ import Modal from "@mui/material/Modal";
 import Paper from "@mui/material/Paper";
 import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
-import { CSVLink, CSVDownload } from "react-csv";
 import Stack from "@mui/material/Stack";
-import Recorder from "./Recorder";
+import { v4 as uuid } from "uuid";
 
 const style = {
   position: "absolute",
@@ -24,11 +23,18 @@ const style = {
 };
 
 export default function Home(props) {
-  console.log("propsss", props);
   const [open, setOpen] = React.useState(false);
   const [customerDetails, setCustomerDetail] = React.useState({});
   const [tempButton, setTempButton] = React.useState({});
   const handleClose = () => setOpen(false);
+  const unique_id = uuid();
+ const genrateUniqueId=()=>{
+    const unique_id = uuid();
+    console.log(unique_id)
+  }
+
+  console.log(unique_id);
+  const small_id = unique_id.slice(0, 8);
 
   const temp_Button = [
     "Home",
@@ -39,11 +45,11 @@ export default function Home(props) {
     "Custom",
     "Business",
     "Property Management",
-    'Open Existing'
+    "Open Existing",
   ];
 
   React.useEffect(() => {
-    // localStorage.setItem("userItem", JSON.stringify(customerDetails));
+    // localStorage.clear();
   }, []);
 
   const handleSubmit = (e) => {
@@ -54,7 +60,6 @@ export default function Home(props) {
         [name]: value,
       };
     });
-    
   };
   const handleOpen = (e) => {
     e.preventDefault();
@@ -64,8 +69,7 @@ export default function Home(props) {
     console.log(tempButton);
     props.getCameraLocation({ temp_btn: e.target.name });
   };
-  
-  
+
   const submitButton = (e) => {
     e.preventDefault();
   };
@@ -102,6 +106,8 @@ export default function Home(props) {
                   variant="filled"
                   name="name"
                   value={customerDetails.name || ""}
+                  error={!customerDetails.name}
+                  helperText="Please Enter Name"
                   onChange={handleSubmit}
                 />
                 <TextField
@@ -110,6 +116,8 @@ export default function Home(props) {
                   variant="filled"
                   name="business"
                   value={customerDetails.business || ""}
+                  error={!customerDetails.business}
+                  helperText="Please Enter Business Name"
                   onChange={handleSubmit}
                 />
               </div>
@@ -120,6 +128,8 @@ export default function Home(props) {
                   variant="filled"
                   name="address"
                   value={customerDetails.address || ""}
+                  error={!customerDetails.address}
+                  helperText="Please Enter Business Name"
                   onChange={handleSubmit}
                 />
                 <TextField
@@ -127,6 +137,8 @@ export default function Home(props) {
                   label="Phone"
                   name="phone"
                   value={customerDetails.phone || ""}
+                  error={!customerDetails.phone}
+                  helperText="Please Enter Phone Number"
                   variant="filled"
                   onChange={handleSubmit}
                 />
@@ -136,6 +148,8 @@ export default function Home(props) {
                 label="Email"
                 name="email"
                 value={customerDetails.email || ""}
+                error={!customerDetails.email}
+                helperText="Please Enter email"
                 variant="filled"
                 onChange={handleSubmit}
               />
@@ -149,11 +163,24 @@ export default function Home(props) {
                     onClick={handleOpen}
                     variant="contained"
                     name={button_name}
+                    disabled={
+                      !(
+                        customerDetails.address &&
+                        customerDetails.email &&
+                        customerDetails.business &&
+                        customerDetails.name &&
+                        customerDetails.email
+                      )
+                    }
                   >
                     {button_name}
                   </Button>
                 );
               })}
+
+              <button onClick={genrateUniqueId}>
+                user id on click{" "}
+              </button>
             </Stack>
           </Paper>
           <Modal

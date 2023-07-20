@@ -6,7 +6,7 @@ export default function portsReducer(state = initialState.portDetails, action) {
   switch (action.type) {
     case PORTS_REDUCER:
       console.log("nvr reducer", action);
-      return [...state, { portDetails: action.data }];
+      return [...state,  action.data ];
 
       break;
     default:

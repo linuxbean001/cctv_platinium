@@ -44,13 +44,13 @@ function Recorder(props) {
   };
   const handleOpen = (e) => {
     const nvrType = e.target.name;
-    props.addNvrType(nvrType);
+    props.addNvrType({nvrType:nvrType});
    navigate('/nvr_info')
     
   };
 
   const nextPage = (e) => {
-    props.getCameraNumber(cameraNumbers.value);
+    props.getCameraNumber({cameraNumber:cameraNumbers.value});
     setOpen(false);
   };
   // props.getNvrDetails(recorder);

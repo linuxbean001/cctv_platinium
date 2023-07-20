@@ -9,7 +9,7 @@ export default function nvrData(state = initialState.nvrData, action) {
   
     case NVR_TYPE:
       console.log("reducer_action", action);
-      return [...state, { nvrData: action.data }];
+      return [...state,  action.data ];
       break;
     default:
       return state;

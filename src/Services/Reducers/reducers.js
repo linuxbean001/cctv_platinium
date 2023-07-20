@@ -8,7 +8,7 @@ export default function cardItem(state = initialState.cardData, action) {
   switch (action.type) {
     case ADD_TO_CARD:
      
-      return [...state, { cardData: action.data }];
+      return [...state, action.data];
     // case CAMERA_LOCATION:
     //        return [...state, { cameraLocation:action.data }];
     //   break;

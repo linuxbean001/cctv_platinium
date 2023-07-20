@@ -28,8 +28,6 @@ const mapStateToProps = state => ({
   hardware_Type: state.hardWareDetail,
   cable_Name:state.cableName,
   camera_Type:state.cameraTypeName
-
-
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -53,5 +51,6 @@ export default {
   Cameras:connect(mapStateToProps, mapDispatchToProps)(Cameras),
   POEs:connect(mapStateToProps, mapDispatchToProps)(POEs),
   Hardware:connect(mapStateToProps, mapDispatchToProps)(Hardware),
-  Cabling:connect(mapStateToProps, mapDispatchToProps)(Cabling)
+  Cabling:connect(mapStateToProps, mapDispatchToProps)(Cabling),
+  CheckCart:connect(mapStateToProps, mapDispatchToProps)(CheckCart)
 };

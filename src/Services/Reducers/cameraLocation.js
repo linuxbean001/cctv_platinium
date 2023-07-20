@@ -7,7 +7,7 @@ export default function cameraLocation(state = initialState.cameraLocation, acti
   switch (action.type) {
     case CAMERA_LOCATION:
       console.log("nvr reducer", action);
-      return [...state, { cameraLocation: action.data }];
+      return [...state, action.data ];
 
       break;
     default:

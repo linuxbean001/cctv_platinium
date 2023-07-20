@@ -7,7 +7,7 @@ const  initialState ={
 export default function hardWareDetail(state=initialState.hardWarDeatil, action){
      switch (action.type) {
           case HARDWARE_REDUCER:
-               return [...state, { hardWarDeatil: action }];
+               return [...state, action.data ];
 
                break;
              default:

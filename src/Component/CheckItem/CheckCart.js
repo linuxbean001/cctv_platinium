@@ -23,36 +23,26 @@ const style = {
 function CheckCart(props) {
   console.log(props);
   const [show, setShow] = React.useState(false);
+  const [userDetail, setUserDetails] = React.useState([]);
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
 
-  const storedData = JSON.parse(
-    JSON.parse(localStorage.getItem("persist:bill_Details")).cardItem
-  );
-  // console.log("aded itenm", storedData);
-  const nvr_type = JSON.parse(
-    JSON.parse(localStorage.getItem("persist:bill_Details")).nvrReducer
-  );
-
-  const cameraLocaiton = JSON.parse(
-    JSON.parse(localStorage.getItem("persist:bill_Details")).cameraLocation
-  );
-  const cameraNumber = JSON.parse(
-    JSON.parse(localStorage.getItem("persist:bill_Details")).cameraNumber
-  );
-  const nvrInfo = JSON.parse(
-    JSON.parse(localStorage.getItem("persist:bill_Details")).nvrInfoReducer
-  );
-
-  const cameraType = JSON.parse(
-    JSON.parse(localStorage.getItem("persist:bill_Details")).cameraTypeName
-  );
-  const cameraLocation = JSON.parse(
-    JSON.parse(localStorage.getItem("persist:bill_Details")).cameraLocation
-  );
-  console.log(
-    cameraLocation[cameraLocation.length - 1].cameraLocation.temp_btn
-  );
+  React.useEffect(() => {
+    setUserDetails({
+      customer_Information: props.userDetail[0],
+      camera_location: props.camera_Location[0],
+      camera_Type: props.camera_Type[0],
+      nvr_type: props.nvr_type[0],
+      ports_Detail: props.ports_Detail[0],
+      hardware_Type: props.hardware_Type[0],
+      cable_Name: props.cable_Name[0],
+      camera_number: props.camera_number[0],
+    });
+  }, []);
+  console.log(userDetail);
+  // userDetail.camera_location.map((item)=>{
+  //   console.log("userDetail State", item);
+  // })
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -85,106 +75,42 @@ function CheckCart(props) {
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Check Cart Item
             </Typography>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              User Detail
-            </Typography>
+
             <Typography id="modal-modal-description">
-              <div className="cardItemModal_name">
-                <label>Name</label>
-                <p className="cardItemModal_para">
-                  {storedData[storedData.length - 1].cardData.name}
-                </p>
-              </div>
-              <div className="cardItemModal_name">
-                <label>Business</label>
-                <p className="cardItemModal_para">
-                  {storedData[storedData.length - 1].cardData.business}
-                </p>
-              </div>
-              <div className="cardItemModal_name">
-                <label>Address</label>
-                <p className="cardItemModal_para">
-                  {storedData[storedData.length - 1].cardData.address}
-                </p>
-              </div>
-              <div className="cardItemModal_name">
-                <label>Email</label>
-                <p className="cardItemModal_para">
-                  {storedData[storedData.length - 1].cardData.email}
-                </p>
-              </div>
-              <div className="cardItemModal_name">
-                <label>Phone</label>
-                <p className="cardItemModal_para">
-                  {storedData[storedData.length - 1].cardData.phone}
-                </p>
-              </div>
+              {props.userDetail.map((item, index) => {
+                if (index == props.userDetail.length - 1)
+                  return (
+                    <Typography>
+                      <div className="cardItemModal_name">
+                        <label>Name</label>
+                        <p className="cardItemModal_para">{item.name}</p>
+                      </div>
+                      <div className="cardItemModal_name">
+                        <label>email</label>
+                        <p className="cardItemModal_para">{item.email}</p>
+                      </div>
+                      <div className="cardItemModal_name">
+                        <label>phone</label>
+                        <p className="cardItemModal_para">{item.phone}</p>
+                      </div>
+                      <div className="cardItemModal_name">
+                        <label>address</label>
+                        <p className="cardItemModal_para">{item.address}</p>
+                      </div>{" "}
+                      <div className="cardItemModal_name">
+                        <label>Business</label>
+                        <p className="cardItemModal_para">{item.business}</p>
+                      </div>
+                    </Typography>
+                  );
+              })}
               <div className="cardItemModal_name">
                 <label>Camera Location</label>
-                <p className="cardItemModal_para">
-                  {
-                    cameraLocation[cameraLocation.length - 1].cameraLocation
-                      .temp_btn
-                  }
-                </p>
+                <p className="cardItemModal_para">userDetail.camera_location.temp_bt</p>
               </div>
-
               <div className="cardItemModal_name">
-                <label>Total Camera No</label>
-                <p className="cardItemModal_para">
-                  {cameraNumber[cameraNumber.length - 1].cameraNumber}*500$
-                </p>
-                <p className="cardItemModal_para">
-                  {500 * cameraNumber[cameraNumber.length - 1].cameraNumber}
-                </p>
-              </div>
-
-              <div className="cardItemModal_name">
-                <label>Nvr Types</label>
-                <p className="cardItemModal_para">
-                  {nvr_type[nvr_type.length - 1].nvrData}
-                </p>
-                <p className="cardItemModal_para">
-                  {cameraNumber[cameraNumber.length - 1].cameraNumber ===
-                  "micro_nvr"?cameraNumber[cameraNumber.length - 1].cameraNumber ===
-                  "mid_nvr"
-                    ? 500
-                    : 700 :600}
-                </p>
-              </div>
-
-              <div className="cardItemModal_name">
-                <label>NVR Information</label>
-                <p className="cardItemModal_para">
-                  {nvrInfo[0].nvrDetails.num}
-                </p>
-                <p className="cardItemModal_para">----</p>
-              </div>
-
-              <div className="cardItemModal_name">
-                <label>Camera type</label>
-                <p className="cardItemModal_para">
-                  {cameraType[13].cameraTypeName}
-                </p>
-                <p className="cardItemModal_para">
-                  {cameraType[13].cameraTypeName === "Turrrets" ? 5000 : 6000}
-                </p>
-              </div>
-            </Typography>
-
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              <div className="cardItemModal_name">
-                <label style={{ fontWeight: "bold" }}>Total</label>
-                <p className="cardItemModal_para">
-                  {(cameraNumber[cameraNumber.length - 1].cameraNumber ===
-                  "micro_nvr"
-                    ? 500
-                    : 600) +
-                    (cameraType[13].cameraTypeName === "Turrrets"
-                      ? 5000
-                      : 6000) +
-                    500 * cameraNumber[cameraNumber.length - 1].cameraNumber}
-                </p>
+                <label>Camera Number</label>
+                <p className="cardItemModal_para">userDetail.</p>
               </div>
             </Typography>
           </Box>

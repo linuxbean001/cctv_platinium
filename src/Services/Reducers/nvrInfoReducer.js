@@ -10,7 +10,7 @@ export default function nvrInfoReducer(
   switch (action.type) {
     case NVR_DETAILS:
       console.log("nvr detais", action);
-      return [...state, { nvrDetails: action.data }];
+      return [...state,  action.data ];
 
       break;
     default:
