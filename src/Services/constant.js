@@ -1,9 +1,0 @@
-export const ADD_TO_CARD = "ADD_TO_CARD";
-export const CAMERA_LOCATION = "CAMERA_LOCATION";
-export const NUMBER_OF_CAMERA = "NUMBER_OF_CAMERA";
-export const NVR_TYPE = "NVR_TYPE";
-export const NVR_DETAILS = "NVR_DETAILS";
-export const CAMERA_TYPE_NAME = "CAMERA_TYPE_NAME";
-export const PORTS_REDUCER ='PORTS_REDUCER';
-export const HARDWARE_REDUCER ='HARDWARE_REDUCER';
-export const CABLE_NAME = "CABLE_NAME";
