@@ -9,8 +9,16 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Modal from "@mui/material/Modal";
 import { CSVLink, CSVDownload } from "react-csv";
 import Cameras from './../Templates/Cameras';
-
-
+import Grid from '@mui/material/Grid';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 const style = {
   position: "absolute",
@@ -27,31 +35,46 @@ const style = {
   height: '500px',
   margin: "auto",
   marginTop: '20%',
-  width:'70%'
+  width: '70%'
 };
 const modalStyle1 = {
   margin: 'auto',
   display: "block",
 };
 
+// Table Code Starts Here
+
+function createData(name, calories, fat, carbs, protein) {
+  return { name, calories, fat, carbs, protein };
+}
+
+const rows = [
+  createData('Camera Location', 159, 6.0, 24, 4.0),
+  createData('Camera Number', 237, 9.0, 37, 4.3),
+  createData('NVR Types', 262, 16.0, 24, 6.0),
+  createData('NVR License', 305, 3.7, 67, 4.3),
+  createData('Camera Types', 356, 16.0, 49, 3.9),
+  createData('Ports Name', 356, 16.0, 49, 3.9),
+  createData('Total Camera', 356, 16.0, 49, 3.9),
+
+  
+];
+// Table Code Ends Here
+
 function CheckCart(props) {
   console.log("check cart Item", props);
   const [show, setShow] = React.useState(false);
- 
+  const [data,setData]=React.useState([]);
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
-  const [cameraDetails, setCameraDetails] = React.useState({});
+  
+  let cameraDetails = {};
+  let cameraItems=[]
+  for (let i = 0; i <= props.userDetail.length; i++) {
+ Object.assign(cameraDetails, props.userDetail[i])
+  }
+ 
 
- React.useEffect(() => {
-    // Update cameraDetails whenever props.userDetail changes
-    if (props.userDetail.length > 0) {
-      let cameraDetailsObj = {};
-      for (let i = 0; i < props.userDetail.length; i++) {
-        Object.assign(cameraDetailsObj, props.userDetail[i]);
-      }
-      setCameraDetails(cameraDetailsObj);
-    }
-  }, [props.userDetail]);
 
   const csvData = [
     [
@@ -65,12 +88,12 @@ function CheckCart(props) {
       "license",
       "Ports Name",
       "Special Types"
-    ],Object.keys(cameraDetails).length>1?
-    [cameraDetails.customerDetails.name, cameraDetails.customerDetails.email, cameraDetails.customerDetails.business,
-    cameraDetails.customerDetails.phone, cameraDetails.temp_btn,
-    cameraDetails.cameraType, cameraDetails.nvrType, cameraDetails.license, cameraDetails.portsName,
-    cameraDetails.special_Types
-    ]:[],
+    ], Object.keys(cameraDetails).length > 1 ?
+      [cameraDetails.customerDetails.name, cameraDetails.customerDetails.email, cameraDetails.customerDetails.business,
+      cameraDetails.customerDetails.phone, cameraDetails.temp_btn,
+      cameraDetails.cameraType, cameraDetails.nvrType, cameraDetails.license, cameraDetails.portsName,
+      cameraDetails.special_Types
+      ] : [],
   ];
 
   return (
@@ -102,23 +125,32 @@ function CheckCart(props) {
           sx={modalStyle1}
         >
           <Box sx={style}>
+          
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Check Cart Item  {}
+              
+    
             </Typography>
-
+           
             <Typography id="modal-modal-description" variant = 'h3'>
+              {Object.keys(cameraDetails).length <=10 ? (
+                
+                'Please Enter Items'
+                
              
+              ) : (
+               
                 <Typography>
                 <div className="cardItemModal_name">
                   <label>Name</label>
                   <p className="cardItemModal_para">
-                    {(cameraDetails.customerDetails) ? cameraDetails.customerDetails.name : ''}
+                    {cameraDetails.customerDetails.name}
                   </p>
                 </div>
                 <div className="cardItemModal_name">
                   <label>email</label>
                   <p className="cardItemModal_para">
-                    {(cameraDetails.customerDetails)?cameraDetails.customerDetails.email:null}
+                    {cameraDetails.customerDetails.email}
                   </p>
                 </div>
                 <div className="cardItemModal_name">
@@ -176,7 +208,12 @@ function CheckCart(props) {
                     {cameraDetails.portsName}
                   </p>
                 </div>
-               
+                <div className="cardItemModal_name">
+                  <label>Total Camera</label>
+                  <p className="cardItemModal_para">
+                    {cameraDetails.portvalues.total_camera}
+                  </p>
+                </div>
                 <div className="cardItemModal_name">
                   <label>Total Ports</label>
                   <p className="cardItemModal_para">
@@ -201,35 +238,88 @@ function CheckCart(props) {
                 <div className="cardItemModal_name">
                   <label>Adapter</label>
                   <p className="cardItemModal_para">
-                    {(cameraDetails.extraHardware)?cameraDetails.extraHardware.adapter:null}
+                    {cameraDetails.extraHardware.adapter}
                   </p>
                 </div>
                 <div className="cardItemModal_name">
                   <label>Mounts</label>
                   <p className="cardItemModal_para">
-                    {(cameraDetails.extraHardware)?cameraDetails.extraHardware.mounts:null}
+                    {cameraDetails.extraHardware.mounts}
                   </p>
                 </div>
                 <div className="cardItemModal_name">
                   <label>Extends</label>
                   <p className="cardItemModal_para">
-                    {(cameraDetails.extraHardware)?cameraDetails.extraHardware.extends:null}
+                    {cameraDetails.extraHardware.extends}
                   </p>
                 </div>
                 <div className="cardItemModal_name">
                   <label>Connecters</label>
                   <p className="cardItemModal_para">
-                    {(cameraDetails.extraHardware)?cameraDetails.extraHardware.connecters:null}
+                    {cameraDetails.extraHardware.connecters}
                   </p>
                 </div>
-             
+                <div className="cardItemModal_name">
+                  <label>Special Types</label>
+                  <p className="cardItemModal_para">
+                    {cameraDetails.special_Types}
+                  </p>
+                  <p className="cardItemModal_para">
+                    {cameraDetails.special_Types === "RACKS"
+                      ? 1000 + "$"
+                      : 600 + "$"}
+                  </p>
+                </div>
+                <div className="cardItemModal_name">
+                  <label>Power</label>
+                  <p className="cardItemModal_para">
+                    {cameraDetails.extraHardware.connecters}
+                  </p>
+
+                  
+                </div>
               </Typography>
-             
+              )}
             </Typography>
             
-            <CSVLink data={csvData}>Export in csv</CSVLink>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow
+              key={row.name}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell align="right">{row.calories}</TableCell>
+              <TableCell align="right">{row.fat}</TableCell>
+              <TableCell align="right">{row.carbs}</TableCell>
+              <TableCell align="right">
+
+                <Box>
+                  <Grid container sx={{backgroundColor:''}}>
+
+                    <Grid xs={3} items sx={{backgroundColor:''}}>
+                      <AddIcon className="common_icon"/>
+                    </Grid>
+                    <Grid xs={3} items sx={{backgroundColor:''}}>
+                      <RemoveIcon className="common_icon"/>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </TableCell>
+
+              
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+
           </Box>
-      
+
         </Modal>
       </AppBar>
     </Box>

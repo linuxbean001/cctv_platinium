@@ -165,7 +165,7 @@ margin: 20px 0;
 .cardItemModal_name{
   border: #2295ff;
   display:flex;
-  justify-content:space-around
+  justify-content:space-around;
 }
 .cardItemModal_para{
   margin-top:0;
@@ -277,3 +277,13 @@ margin: 20px 0;
   background: #f6fcff;
 }
 
+.common_icon
+{
+  background-color: rgb(0, 0, 0);
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  cursor: pointer;
+  padding: 2px;
+  color: #fff;
+}
