@@ -71,6 +71,42 @@ margin-right: 24pc;
   justify-content: space-between;
   flex-wrap: wrap;
 }
+.spceItem2{
+  background-color: green;
+}
+.spceItem2 input
+{
+  background-color: red;
+  width: 50%;
+}
+
+.spceItemA
+{
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.spceItemB
+{
+height: 50px;
+display: flex;
+justify-content: space-between;
+margin: 20px 0;
+
+}
+.spceItemC
+{
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.labor_input input{
+  border: none;
+}
+
+
 
 .button_padding{
   margin:25px auto;
@@ -81,6 +117,8 @@ margin-right: 24pc;
   margin: 10px auto;
 
 }
+
+
 
 .btn_pad{
   padding: 30px;

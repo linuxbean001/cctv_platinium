@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -7,8 +7,9 @@ import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import Modal from "@mui/material/Modal";
-import Typography from "@mui/material/Typography";
-
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
 
 const style = {
   position: "absolute",
@@ -23,15 +24,40 @@ const style = {
 };
 
 function LaborRate(props) {
-  console.log(props.userDetail[1].cameraNumber)
+  console.log(props.userDetail);
+  const [laborDetail, setLaborDetail] = React.useState([]);
   const [open, setOpen] = React.useState(false);
-  const labor_rate = ['LEVEL-1', 'LEVEL-2', 'LEVEL-3', 'LEVEL-4', 'NO INSTALL', 'PRE VILLAGE']
+  const [nestModal, setNestModal] = React.useState(false);
+  const labor_rate = [
+    "LEVEL-1",
+    "LEVEL-2",
+    "LEVEL-3",
+    "LEVEL-4",
+    "NO INSTALL",
+    "PRE VILLAGE",
+  ];
+
+  let cameraDetails = {};
+  for (let i = 0; i <= props.userDetail.length; i++) {
+    Object.assign(cameraDetails, props.userDetail[i]);
+  }
+  console.log(cameraDetails.specialDetails.tx);
+
   const handleClose = () => {
     setOpen(false);
   };
-  const handleOpen = () => {
-    setOpen(true)
+
+  const handleOpen = (e) => {
+    setLaborDetail({ laborDetail: e.target.name });
+    setOpen(true);
+  };
+  const handleNestModal=()=>{
+    alert('hello')
+    setNestModal(true);
+    
   }
+
+  console.log(laborDetail);
 
   const navigate = useNavigate();
   return (
@@ -44,7 +70,6 @@ function LaborRate(props) {
           padding: "30px",
         }}
       >
-
         <Box
           sx={{
             marginLeft: 20,
@@ -59,43 +84,50 @@ function LaborRate(props) {
           <Paper variant="outlined" square={true} color="red">
             <h1>Labor Rate</h1>
 
-
-            <div style={{ display: 'inline-block' }}>
-              <div className="spceItem" style={{ display: 'flex', flexWrap: 'nowrap' }}>
-                <TextField
-                  id="outlined-basic"
-                  label="Camera Number"
-                  variant="outlined"
+            <div className="labor_input">
+              <div className="spceItemA">
+                <label>Number of Camera</label>
+                <input
+                  type="text"
+                
+                  value={cameraDetails.cameraNumber}
+                  readOnly
                 />
-                <TextField
-                  id="outlined-basic"
-                  label="Number of Drops"
-                  variant="outlined"
-                />
+              </div>
 
-                <TextField
-                  id="outlined-basic"
-                  label="Labor"
-                  variant="outlined"
+              <div className="spceItemB">
+                <label>No of Drops</label>
+                <input
+                  type="text"
+                  value={
+                    cameraDetails.cameraNumber + cameraDetails.specialDetails.tx
+                  }
+                  readOnly
                 />
+              </div>
 
+              <div className="spceItemC">
+                <label>labor</label>
+                <input type="text" value={30} readOnly />
               </div>
             </div>
-            <Stack spacing={2} direction="row" m={2}>
+            <Stack spacing={2} direction="row" m={3}>
               {labor_rate.map((btn_types) => {
                 return (
-                  <Button variant="contained" name={btn_types} onClick={handleOpen}>
-                    {btn_types}
-                  </Button>
-                )
-              }
-              )}
-
-
+                  <div className="changes">
+                    <Button
+                      variant="contained"
+                      name={btn_types}
+                      onClick={handleOpen}
+                    >
+                      {btn_types}
+                    </Button>
+                  </div>
+                );
+              })}
             </Stack>
 
-
-            <Button variant="contained" onClick={() => navigate("/svc_call")}>
+            <Button variant="contained" onClick={ handleNestModal}>
               Next
             </Button>
 
@@ -106,33 +138,39 @@ function LaborRate(props) {
               aria-describedby="modal-modal-description"
             >
               <Box sx={style}>
-                <Typography
-                  id="modal-modal-title"
-                  variant="h6"
-                  component="h2"
-                  color={"red"}
-                >
-                  POWER
-                </Typography>
                 <Box>
-                  <Button variant="contained" style={{ margin: "0 5px" }} onClick={() => navigate("/extra_hardware")}>
-                    19V
-                  </Button>
+                  <h3>{laborDetail.laborDetail}</h3>
+                  <div className="spceItemB">
+                  <label>Quantity</label>
+                  <input
+                    type="text"
+                    value={
+                      cameraDetails.cameraNumber + cameraDetails.specialDetails.tx
+                    }
+                    readOnly
+                  />
+                </div>
                   <Button
                     variant="contained"
-                    style={{ margin: "0 5px", background: "red" }}
-
+                    style={{ margin: "0 5px" }}
+                    onClick={handleClose}
                   >
-                    20V
-                  </Button>
-                  <Button variant="contained" style={{ margin: "0 5px" }} onClick={() => navigate("/extra_hardware")}>
-                    21V
+                    ADD
                   </Button>
                 </Box>
-                <Button variant="contained" style={{ marginTop: '50px' }} onClick={handleClose} >Back</Button>
+              
               </Box>
             </Modal>
 
+            <Dialog open={open} onClose={handleClose}>
+            <DialogContent>
+              <DialogContentText>ARE YOU SURE?</DialogContentText>
+              <Button onClick={handleClose}>No</Button>
+              <Button onClick={navigate("/svc_call")}>Yes</Button>
+              
+            </DialogContent>
+          </Dialog>
+  
           </Paper>
         </Box>
       </Container>
