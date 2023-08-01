@@ -24,7 +24,7 @@ const style = {
 };
 
 function LaborRate(props) {
-  console.log(props.userDetail);
+  console.log(props);
   const [laborDetail, setLaborDetail] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [nestModal, setNestModal] = React.useState(false);
@@ -56,7 +56,7 @@ function LaborRate(props) {
     setNestModal(true);
     
   }
-
+  props.addToCartHandler(laborDetail)
   console.log(laborDetail);
 
   const navigate = useNavigate();
@@ -107,7 +107,7 @@ function LaborRate(props) {
               </div>
 
               <div className="spceItemC">
-                <label>labor</label>
+                <label>Labor</label>
                 <input type="text" value={30} readOnly />
               </div>
             </div>

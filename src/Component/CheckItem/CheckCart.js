@@ -35,19 +35,23 @@ const modalStyle1 = {
 };
 
 function CheckCart(props) {
-  console.log("check cart Item", props.userDetail);
+  console.log("check cart Item", props);
   const [show, setShow] = React.useState(false);
-  const [data,setData]=React.useState([]);
+ 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
-  
-  let cameraDetails = {};
-  let cameraItems=[]
-  for (let i = 0; i <= props.userDetail.length; i++) {
- Object.assign(cameraDetails, props.userDetail[i])
-  }
- 
+  const [cameraDetails, setCameraDetails] = React.useState({});
 
+ React.useEffect(() => {
+    // Update cameraDetails whenever props.userDetail changes
+    if (props.userDetail.length > 0) {
+      let cameraDetailsObj = {};
+      for (let i = 0; i < props.userDetail.length; i++) {
+        Object.assign(cameraDetailsObj, props.userDetail[i]);
+      }
+      setCameraDetails(cameraDetailsObj);
+    }
+  }, [props.userDetail]);
 
   const csvData = [
     [
@@ -98,32 +102,23 @@ function CheckCart(props) {
           sx={modalStyle1}
         >
           <Box sx={style}>
-          
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Check Cart Item  {}
-              
-    
             </Typography>
-           
+
             <Typography id="modal-modal-description" variant = 'h3'>
-              {Object.keys(cameraDetails).length <=10 ? (
-                
-                'Please Enter Items'
-                
              
-              ) : (
-               
                 <Typography>
                 <div className="cardItemModal_name">
                   <label>Name</label>
                   <p className="cardItemModal_para">
-                    {cameraDetails.customerDetails.name}
+                    {(cameraDetails.customerDetails) ? cameraDetails.customerDetails.name : ''}
                   </p>
                 </div>
                 <div className="cardItemModal_name">
                   <label>email</label>
                   <p className="cardItemModal_para">
-                    {cameraDetails.customerDetails.email}
+                    {(cameraDetails.customerDetails)?cameraDetails.customerDetails.email:null}
                   </p>
                 </div>
                 <div className="cardItemModal_name">
@@ -181,12 +176,7 @@ function CheckCart(props) {
                     {cameraDetails.portsName}
                   </p>
                 </div>
-                <div className="cardItemModal_name">
-                  <label>Total Camera</label>
-                  <p className="cardItemModal_para">
-                    {cameraDetails.portvalues.total_camera}
-                  </p>
-                </div>
+               
                 <div className="cardItemModal_name">
                   <label>Total Ports</label>
                   <p className="cardItemModal_para">
@@ -211,48 +201,30 @@ function CheckCart(props) {
                 <div className="cardItemModal_name">
                   <label>Adapter</label>
                   <p className="cardItemModal_para">
-                    {cameraDetails.extraHardware.adapter}
+                    {(cameraDetails.extraHardware)?cameraDetails.extraHardware.adapter:null}
                   </p>
                 </div>
                 <div className="cardItemModal_name">
                   <label>Mounts</label>
                   <p className="cardItemModal_para">
-                    {cameraDetails.extraHardware.mounts}
+                    {(cameraDetails.extraHardware)?cameraDetails.extraHardware.mounts:null}
                   </p>
                 </div>
                 <div className="cardItemModal_name">
                   <label>Extends</label>
                   <p className="cardItemModal_para">
-                    {cameraDetails.extraHardware.extends}
+                    {(cameraDetails.extraHardware)?cameraDetails.extraHardware.extends:null}
                   </p>
                 </div>
                 <div className="cardItemModal_name">
                   <label>Connecters</label>
                   <p className="cardItemModal_para">
-                    {cameraDetails.extraHardware.connecters}
+                    {(cameraDetails.extraHardware)?cameraDetails.extraHardware.connecters:null}
                   </p>
                 </div>
-                <div className="cardItemModal_name">
-                  <label>Special Types</label>
-                  <p className="cardItemModal_para">
-                    {cameraDetails.special_Types}
-                  </p>
-                  <p className="cardItemModal_para">
-                    {cameraDetails.special_Types === "RACKS"
-                      ? 1000 + "$"
-                      : 600 + "$"}
-                  </p>
-                </div>
-                <div className="cardItemModal_name">
-                  <label>Power</label>
-                  <p className="cardItemModal_para">
-                    {cameraDetails.extraHardware.connecters}
-                  </p>
-
-                  
-                </div>
+             
               </Typography>
-              )}
+             
             </Typography>
             
             <CSVLink data={csvData}>Export in csv</CSVLink>

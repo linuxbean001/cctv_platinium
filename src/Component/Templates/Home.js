@@ -33,7 +33,7 @@ export default function Home(props) {
     console.log(unique_id)
   }
 
-  
+
 
   const temp_Button = [
     "Home",
