@@ -51,7 +51,7 @@ function LandingPage() {
                     Some quick example text to build on the card title and make up the
                     bulk of the card's content.
                   </Card.Text>
-                  <Button variant="primary">Home</Button>
+                  <Button variant="dark">Home</Button>
                 </Card.Body>
               </Card>
             </Col>
@@ -64,7 +64,7 @@ function LandingPage() {
                     Some quick example text to build on the card title and make up the
                     bulk of the card's content.
                   </Card.Text>
-                  <Button variant="primary">Business</Button>
+                  <Button variant="dark">Business</Button>
                 </Card.Body>
               </Card>
             </Col>
@@ -77,7 +77,7 @@ function LandingPage() {
                     Some quick example text to build on the card title and make up the
                     bulk of the card's content.
                   </Card.Text>
-                  <Button variant="primary">Warehouse</Button>
+                  <Button variant="dark">Warehouse</Button>
                 </Card.Body>
               </Card>
             </Col>
@@ -95,7 +95,7 @@ function LandingPage() {
                     Some quick example text to build on the card title and make up the
                     bulk of the card's content.
                   </Card.Text>
-                  <Button variant="primary">Restaurent</Button>
+                  <Button variant="dark">Restaurent</Button>
                 </Card.Body>
               </Card>
             </Col>
@@ -108,7 +108,7 @@ function LandingPage() {
                     Some quick example text to build on the card title and make up the
                     bulk of the card's content.
                   </Card.Text>
-                  <Button variant="primary">Property Management</Button>
+                  <Button variant="dark">Property Management</Button>
                 </Card.Body>
               </Card>
             </Col>
@@ -121,7 +121,7 @@ function LandingPage() {
                     Some quick example text to build on the card title and make up the
                     bulk of the card's content.
                   </Card.Text>
-                  <Button variant="primary">Internet</Button>
+                  <Button variant="dark">Internet</Button>
                 </Card.Body>
               </Card>
             </Col>
@@ -138,7 +138,7 @@ function LandingPage() {
                     Some quick example text to build on the card title and make up the
                     bulk of the card's content.
                   </Card.Text>
-                  <Button variant="primary">Takeover</Button>
+                  <Button variant="dark">Takeover</Button>
                 </Card.Body>
               </Card>
             </Col>
@@ -151,7 +151,7 @@ function LandingPage() {
                     Some quick example text to build on the card title and make up the
                     bulk of the card's content.
                   </Card.Text>
-                  <Button variant="primary">Dealer</Button>
+                  <Button variant="dark">Dealer</Button>
                 </Card.Body>
               </Card>
             </Col>
@@ -164,11 +164,12 @@ function LandingPage() {
                     Some quick example text to build on the card title and make up the
                     bulk of the card's content.
                   </Card.Text>
-                  <Button variant="primary">Custom</Button>
+                  <Button variant="dark">Custom</Button>
                 </Card.Body>
               </Card>
             </Col>
             </Row>
+            
             
           </Col>
 
