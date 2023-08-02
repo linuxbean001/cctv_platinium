@@ -48,23 +48,12 @@ function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
-const rows = [
-  createData('Camera Location', 159, 6.0, 24, 4.0),
-  createData('Camera Number', 237, 9.0, 37, 4.3),
-  createData('NVR Types', 262, 16.0, 24, 6.0),
-  createData('NVR License', 305, 3.7, 67, 4.3),
-  createData('Camera Types', 356, 16.0, 49, 3.9),
-  createData('Ports Name', 356, 16.0, 49, 3.9),
-  createData('Total Camera', 356, 16.0, 49, 3.9),
 
-  
-];
 // Table Code Ends Here
 
 function CheckCart(props) {
   console.log("check cart Item", props.userDetail);
   const [show, setShow] = React.useState(false);
-  const [data, setData] = React.useState([]);
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
 
@@ -74,7 +63,7 @@ function CheckCart(props) {
     Object.assign(cameraDetails, props.userDetail[i])
   }
 
-
+   console.log(cameraDetails.temp_btn)
 
   const csvData = [
     [
@@ -88,12 +77,25 @@ function CheckCart(props) {
       "license",
       "Ports Name",
       "Special Types"
-    ], Object.keys(cameraDetails).length > 1 ?
-      [cameraDetails.customerDetails.name, cameraDetails.customerDetails.email, cameraDetails.customerDetails.business,
-      cameraDetails.customerDetails.phone, cameraDetails.temp_btn,
-      cameraDetails.cameraType, cameraDetails.nvrType, cameraDetails.license, cameraDetails.portsName,
-      cameraDetails.special_Types
-      ] : [],
+    ], 
+    // Object.keys(cameraDetails).length  0?
+      // [cameraDetails.customerDetails.name, cameraDetails.customerDetails.email, cameraDetails.customerDetails.business,
+      // cameraDetails.customerDetails.phone, cameraDetails.temp_btn,
+      // cameraDetails.cameraType, cameraDetails.nvrType, cameraDetails.license, cameraDetails.portsName,
+      // cameraDetails.special_Types
+      // ] : [],
+  ];
+
+  const rows = [
+    createData('Camera Location', cameraDetails, 6.0, 24, 4.0),
+    createData('Camera Number', 237, 9.0, 37, 4.3),
+    createData('NVR Types', 262, 16.0, 24, 6.0),
+    createData('NVR License', 305, 3.7, 67, 4.3),
+    createData('Camera Types', 356, 16.0, 49, 3.9),
+    createData('Ports Name', 356, 16.0, 49, 3.9),
+    createData('Total Camera', 356, 16.0, 49, 3.9),
+  
+    
   ];
 
   return (
@@ -140,7 +142,7 @@ function CheckCart(props) {
                     Name
                   </Typography>
                   <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ backgroundColor: '' }}>
-                    Ravi Rathore
+            {(cameraDetails.customerDetails)?cameraDetails.customerDetails.name:null}
                   </Typography>
                 </Box>
               </Grid>
@@ -151,7 +153,7 @@ function CheckCart(props) {
                     Email
                   </Typography>
                   <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ backgroundColor: '' }}>
-                    ravi@r.com
+                      {(cameraDetails.customerDetails)?cameraDetails.customerDetails.email:null}
                   </Typography>
                 </Box>
               </Grid>
@@ -166,7 +168,7 @@ function CheckCart(props) {
                     Phone
                   </Typography>
                   <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ backgroundColor: '' }}>
-                    +919685131337
+                      {(cameraDetails.customerDetails)?cameraDetails.customerDetails.phone:null}
                   </Typography>
                 </Box>
               </Grid>
@@ -176,7 +178,7 @@ function CheckCart(props) {
                     Address
                   </Typography>
                   <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ backgroundColor: '' }}>
-                    Indore
+                      {(cameraDetails.customerDetails)?cameraDetails.customerDetails.address:null}
                   </Typography>
                 </Box>
               </Grid>
@@ -192,7 +194,7 @@ function CheckCart(props) {
       Business
     </Typography>
     <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ backgroundColor: '' }}>
-     Web Dev Company
+    {(cameraDetails.customerDetails)?cameraDetails.customerDetails.business:null}
     </Typography>
   </Box>
 </Grid>
