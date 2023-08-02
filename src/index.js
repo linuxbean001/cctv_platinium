@@ -9,6 +9,7 @@ import rootReducer from "./Services/Reducers/index";
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import storage from 'redux-persist/lib/storage'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const persistConfig = {
   key: "bill_Details",

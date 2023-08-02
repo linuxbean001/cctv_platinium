@@ -127,8 +127,10 @@ function CheckCart(props) {
           <Box sx={style}>
 
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Check Cart Item
+              Check Cart Item :
             </Typography>
+{/* 1 */}
+
 
             <Grid container sx={{ backgroundColor: '',margin:'10px 0' }}>
 
