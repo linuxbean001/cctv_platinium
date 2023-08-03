@@ -1,212 +1,141 @@
-import React from "react";
-import Container from "@mui/material/Container";
-import { Button } from "@mui/material";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import Paper from "@mui/material/Paper";
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import hotelImage from "../../assets/images/Categories/Restaurant-Security-Cameras-1.jpg";
+import Papa from "papaparse";
+import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
-import TextField from "@mui/material/TextField";
-import Stack from "@mui/material/Stack";
-import { v4 as uuid } from "uuid";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+function Home(props) {
+  console.log(props);
 
-export default function Home(props) {
-  const [open, setOpen] = React.useState(false);
-  const [customerDetails, setCustomerDetail] = React.useState({});
-  const [tempButton, setTempButton] = React.useState({});
-  const handleClose = () => setOpen(false);
-  // const unique_id = uuid();
-  const genrateUniqueId = () => {
-    const unique_id = uuid();
-    console.log(unique_id)
-  }
+  const navigate = useNavigate();
+  const [options, setOptions] = React.useState([]);
+  const [data, setData] = React.useState([]);
+  const [show, setShow] = React.useState(false);
 
-
-
-  const temp_Button = [
-    "Home",
-    "WareHouse",
-    "InterNet",
-    "Takers",
-    "Deleas",
-    "Custom",
-    "Business",
-    "Property Management",
-    "Open Existing",
+  const cameraOptions = [
+    { location_name: "Home" },
+    { location_name: "Restaurant" },
+    { location_name: "Internet" },
+    { location_name: "Dealer" },
+    { location_name: "Custom" },
+    { location_name: "Property Mangaement" },
   ];
 
   React.useEffect(() => {
-    // localStorage.clear();
+    const fetchData = async () => {
+      const file = "csv/products.csv";
+      const response = await fetch(file);
+      const csvText = await response.text();
+      const parsedData = Papa.parse(csvText, { header: true }).data;
+      setData(parsedData);
+    };
+    fetchData();
   }, []);
 
-  const handleSubmit = (e) => {
+  // data.forEach((item) => {
+  //   console.log(item)
+  // })
+  const handleOptions = (e) => {
     const { name, value } = e.target;
-    setCustomerDetail((prev) => {
+    setOptions((prevValues) => {
       return {
-        ...prev,
-        [name]: value,
+        ...prevValues,
+        name: value,
       };
     });
+    setShow(true);
   };
-  const handleOpen = (e) => {
-    e.preventDefault();
-    setTempButton({ temp_btn: e.target.name });
-    setOpen(true);
-    props.addToCartHandler({ customerDetails: customerDetails, temp_btn: e.target.name });
-  };
+  console.log(show)
 
-  const navigate = useNavigate();
   return (
-    <React.Fragment>
-      <Container
-        maxWidth="xl"
-        style={{
-          background: "#f6fcff",
-          height: "100vh",
-        }}
-      >
-        <Box
-          sx={{
-            marginLeft: 20,
-            display: "flex",
-            "& > :not(style)": {
-              m: 1,
-              width: "125vh",
-              height: 600,
-            },
-          }}
-        >
-          <Paper variant="outlined" square={true} color="red">
-            <h1>PLEASE CHOOSE OPTION</h1>
-
-            <div className="MuiFormControl" style={{ display: "block" }}>
-              <div className="spceItem">
-                <TextField
-                  id="filled-basic"
-                  label="Customer Name"
-                  variant="filled"
-                  name="name"
-                  value={customerDetails.name || ""}
-                  error={!customerDetails.name}
-                  helperText="Please Enter Name"
-                  onChange={handleSubmit}
-                />
-                <TextField
-                  id="filled-basic"
-                  label="Business"
-                  variant="filled"
-                  name="business"
-                  value={customerDetails.business || ""}
-                  error={!customerDetails.business}
-                  helperText="Please Enter Business Name"
-                  onChange={handleSubmit}
-                />
-              </div>
-              <div className="spceItem">
-                <TextField
-                  id="filled-basic"
-                  label="Address"
-                  variant="filled"
-                  name="address"
-                  value={customerDetails.address || ""}
-                  error={!customerDetails.address}
-                  helperText="Please Enter Business Name"
-                  onChange={handleSubmit}
-                />
-                <TextField
-                  id="filled-basic"
-                  label="Phone"
-                  name="phone"
-                  value={customerDetails.phone || ""}
-                  error={!customerDetails.phone}
-                  helperText="Please Enter Phone Number"
-                  variant="filled"
-                  onChange={handleSubmit}
-                />
-              </div>
-              <TextField
-                id="filled-basic"
-                label="Email"
-                name="email"
-                value={customerDetails.email || ""}
-                error={!customerDetails.email}
-                helperText="Please Enter email"
-                variant="filled"
-                onChange={handleSubmit}
-              />
-            </div>
-            <Stack spacing={2} direction="row" m={2}>
-              {temp_Button.map((button_name) => {
+    <>
+      <Container className="my-4" fluid style={{ backgroundColor: "" }}>
+        <Row className="p-1">
+          {/* Left */}
+          <Col md={9}>
+            <Row className="my-4">
+              {cameraOptions.map((details) => {
                 return (
-                  <Button
-                    key={button_name}
-                    style={{ margin: "0" }}
-                    onClick={handleOpen}
-                    variant="contained"
-                    name={button_name}
-                    disabled={
-                      !(
-                        customerDetails.address &&
-                        customerDetails.email &&
-                        customerDetails.business &&
-                        customerDetails.name &&
-                        customerDetails.email
-                      )
-                    }
-                  >
-                    {button_name}
-                  </Button>
+                  <Col className="my-4" style={{ backgroundColor: "" }}>
+                    <Card style={{ width: "18rem" }}>
+                      <Card.Img variant="top" height={200} src={hotelImage} />
+                      <Card.Body>
+                        <Card.Title>{details.location_name}</Card.Title>
+                        <Card.Text>
+                          Some quick example text to build on the card title and
+                          make up the bulk of the card's content.
+                        </Card.Text>
+                        <Button
+                          variant="dark"
+                          name={details.location_name || ""}
+                          value={details.location_name || ""}
+                          onClick={handleOptions}
+                        >
+                          {details.location_name}
+                        </Button>
+                      </Card.Body>
+                    </Card>
+                  </Col>
                 );
               })}
-
-              <button onClick={genrateUniqueId}>
-                user id on click{" "}
-              </button>
-            </Stack>
-          </Paper>
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                color={"red"}
-              >
-                Do You Want Use Template ?
-              </Typography>
-              <Box>
-                <Button variant="contained" style={{ margin: "0 5px" }}>
+            </Row>
+          </Col>
+        </Row>
+        {/* Modal Starts */}
+        <Modal show={show} onHide={() => setShow(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>First Modal</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row className="my-2">
+              <Col md={8} style={{ backgroundColor: "" }}>
+                Number of Options
+              </Col>
+              <Col md={4} style={{ backgroundColor: "" }}>
+                <a href="#">-</a>
+                <a href="#" class="border">
+                  1
+                </a>
+                <a href="#">+</a>
+              </Col>
+            </Row>
+            {/* <Modal show={showNested} onHide={handleCloseNested}>
+              <Modal.Header closeButton>
+                <Modal.Title>*Use Templates</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>Use Templates?</Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleNumberModal}>
                   Yes
                 </Button>
-                <Button
-                  variant="contained"
-                  style={{ margin: "0 5px", background: "red" }}
-                  onClick={() => navigate("recorder")}
-                >
+                <Button variant="primary" onClick={handleNumberModal}>
                   No
                 </Button>
-              </Box>
-            </Box>
-          </Modal>
-        </Box>
+              </Modal.Footer>
+            </Modal> */}
+
+            {/* End of Nested Modal */}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              className="d-block"
+              variant="info"
+              onClick={() => setShow(true)}
+            >
+              Next
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        {/* Modal Ends */}
+        {/* Modal Camera Numbers */}
       </Container>
-    </React.Fragment>
+    </>
   );
 }
+
+export default Home;
