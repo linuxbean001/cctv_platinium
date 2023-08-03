@@ -5,6 +5,8 @@ import HomeContainer from "./Redux/Container/HomeContainer";
 
 import LandingPage from "./Design/LandingPage";
 import FinalCart from "./Design/finalcart/FinalCart";
+import SideBar from "./Component/SideBar/SideBar";
+import NavBar from "./Component/Header/NavBaR";
 
 
 
@@ -16,7 +18,9 @@ function App() {
     {/*     
     <HomeContainer.CheckCart/>
 */}
-  <FinalCart/>
+   <NavBar/>
+  <RoutesMiddleware/>
+  <SideBar/>
 
   </div>
   );
