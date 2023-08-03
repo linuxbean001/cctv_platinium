@@ -5,6 +5,7 @@ import HomeContainer from "./Redux/Container/HomeContainer";
 
 import LandingPage from "./Design/LandingPage";
 import FinalCart from "./Design/finalcart/FinalCart";
+import Nvr from "./Design/nvrrecorder/Nvr";
 
 
 
@@ -16,7 +17,8 @@ function App() {
     {/*     
     <HomeContainer.CheckCart/>
 */}
-  <FinalCart/>
+  <Nvr/>
+
 
   </div>
   );
