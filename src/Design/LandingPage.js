@@ -1,7 +1,8 @@
-import React from 'react'
+import { React, useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -13,12 +14,69 @@ import hotelImage from '../assets/images/Categories/Restaurant-Security-Cameras-
 
 
 function LandingPage() {
+  const [show, setShow] = useState(false);
+  const [showNested, setShowNested] = useState(false); // State for the nested modal
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const handleCloseNested = () => setShowNested(false);
+  const handleShowNested = () => setShowNested(true);
   const imgUrl_1 = 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80';
   const imgUrl_2 = 'https://plus.unsplash.com/premium_photo-1675016457613-2291390d1bf6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80';
   const imgUrl_3 = 'https://images.unsplash.com/photo-1600069620961-8bee77c2e28a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=773&q=80';
   
   return (
     <>
+  {/* Modal Starts */}
+
+   <Button variant="primary" onClick={handleShow}>
+        Launch demo modal
+      </Button>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>First Modal</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            <Row className='my-2'>
+              <Col md={8} style={{backgroundColor:''}}>Number of Options</Col>
+              <Col md={4} style={{backgroundColor:''}}>
+                  <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
+              </Col>
+
+            </Row>
+          <Button className='d-block' variant="info" onClick={handleShowNested}>
+            Next
+          </Button>
+
+          {/* Nested Modal */}
+          <Modal show={showNested} onHide={handleCloseNested}>
+            <Modal.Header closeButton>
+              <Modal.Title>Nested Modal Heading</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Content for the Nested Modal</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseNested}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleCloseNested}>
+                Save Changes
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          {/* End of Nested Modal */}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+  {/* Modal Ends */}
       <Navbar bg="dark" data-bs-theme="dark">
         <Container>
           <Navbar.Brand href="#home">Platinum CCTV</Navbar.Brand>

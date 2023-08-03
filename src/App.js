@@ -5,8 +5,13 @@ import HomeContainer from "./Redux/Container/HomeContainer";
 
 import LandingPage from "./Design/LandingPage";
 import FinalCart from "./Design/finalcart/FinalCart";
+
+
 import SideBar from "./Component/SideBar/SideBar";
 import NavBar from "./Component/Header/NavBaR";
+
+import Nvr from "./Design/nvrrecorder/Nvr";
+
 
 
 
@@ -18,10 +23,13 @@ function App() {
     {/*     
     <HomeContainer.CheckCart/>
 */}
+
    <NavBar/>
   <RoutesMiddleware/>
   <SideBar/>
 
+  <Nvr/>
+ 
   </div>
   );
 }
