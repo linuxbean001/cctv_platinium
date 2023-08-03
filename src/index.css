@@ -1,4 +1,11 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+body
+{
+  font-family: 'Nunito', sans-serif !important;
+}
+
 /*modal css */
 .css-1i2vuon-MuiTypography-root{
   text-align: center;
@@ -262,3 +269,4 @@ margin: 20px 0;
   border-radius: 10px;
   border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
+

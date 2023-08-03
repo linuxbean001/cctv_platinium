@@ -4,6 +4,7 @@ import React from "react";
 import HomeContainer from "./Redux/Container/HomeContainer";
 
 import LandingPage from "./Design/LandingPage";
+import FinalCart from "./Design/finalcart/FinalCart";
 
 
 
@@ -14,9 +15,9 @@ function App() {
   <div className="App">
     {/*     
     <HomeContainer.CheckCart/>
-    <RoutesMiddleware/>
 */}
-<LandingPage/>
+  <FinalCart/>
+
   </div>
   );
 }
