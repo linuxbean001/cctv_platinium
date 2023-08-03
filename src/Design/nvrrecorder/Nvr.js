@@ -42,7 +42,7 @@ function Nvr() {
                         <Col>
                             <Card style={{ width: '', margin: '' }}>
                                 <Card.Body>
-                                    <Card.Title>SKU:Micro NVR</Card.Title>
+                                    <Card.Title className='fw-bold'>SKU: Micro NVR</Card.Title>
                                     <Card.Text> Description:
                                         Micro NVR to build  Micro NVR to build  Micro NVR to build.....
                                     </Card.Text>
@@ -61,7 +61,7 @@ function Nvr() {
                         <Col>
                             <Card style={{ width: '', margin: '' }}>
                                 <Card.Body>
-                                    <Card.Title>SKU:Micro NVR</Card.Title>
+                                    <Card.Title className='fw-bold'>SKU: Mid NVR</Card.Title>
                                     <Card.Text> Description:
                                         Micro NVR to build  Micro NVR to build  Micro NVR to build.....
                                     </Card.Text>
@@ -80,8 +80,8 @@ function Nvr() {
                         <Col>
                             <Card style={{ width: '', margin: '' }}>
                                 <Card.Body>
-                                    <Card.Title>SKU:Micro NVR</Card.Title>
-                                    <Card.Text> Description:
+                                    <Card.Title className='fw-bold' >SKU: Platinum NVR</Card.Title>
+                                    <Card.Text className='fs-6'> Description:
                                         Micro NVR to build  Micro NVR to build  Micro NVR to build.....
                                     </Card.Text>
 
