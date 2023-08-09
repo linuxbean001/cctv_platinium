@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React from "react";
 import SVCCall from "../Templates/SVC_Call";
 import HomeContainer from "../../Redux/Container/HomeContainer";
-
+import Home from "../Templates/Home";
 function RoutesMiddleware() {
   const routesComponent=[
     {
@@ -71,8 +71,9 @@ function RoutesMiddleware() {
         {routesComponent.map((index)=>{
           // console.log(index.path,index.element,index.exact)
         })}
+           
           <Route exact path="/" element={<HomeContainer.Home />} />
-          <Route exact path="/recorder" element={<HomeContainer.Recorder/>} />
+          <Route exact path="/recorder" element={<HomeContainer.Nvr/>} />
           <Route exact path="/nvr_info" element={<HomeContainer.NVRINFO />} />
           <Route exact path="/cameras" element={<HomeContainer.Cameras />} />
           <Route exact path="/poe_s" element={<HomeContainer.POEs />} />
@@ -85,7 +86,7 @@ function RoutesMiddleware() {
           <Route
             exact
             path="/add_to_cart"
-            element={<HomeContainer.CheckCart />}
+            element={<HomeContainer.FinalCart />}
           />
         </Routes>
       </BrowserRouter>
