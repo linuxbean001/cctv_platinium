@@ -3,7 +3,6 @@ import Home from "../../Component/Templates/Home";
 import AddCart from "../../Component/Templates/AddCart";
 import Cameras from "../../Component/Templates/Cameras";
 import { addToCart } from "../../Services/Actions/actions";
-import Recorder from "../../Component/Templates/Recorder";
 import NVRINFO from "../../Component/Templates/NVRINFO";
 import POEs from "../../Component/Templates/POEs";
 import Hardware from "../../Component/Templates/Hardware";

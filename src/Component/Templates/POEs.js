@@ -10,10 +10,7 @@ import Stack from "@mui/material/Stack";
 function POEs(props) {
   const [ports, setPorts] = React.useState([]);
   const [portvalues, setPortsValues] = React.useState({});
-  console.log(props)
   const navigate = useNavigate();
-
-
   const handleValues = (e) => {
     const { name, value } = e.target;
     setPortsValues((prev) => {
@@ -23,19 +20,13 @@ function POEs(props) {
       };
     });
   }
-
-
   const handlePorts = (e) => {
     const btnName = e.target.name
     setPorts( btnName)
   }
 
   const handleNext=()=>{
-    console.log(portvalues)
-   console.log(ports)
-
    props.addToCartHandler({portvalues:portvalues,portsName:ports})
-
    navigate("/hardware")
   }
   return (

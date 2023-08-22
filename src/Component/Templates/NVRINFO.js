@@ -12,14 +12,12 @@ import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
 
 function NVRINFO(props) {
-  console.log(props);
   const [open, setOpen] = React.useState(false);
   const [numValues, setNumValues] = React.useState({});
 
   const handleClose = () => {
     setOpen(false);
   };
-
   const handleValues = (e) => {
     const { name, value } = e.target;
     setNumValues((prev) => {
@@ -29,8 +27,6 @@ function NVRINFO(props) {
       };
     });
   };
-  //
-  // console.log(numValues);
 
   const handleClickOpen = (e) => {
     props.addToCartHandler(numValues);
@@ -39,7 +35,6 @@ function NVRINFO(props) {
         message: "Please enter the number of values",
       };
     }
-
     setOpen(true);
   };
 

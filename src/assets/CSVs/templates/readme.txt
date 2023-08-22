@@ -1,1 +1,0 @@
-This folder will contain the templates that can be used to auto-populate a cart with certain items (left branch of flowchart).

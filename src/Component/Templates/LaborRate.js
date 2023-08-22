@@ -24,7 +24,6 @@ const style = {
 };
 
 function LaborRate(props) {
-  console.log(props);
   const [laborDetail, setLaborDetail] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [nestModal, setNestModal] = React.useState(false);
@@ -41,7 +40,6 @@ function LaborRate(props) {
   for (let i = 0; i <= props.userDetail.length; i++) {
     Object.assign(cameraDetails, props.userDetail[i]);
   }
-  console.log(cameraDetails.specialDetails.tx);
 
   const handleClose = () => {
     setOpen(false);
@@ -57,8 +55,6 @@ function LaborRate(props) {
     
   }
   props.addToCartHandler(laborDetail)
-  console.log(laborDetail);
-
   const navigate = useNavigate();
   return (
     <React.Fragment>

@@ -3,6 +3,7 @@ import React from "react";
 import SVCCall from "../Templates/SVC_Call";
 import HomeContainer from "../../Redux/Container/HomeContainer";
 import Home from "../Templates/Home";
+import FinalCart from "../CheckItem/finalcart/FinalCart";
 function RoutesMiddleware() {
   const routesComponent=[
     {
@@ -83,6 +84,8 @@ function RoutesMiddleware() {
           <Route exact path="/labor_rate" element={<HomeContainer.LaborRate />} />
           <Route exact path="/special" element={<HomeContainer.Special />} />
           <Route exact path="/svc_call" element={<SVCCall />} />
+          <Route exact path="/add_to_cart" element={<FinalCart />} />
+
           <Route
             exact
             path="/add_to_cart"

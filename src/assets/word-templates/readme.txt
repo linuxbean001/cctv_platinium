@@ -1,1 +1,0 @@
-These are the Word Templates I currently use to create the quotes.  Great reference to see where our variables will be.  They will be converted to HTML files and we can add variables in that will be controlled by our process/scripts.

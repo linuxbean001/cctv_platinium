@@ -1,14 +1,10 @@
 import React, { useEffect } from "react";
 
-
 function AddCart(props) {
-  console.log(props);
-
   const [cartData, setCartData] = React.useState([]);
   const [cartPaper, setCartPaper] = React.useState(false);
 
   const [nvrDetails, setNvrDetail] = React.useState([]);
-  console.log("nvrState", nvrDetails);
   React.useEffect(() => {
     // window.localStorage.setItem("myData", JSON.stringify(props));
     if (
@@ -41,12 +37,7 @@ function AddCart(props) {
       setCartPaper(true);
     }
   };
-
   const storedData = JSON.parse(localStorage.getItem("initData"));
-  // console.log(storedData.userDetail[0].name);
-
-  // console.log(JSON.parse(persist.nvrInfoReducer))
-
   return (
     <div>
       <h5> cart Items</h5>
@@ -77,7 +68,6 @@ function AddCart(props) {
             <th>Total Camera</th>
           </tr>
           <tr>
-           
           </tr>
         </tbody>
       </table>
@@ -99,9 +89,7 @@ function AddCart(props) {
             <th>CPU</th>
             <th>Licenses</th>
           </tr>
-
           <tr>
-           
           </tr>
         </tbody>
       </table>

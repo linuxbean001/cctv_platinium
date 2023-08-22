@@ -5,71 +5,181 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-
-import warehouseImage from "../../../assets/images/Categories/Warehouse-Security-Cameras.jpg";
+import Modal from 'react-bootstrap/Modal';
 import "./index.css";
 import Papa from "papaparse";
-import { CompareSharp } from "@mui/icons-material";
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import { useNavigate } from "react-router-dom"
+
+//Modal Starts Here
+
+
+function MyVerticallyCenteredModal(props) {
+  console.log('props aress',props)
+
+  const [count, setCount] = useState(0);
+  const handleIncrement = () => {
+    setCount(count + 1);
+  };
+  const handleDecrement = () => {
+    setCount(count - 1);
+  };
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          {props.modalTitle}
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Container>
+          <Row>
+            <Col md={4}>
+              <Row>
+                <Card.Img
+                  variant="top"
+                  height={150}
+                  src={props.modalTitle === 'MicroNVR' ? props.data[0].thumbnail
+                    : props.modalTitle === 'MidNVR' ? props.data[1].thumbnail
+                      : props.modalTitle === 'PlatinumNVR' ? props.data[2].thumbnail
+                        : null}
+                />
+              </Row>
+              <Row className="my-2">
+                <Col> <Card.Img
+                  variant="top"
+                  height={50}
+                  src={props.modalTitle === 'MicroNVR' ? props.data[0].thumbnail
+                    : props.modalTitle === 'MidNVR' ? props.data[1].thumbnail
+                      : props.modalTitle === 'PlatinumNVR' ? props.data[2].thumbnail
+                        : null}
+                /></Col>
+                <Col> <Card.Img
+                  variant="top"
+                  height={50}
+                  src={props.modalTitle === 'MicroNVR' ? props.data[0].thumbnail
+                    : props.modalTitle === 'MidNVR' ? props.data[1].thumbnail
+                      : props.modalTitle === 'PlatinumNVR' ? props.data[2].thumbnail
+                        : null}
+                /></Col>
+                <Col> <Card.Img
+                  variant="top"
+                  height={50}
+                  src={props.modalTitle === 'MicroNVR' ? props.data[0].thumbnail
+                    : props.modalTitle === 'MidNVR' ? props.data[1].thumbnail
+                      : props.modalTitle === 'PlatinumNVR' ? props.data[2].thumbnail
+                        : null}
+                /></Col>
+              </Row>
+            </Col>
+            <Col md={8}>
+              <p>Description:
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Autem, corrupti?
+              </p>
+              <p>Options:
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              </p>
+              <DropdownButton variant="dark" id="dropdown-basic-button" title="Options">
+                <Dropdown.Item href="#/action-1">
+                  {
+                    props.modalTitle === 'MicroNVR' ? props.data3[0].featurename
+                      : props.modalTitle === 'MidNVR' ? props.data3[1].featurename
+                        : props.modalTitle === 'PlatinumNVR' ? props.data3[2].featurename
+                          : null
+                  }
+                </Dropdown.Item>
+              </DropdownButton>
+              <div className="d-flex align-items-end justify-content-end" style={{ backgroundColor: '' }}>
+                <Button variant="dark" onClick={handleIncrement}>
+                  +
+                </Button>
+                <h6 className="mx-3">{count}</h6>
+                <Button variant="dark" onClick={handleDecrement}>
+                  -
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </Modal.Body>
+      <Modal.Footer>
+
+        <div className="w-100 my-4 d-flex align-items-end justify-content-between" >
+          <Button className="mx-3" variant="dark" onClick={() => props.onHide(false)}>
+            Back
+          </Button>
+          <Button variant="dark" onClick={() => props.onHide(false)}>
+            Add
+          </Button>
+        </div>
+      </Modal.Footer>
+    </Modal>
+  );
+}
+//Modal Ends Here
 
 function Nvr(props) {
-     const [data, setData] = useState([]);
-     console.log("first",data)
-    let categoriesData = [];
-    let productOptionsDetails = []
+  const navigate = useNavigate();
+  // Modal Click Button Text Changed
+  // Modal State Starts
+  const [modalShow, setModalShow] = React.useState(false);
+  const [modalTitle, setModalTitle] = React.useState([]); // Initialize with a default title
+  //Modal State Ends
+  const [data, setData] = useState([]);
+  const [data2, setData2] = useState([]);
 
 
   React.useEffect(() => {
     const parseCSVFiles = async () => {
-    try {
-    //   const categoryData = await fetch('assets/CSVs/categories.csv');
-      const productData = await fetch('assets/CSVs/products.csv');
-    //   const productOptionData = await fetch('assets/CSVs/products_options.csv');
-    //   const categoryArray = await categoryData.text();
-      const productArray = await productData.text();
-      console.log("productArray",productArray)
-    //   const productOptionArray = await productOptionData.text();
-    //   const categories = Papa.parse(categoryArray, { header: true }).data;
-    //   categories.map(({ id, category_name, category_description, category_parent, iconimage, filename, sorting }) => {
-        
-    //     categoriesData.push({
-    //       id,
-    //       category_name,
-    //       category_description,
-    //       category_parent,
-    //       iconimage,
-    //       filename,
-    //       sorting,
-    //     });
-    //   });
-      const products = Papa.parse(productArray, { header: true }).data;
-      console.log("products",products)
-       setData(products)
-      //   const productOptions = Papa.parse(productOptionArray, { header: true }).data;
-    //   productOptions.map(({ optionid, productid, featurecaption, featuretype, featureprice, partnumber, selected,sorting ,thumbpath,featurerequired}) => {
-        
-    // //     productOptionsDetails.push({
-    //       optionid, productid, featurecaption, featuretype, featureprice, partnumber, selected,sorting ,thumbpath,featurerequired
-    //     });
-    //   });
-     
-    //   setData((data)=>({
-    //     // categories: categoriesData,
-    //     products,
-    //     // productOptions:productOptionsDetails ,
-    //   }));
-    
-      
-    } catch (error) {
-      console.error('Error parsing CSV files:', error);
-    }
-  };
-  parseCSVFiles();
-}, []);
-console.log(data)
-// for(let i =0; i<data.products.length;i++){
-//     console.log(data.products[i])
-// }
-    
+      try {
+        const productData = await fetch('assets/CSVs/products.csv');
+        const productOptionData = await fetch('assets/CSVs/products_options.csv');
+        const productArray = await productData.text();
+        const productArray2 = await productOptionData.text();
+        const products = Papa.parse(productArray, { header: true }).data;
+        const products2 = Papa.parse(productArray2, { header: true }).data;
+        setData(products) // product data
+        setData2(products2) // product_options data
+
+      } catch (error) {
+        console.error('Error parsing CSV files:', error);
+      }
+    };
+    parseCSVFiles();
+  }, []);
+
+  const handleButtonClick = (e, id, image1) => {
+    setModalTitle(id)
+    setModalShow(true)
+  }
+
+  // Filter Condition
+  const targetIds = ['PlatinumNVR', 'MicroNVR', 'MidNVR'];
+  const filteredData = data.filter(item => targetIds.includes(item.id));
+
+  // Filter Condition 2
+  const targetIds2 = ['57', '58', '59'];
+  const filteredData2 = data2.filter(item => targetIds2.includes(item.optionid));
+
+  // Filter Condition 3
+  const targetIds3 = ['1956', '1966', '1982'];
+  const filteredData3 = data2.filter(item => targetIds3.includes(item.optionid));
+
+
+  // Warning Modals state
+  const [show2, setShow2] = useState(false);
+  const handleClose2 = () => setShow2(false);
+  const handleShow2 = () => setShow2(true);
+  // Warning Modals state
+
+
+
   return (
     <>
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
@@ -85,20 +195,13 @@ console.log(data)
             <Col className="" style={{ backgroundColor: "" }}>
               <Row>
                 <Col className="text-end">
-                  {props.userDetail.map((element, index) => {
-                    return (
-                      <h6>
-                        Number of Cameras :{" "}
-                        <span className="fw-bold">{element.cameraNumber}</span>
-                      </h6>
-                    );
-                  })}
+                  Number of Cameras : <span className="fw-bold">??</span>
                 </Col>
               </Row>
               <Row>
                 <Col className="text-end">
                   <h6>
-                    Number of Licenses : <span className="fw-bold">20</span>
+                    Number of Licenses : <span className="fw-bold">??</span>
                   </h6>
                 </Col>
               </Row>
@@ -106,96 +209,50 @@ console.log(data)
           </Row>
 
           {/* Box Row */}
-
-          <Row className="my-4" style={{}}>
-            <Col>
-              <Card style={{ width: "", margin: "" }}>
-                <Card.Body>
-                  <Card.Title className="fw-bold">SKU: Micro NVR</Card.Title>
-                  <Card.Text>
-                    {" "}
-                    Description: Micro NVR to build Micro NVR to build Micro NVR
-                    to build.....
-                  </Card.Text>
-
-                  <Row>
-                    <Col xs={8}>
-                      <Card.Img
-                        variant="top"
-                        height={150}
-                        src={warehouseImage}
-                      />
-                    </Col>
-                    <Col
-                      xs={4}
-                      className="d-flex align-items-center justify-content-center fw-bold"
-                    >
-                      $500
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col>
-              <Card style={{ width: "", margin: "" }}>
-                <Card.Body>
-                  <Card.Title className="fw-bold">SKU: Mid NVR</Card.Title>
-                  <Card.Text>
-                    {" "}
-                    Description: Micro NVR to build Micro NVR to build Micro NVR
-                    to build.....
-                  </Card.Text>
-
-                  <Row>
-                    <Col xs={8}>
-                      <Card.Img
-                        variant="top"
-                        height={150}
-                        src={warehouseImage}
-                      />
-                    </Col>
-                    <Col
-                      xs={4}
-                      className="d-flex align-items-center justify-content-center fw-bold"
-                    >
-                      $500
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col>
-              <Card style={{ width: "", margin: "" }}>
-                <Card.Body>
-                  <Card.Title className="fw-bold">SKU: Platinum NVR</Card.Title>
-                  <Card.Text className="fs-6">
-                    {" "}
-                    Description: Micro NVR to build Micro NVR to build Micro NVR
-                    to build.....
-                  </Card.Text>
-
-                  <Row>
-                    <Col xs={8}>
-                      <Card.Img
-                        variant="top"
-                        height={150}
-                        src={warehouseImage}
-                      />
-                    </Col>
-                    <Col
-                      xs={4}
-                      className="d-flex align-items-center justify-content-center fw-bold"
-                    >
-                      $500
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </Col>
+          <Row className="my-4">
+            {
+              filteredData.map((val) => {
+                return (
+                  <Col className="nvr_col" onClick={(e) => handleButtonClick(e, val.id, val.image1)}>
+                    <Card style={{ width: "", margin: "" }}>
+                      <Card.Body>
+                        <Card.Title className="fw-bold">SKU :  {val.id}</Card.Title>
+                        <Card.Text>
+                          {" "}
+                          Description :
+                          {val.name}
+                        </Card.Text>
+                        <Row>
+                          <Col xs={8}>
+                            <Card.Img
+                              variant="top"
+                              height={150}
+                              src={val.thumbnail}
+                            />
+                          </Col>
+                          <Col
+                            xs={4}
+                            className="d-flex align-items-center justify-content-center fw-bold"
+                          >
+                            $ {val.price}
+                          </Col>
+                        </Row>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                )
+              })
+            }
+            <MyVerticallyCenteredModal
+              show={modalShow}
+              onHide={() => setModalShow(false)}
+              modalTitle={modalTitle}
+              data={filteredData}
+              data2={filteredData2}
+              data3={filteredData3}
+            />
           </Row>
-
           {/* Table */}
-
           <Row className="my-4" style={{ padding: "8px" }}>
             <Col style={{}}>
               <div className="table-border">
@@ -241,15 +298,29 @@ console.log(data)
           </Row>
 
           {/* Button */}
-
           <Row className="my-4" style={{ backgroundColor: "" }}>
             <Col className="d-flex justify-content-between">
               <Button variant="dark">Previous</Button>
-              <Button variant="dark">Next</Button>
+              <Button variant="dark" onClick={handleShow2}>Next</Button>
             </Col>
           </Row>
         </Container>
       </Container>
+
+      <Modal show={show2} onHide={handleClose2}>
+        <Modal.Header closeButton>
+          <Modal.Title> <h6> Warning ! Less Licenses than number of cameras</h6> </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure want to continue</Modal.Body>
+        <Modal.Footer>
+          <Button variant="dark" onClick={handleClose2}>
+            Go Back
+          </Button>
+          <Button variant="dark" onClick={() => navigate("/cameras")}>
+            Continue Anyways
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

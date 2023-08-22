@@ -4,7 +4,6 @@ import Paper from "@mui/material/Paper";
 import { useNavigate } from "react-router-dom";
 
 function SVCCall() {
-     
      const navigate = useNavigate();
   return (
      <Paper variant="outlined" square={true} color="red">

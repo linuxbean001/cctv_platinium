@@ -5,6 +5,7 @@
     box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 1rem;
     border: transparent;
+    transition: transform .9s; /* Animation */
   }
   /* Add border to the table */
 .table-border {
@@ -13,4 +14,14 @@
     border-radius: 10px;
     box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
+  }
+  .nvr_col
+  {
+    cursor: pointer;
+  }
+
+  .card:hover
+  {
+      border: 1px solid gray;
+      /* transform: scale(1.03); */
   }

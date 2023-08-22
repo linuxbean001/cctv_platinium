@@ -23,7 +23,6 @@ const style = {
 };
 
 function Hardware(props) {
-  console.log(props)
   const [open, setOpen] = React.useState(false);
   const [hardwarelevel, SetHardwareLevel] = React.useState([])
   const handleClose = () => {
@@ -36,11 +35,9 @@ function Hardware(props) {
   };
 
   const naviGateButtn=(e)=>{
-  //  const value = e.target.value
     props.addToCartHandler(hardwarelevel)
     navigate("/cabling")
   }
-  console.log(hardwarelevel)
   const navigate = useNavigate();
 
   return (
@@ -95,7 +92,6 @@ function Hardware(props) {
                   <InputAdornment position="start">$</InputAdornment>
                 }
                 name ="amount"
-                // value={hardwarelevel.modalName||""}
                 onChange={handleOpen}
               />
               <p>/camera</p>

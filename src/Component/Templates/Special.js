@@ -51,7 +51,6 @@ function Special(props) {
     props.addToCartHandler({specialDetails:specialDetails});
     setNestModal(false)
   }
-  console.log(specialDetails)
   const navigate = useNavigate();
   return (
     <React.Fragment>

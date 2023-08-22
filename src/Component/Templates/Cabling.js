@@ -28,7 +28,6 @@ const style = {
 };
 
 function Cabling(props) {
-  console.log('cabling', props)
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [cable, setCableName] = React.useState({})
@@ -45,8 +44,6 @@ function Cabling(props) {
   const cableName = (e) => {
     const name = e.target.name
     // setCableName({cable:name})
-
-    console.log(name)
   }
   {/* Modal Open*/ }
   const handleOpen = (e) => {

@@ -4,15 +4,9 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-
 function SideBar(props) {
-  
-
-
   return (
     <>
-     
-
       <Container className="my-4" fluid style={{ backgroundColor: '' }}>
         <Row className='p-1'>
                  <Col className='cart_box' md={3} style={{ backgroundColor: '', height: '320px' }}>

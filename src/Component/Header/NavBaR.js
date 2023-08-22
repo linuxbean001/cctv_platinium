@@ -5,10 +5,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import { Link } from "react-router-dom";
 
-
 function NavBar(props) {
 
- 
   return (
     <>
       <Navbar bg="dark" data-bs-theme="dark">
@@ -22,7 +20,6 @@ function NavBar(props) {
           <Nav.Link href="/add_to_cart">CheckCart</Nav.Link>
             <Nav.Link href="#features">CSV Export</Nav.Link>
           </Nav>
-      
         </Container>
       </Navbar>
     </>
