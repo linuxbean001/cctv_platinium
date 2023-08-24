@@ -10,8 +10,11 @@ import Papa from "papaparse";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
 
 function Cameras(props) {
+  const navigate = useNavigate();
+
   const [data, setData] = useState([]); // for category csv
   const [productCSV, setProductCSV] = useState([]); // for products csv
   const [categoryDatas, setCategoryDatas] = useState([]); // for products csv
@@ -23,6 +26,7 @@ function Cameras(props) {
 
   const [test, setTest] = useState([])
   const [test2, setTest2] = useState([])
+  const [thumbimg, setThumbimg] = useState([])
 
 
   const handleIncrement = () => {
@@ -67,36 +71,36 @@ function Cameras(props) {
 
   const handleButtonClick = (e, category_name) => {
     setShow(true)
-    setCategoryDatas(category_name) // whatever we click, store here
-
+    setCategoryDatas(category_name) 
     // Filter Condition-2
     const filteredData4 = productCSV.filter((item) => {
       if (item.categories) {
         const categoriesWords = item.categories.split('/');
-        console.log('items are' ,categoriesWords)
+        // console.log('items are' ,categoriesWords)
         return categoriesWords.some(word => category_name == word);
       }
       return false
     });
     setTest(filteredData4)
   }
-  // console.log(test)
 
   // Modal_1
   function modal_1(e,id) {
     setShow2(true)
     setShow(false)
-    // console.log('id is', id)
+    // console.log('id is', id) // getting id from product csv
 
      // Filter Condition-2
      const filteredData5 = test.filter((item) => {
-      // console.log('item are', item)
+      // console.log(test)
+      if (item.id == id) {
+        return item
+      }
     });
-    // console.log(filteredData5)
-
+    setTest2(filteredData5)
   }
-
-
+console.log('test 2 :',  test2)
+  console.log('imagess', thumbimg.img1)
 
   return (
     <>
@@ -166,7 +170,7 @@ function Cameras(props) {
           <Row className="my-4" style={{ backgroundColor: "" }}>
             <Col className="d-flex justify-content-end">
 
-              <Button variant="dark">Next</Button>
+              <Button variant="dark" onClick={() => navigate("/poe-switch")} >Next</Button>
             </Col>
           </Row>
 
@@ -185,10 +189,10 @@ function Cameras(props) {
               <Row className="my-4">
                 {test.map(item => (
                   <Col md={4} className="nvr_col" onClick={(e) => modal_1(e, item.id)} key={item.id}>
-                    <Card style={{ width: "", margin: "" }}>
+                    <Card style={{ width: "", backgroundColor: "", height:'350px' }}>
                       <Card.Body>
                         <Card.Title className="fw-bold">SKU : {item.id}</Card.Title>
-                        <Card.Text>Description : {item.description}</Card.Text>
+                        <Card.Text>Description :  {item.description.split(' ').slice(0, 20).join(' ')}...</Card.Text>
 
                         <Row>
                           <Col xs={8}>
@@ -228,43 +232,61 @@ function Cameras(props) {
               <Container>
 
                 <Row>
-                  <Col md={4} style={{ backgroundColor: '' }}>
+
+                  {
+
+                      test2.map((val)=>{
+                        return(
+                          <>
+                        <Col md={5} style={{ backgroundColor: '' }}>
                     <Row>
                       <Card.Img
                         variant="top"
                         height={150}
-                        src='assets/images/Categories/Fake-Cameras.jpg'
+                        src= {thumbimg.img1}
                       />
                     </Row>
                     <Row className="my-2">
                       <Col> <Card.Img
                         variant="top"
-                        height={50}
-                        src='assets/images/Categories/Fake-Cameras.jpg'
+                        height={40}
+                        className="camera_thumbnail_img"
+                        src={val.image1}
+                         onClick={()=>{setThumbimg({img1:val.image1})}}
 
                       /></Col>
                       <Col> <Card.Img
                         variant="top"
-                        height={50}
-                        src='assets/images/Categories/Fake-Cameras.jpg'
+                        height={40}
+                        className="camera_thumbnail_img"
+                        src={val.image2}
+                        onClick={()=>{setThumbimg({img1:val.image2})}}
 
                       /></Col>
                       <Col> <Card.Img
                         variant="top"
-                        height={50}
-                        src='assets/images/Categories/Fake-Cameras.jpg'
+                        height={40}
+                        className="camera_thumbnail_img"
+                        src={val.image3}
+                        onClick={()=>{setThumbimg({img1:val.image3})}}
 
+                      /></Col>
+                        <Col> <Card.Img
+                        variant="top"
+                        height={40}
+                        className="camera_thumbnail_img"
+                        src={val.image4}
+                        onClick={()=>{setThumbimg({img1:val.image4})}}
                       /></Col>
 
                     </Row>
 
                   </Col>
-                  <Col md={8}>
-                    <p>Description:
-                      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Autem, corrupti?
+                  <Col md={7}>
+                    <p>{val.name}
                     </p>
-                    <p>Options:
-                      Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                    <p>
+                    {val.name}
                     </p>
                     <DropdownButton variant="dark" id="dropdown-basic-button" title="Options">
                       <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
@@ -282,6 +304,11 @@ function Cameras(props) {
                       </Button>
                     </div>
                   </Col>
+                          </>
+                        )
+                      })
+                  }
+                  
                 </Row>
               </Container>
             </Modal.Body>
