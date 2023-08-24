@@ -6,7 +6,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Modal from 'react-bootstrap/Modal';
-// import "./index.css";
+import "./index.css";
 import Papa from "papaparse";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
@@ -18,8 +18,6 @@ const onlineImageURL = 'https://images.pexels.com/photos/326508/pexels-photo-326
 
 // Modal-1 Starts
 function MyVerticallyCenteredModal(props) {
-  const navigate = useNavigate();
-
 // Increment and Decrement
 const [count, setCount] = useState(0);
 const handleIncrement = () => {
@@ -102,7 +100,7 @@ const handleDecrement = () => {
       </Modal.Body>
             <Modal.Footer className="d-flex justify-content-between">
                 <Button variant="dark" onClick={props.onHide}>Back</Button>
-                <Button variant="dark" onClick={() => navigate("/cameras")} >Add</Button>
+                <Button variant="dark" onClick={props.onHide}>Add</Button>
             </Modal.Footer>
         </Modal>
     );
@@ -138,7 +136,7 @@ function MyVerticallyCenteredModal2(props) {
 
 //Modal Ends
 
-function Hardware() {
+function PoeSwitches() {
     // Modal state-1
     const [modalShow, setModalShow] = React.useState(false);
     // Modal state-2
@@ -162,7 +160,7 @@ function Hardware() {
                     <Row style={{ backgroundColor: "" }}>
                         <Col style={{ backgroundColor: "" }}>
                             <h2>
-                               Hardware{" "}
+                                POEs Switches{" "}
                                 <span className="fst-italic fs-6">(Category)</span>
                             </h2>
                         </Col>
@@ -189,10 +187,11 @@ function Hardware() {
                         <Col md={4} className="nvr_col" onClick={(e) => handleButtonClick(e)}>
                             <Card style={{ width: "", margin: "" }}>
                                 <Card.Body>
-                                    <Card.Title className="fw-bold">SKU : HRD-LVL1</Card.Title>
+                                    <Card.Title className="fw-bold">SKU :  192</Card.Title>
                                     <Card.Text>
                                         {" "}
-                                        Hardware LVL 1
+                                        Description :
+                                        Lorem Ipsum.....
                                     </Card.Text>
                                     <Row>
                                         <Col xs={8}>
@@ -214,9 +213,58 @@ function Hardware() {
                         </Col>
                     </Row>
 
-                    
+                    {/* Table */}
+                    <Row className="my-4" style={{ padding: "8px" }}>
+                        <Col style={{}}>
+                            <div className="table-border">
+                                <Table striped hover>
+                                    <thead></thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Adding to Cart</td>
+                                            <td>QTY</td>
+                                            <td>SKU</td>
+                                            <td>Description</td>
+                                            <td>Total:</td>
+                                            <td>Licenses:</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>QTY</td>
+                                            <td>SKU</td>
+                                            <td>Description</td>
+                                            <td>Total:</td>
+                                            <td>Licenses:</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>QTY</td>
+                                            <td>SKU</td>
+                                            <td>Description</td>
+                                            <td>Total:</td>
+                                            <td>Licenses:</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Total:</td>
+                                            <td>Total:</td>
+                                            <td>Licenses:</td>
+                                        </tr>
+                                    </tbody>
+                                </Table>
+                            </div>
+                        </Col>
+                    </Row>
 
-             
+                    {/* Button */}
+                    <Row className="my-4" style={{ backgroundColor: "" }}>
+                        <Col className="d-flex justify-content-between">
+
+                            <Button className="poe_next_btn" variant="dark" onClick={(e) => handleButtonClick2(e)} >Next</Button>
+                        </Col>
+                    </Row>
                 </Container>
             </Container>
 
@@ -234,4 +282,4 @@ function Hardware() {
     )
 }
 
-export default Hardware
+export default PoeSwitches

@@ -16,8 +16,6 @@ import { useNavigate } from "react-router-dom"
 
 
 function MyVerticallyCenteredModal(props) {
-  console.log('props aress',props)
-
   const [count, setCount] = useState(0);
   const handleIncrement = () => {
     setCount(count + 1);

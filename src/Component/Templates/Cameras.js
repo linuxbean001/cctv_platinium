@@ -13,13 +13,18 @@ import { Link } from "react-router-dom";
 
 function Cameras(props) {
   const [data, setData] = useState([]); // for category csv
-  const [data2, setData2] = useState([]); // for products csv
+  const [productCSV, setProductCSV] = useState([]); // for products csv
   const [categoryDatas, setCategoryDatas] = useState([]); // for products csv
 
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
   const [count, setCount] = useState(0);
+
+  const [test, setTest] = useState([])
+  const [test2, setTest2] = useState([])
+
+
   const handleIncrement = () => {
     setCount(count + 1);
   };
@@ -27,11 +32,7 @@ function Cameras(props) {
   const handleDecrement = () => {
     setCount(count - 1);
   };
-  // Modal_1
-  function modal_1() {
-    setShow2(true)
-    setShow(false)
-  }
+
   function modal_3() {
     setShow3(true)
     setShow2(false)
@@ -50,7 +51,7 @@ function Cameras(props) {
         const products2 = Papa.parse(categoryArray2, { header: true }).data;
 
         setData(products1)
-        setData2(products2)
+        setProductCSV(products2)
 
 
       } catch (error) {
@@ -60,29 +61,40 @@ function Cameras(props) {
     parseCSVFiles2();
   }, []);
 
-  const handleButtonClick = (e,category_name) => {
-    setShow(true)
-    setCategoryDatas(category_name)
-  }
-
-  console.log(categoryDatas)
-
-
   // Filter Condition-1
   const targetIds = ['Moving PTZ Cameras', 'Domes', 'Turrets', 'NDAA', 'LPR - License Plate Recognition', 'Bullets'];
   const filteredData = data.filter(item => targetIds.includes(item.category_name));
 
-  // Filter Condition-2
-  const filteredData4 = data2.filter((item)=>{
-    if (item.categories) {
-      const categoriesWords = item.categories.split('/');
-      return categoriesWords.some(word => targetIds.includes(word));
-    }
-    return false
-  });
+  const handleButtonClick = (e, category_name) => {
+    setShow(true)
+    setCategoryDatas(category_name) // whatever we click, store here
 
-  // console.log(filteredData4)
- 
+    // Filter Condition-2
+    const filteredData4 = productCSV.filter((item) => {
+      if (item.categories) {
+        const categoriesWords = item.categories.split('/');
+        console.log('items are' ,categoriesWords)
+        return categoriesWords.some(word => category_name == word);
+      }
+      return false
+    });
+    setTest(filteredData4)
+  }
+  // console.log(test)
+
+  // Modal_1
+  function modal_1(e,id) {
+    setShow2(true)
+    setShow(false)
+    // console.log('id is', id)
+
+     // Filter Condition-2
+     const filteredData5 = test.filter((item) => {
+      // console.log('item are', item)
+    });
+    // console.log(filteredData5)
+
+  }
 
 
 
@@ -105,21 +117,23 @@ function Cameras(props) {
               </Row>
               <Row>
                 <Col className="text-end">
-                
-                <Link to='/'>
-                  <h6>
-                    Edit here <span className="fw-bold"></span>
-                  </h6>
+
+                  <Link to='/'>
+                    <h6>
+                      Edit here <span className="fw-bold"></span>
+                    </h6>
                   </Link>
                 </Col>
               </Row>
             </Col>
           </Row>
+
+          {/* Box */}
           <Row className="my-4" style={{ backgroundColor: '' }}>
             {
               filteredData.map((val) => {
                 return (
-                  <Col md={4} className="mb-4" onClick={(e) => handleButtonClick(e,val.category_name)}>
+                  <Col md={4} className="mb-4" onClick={(e) => handleButtonClick(e, val.category_name)}>
                     <Card style={{ width: "", margin: "" }}>
                       <Card.Body>
                         <Row>
@@ -158,51 +172,45 @@ function Cameras(props) {
 
           {/* Modal Code - 1 */}
           <Modal
+
             {...props}
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
             show={show} onHide={() => setShow(false)}>
             <Modal.Header closeButton>
-              <Modal.Title>Turrets</Modal.Title>
+              <Modal.Title>{categoryDatas}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Row className="my-4">
-                <Col md={6} className="nvr_col" onClick={modal_1}>
-                  <Card style={{ width: "", margin: "" }}>
-                    <Card.Body>
-                      <Card.Title className="fw-bold">SKU : ?</Card.Title>
-                      <Card.Text>
+                {test.map(item => (
+                  <Col md={4} className="nvr_col" onClick={(e) => modal_1(e, item.id)} key={item.id}>
+                    <Card style={{ width: "", margin: "" }}>
+                      <Card.Body>
+                        <Card.Title className="fw-bold">SKU : {item.id}</Card.Title>
+                        <Card.Text>Description : {item.description}</Card.Text>
 
-                        Description : ?
+                        <Row>
+                          <Col xs={8}>
+                            <Card.Img variant="top" height={100} src={item.thumbnail} />
+                          </Col>
+                          <Col
+                            xs={4}
+                            className="d-flex align-items-center justify-content-center fw-bold"
+                          >
+                            $ {item.price}
+                          </Col>
+                        </Row>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
 
-                      </Card.Text>
-
-                      <Row>
-                        <Col xs={8}>
-                          <Card.Img
-                            variant="top"
-                            height={150}
-                            src='assets/images/Categories/Fake-Cameras.jpg'
-                          />
-                        </Col>
-                        <Col
-                          xs={4}
-                          className="d-flex align-items-center justify-content-center fw-bold"
-                        >
-                          $ 500
-                        </Col>
-                      </Row>
-                    </Card.Body>
-
-                  </Card>
-                </Col>
-                
 
               </Row>
             </Modal.Body>
             <Modal.Footer>
-
+              <Button variant="dark" onClick={() => setShow(false)}>Close</Button>
             </Modal.Footer>
           </Modal>
 
@@ -214,7 +222,7 @@ function Cameras(props) {
             centered
             show={show2} onHide={() => setShow2(false)}>
             <Modal.Header closeButton>
-              <Modal.Title>Modal 2</Modal.Title>
+              <Modal.Title>{categoryDatas}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Container>
@@ -280,7 +288,7 @@ function Cameras(props) {
             <Modal.Footer>
               <div className="w-100 my-4 d-flex align-items-end justify-content-between" >
 
-                <Button className="mx-3" variant="dark">
+                <Button className="mx-3" variant="dark" onClick={() => setShow2(false)}>
                   Back
                 </Button>
                 <Button variant="dark" onClick={modal_3}>
@@ -307,10 +315,10 @@ function Cameras(props) {
             <Modal.Footer>
               <div className="w-100 my-4 d-flex align-items-end justify-content-between" >
 
-                <Button className="mx-3" variant="dark">
+                <Button className="mx-3" variant="dark" onClick={() => setShow3(false)}>
                   Go Back
                 </Button>
-                <Button variant="dark" >
+                <Button variant="dark" onClick={() => setShow3(false)}>
                   Continue Anyways
                 </Button>
               </div>
