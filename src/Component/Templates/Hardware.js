@@ -211,16 +211,15 @@ function Hardware() {
           </Row>
 
           {/* Box Row */}
-
+          <Row className="my-4">
           {productCSV.map((hardware) => {
-             console.log(hardware.categories === 'Hardware')
+             console.log(hardware.name)
             if (hardware.categories === 'Hardware')
              
             {
               return (<>
-                <Row className="my-4">
 
-                  <Col md={4} className="nvr_col" onClick={(e) => handleButtonClick(e)}>
+                  <Col style={{backgroundColor:''}} md={4} className="nvr_col" onClick={(e) => handleButtonClick(e)}>
                     <Card style={{ width: "", margin: "" }}>
                       <Card.Body>
 
@@ -247,7 +246,6 @@ function Hardware() {
                       </Card.Body>
                     </Card>
                   </Col>
-                </Row>
 
               </>)
 
@@ -255,6 +253,7 @@ function Hardware() {
           })}
 
 
+</Row>
 
 
 

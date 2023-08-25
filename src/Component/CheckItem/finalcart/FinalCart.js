@@ -23,10 +23,10 @@ function FinalCart() {
 
   return (
         <>
-        <Container fluid className='final_container py-5'>
-        <div className="card p-4">
-            <div className="row">
-                <div className="col-md-7 cart">
+        <Container fluid className='final_container py-5' >
+        <div className="card p-4" style={{backgroundColor:''}}>
+            <div className="row p-2" style={{backgroundColor:''}}>
+                <div className="col-md-7 cart" style={{backgroundColor:''}}>
                     <div className="title">
                         <div className="row">
                             <div className="col"><h4><b>Shopping Cart</b></h4></div>
@@ -74,7 +74,7 @@ function FinalCart() {
                     </div>
                     <div className="back-to-shop"><a href="#">  </a><span className="text-muted">Back to shop</span></div>
                 </div>
-                <div className="col-md-3 summary">
+                <div className="col-md-5 summary">
                     <div><h5><b>Summary</b></h5></div>
                     <hr/>
                     <div className="row">
