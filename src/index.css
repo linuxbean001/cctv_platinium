@@ -1,83 +1,82 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
 
-body
-{
+body {
   font-family: 'Nunito', sans-serif !important;
 }
 
 /*modal css */
-.css-1i2vuon-MuiTypography-root{
+.css-1i2vuon-MuiTypography-root {
   text-align: center;
   margin: 30px 0 !important;
-  color:blue !important
+  color: blue !important
 }
+
 /*modal button css */
-.css-0{
-  margin-left:105px
+.css-0 {
+  margin-left: 105px
 }
+
 /*paper button css */
-.css-qbsdwg>:not(style){
+.css-qbsdwg>:not(style) {
   width: 100%;
   height: auto;
-
-/* background: linear-gradient(90deg, rgb(212, 211, 222) 0%, 35%, rgb(127, 218, 236) 100%); */
-background:rgb(249, 249, 255)
+  background: rgb(249, 249, 255)
 }
 
-.formstyle{
+.formstyle {
   margin: 42px auto;
-display: grid;
-justify-content: space-evenly;
-justify-items: stretch;
-margin-right: 24pc;
+  display: grid;
+  justify-content: space-evenly;
+  justify-items: stretch;
+  margin-right: 24pc;
 }
+
 .spceItem {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
 }
-.spceItem2{
+
+.spceItem2 {
   background-color: green;
 }
-.spceItem2 input
-{
+
+.spceItem2 input {
   background-color: red;
   width: 50%;
 }
 
-.spceItemA
-{
+.spceItemA {
   height: 50px;
   display: flex;
   justify-content: space-between;
 }
 
-.spceItemB
-{
-height: 50px;
-display: flex;
-justify-content: space-between;
-margin: 20px 0;
+.spceItemB {
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
 
 }
-.spceItemC
-{
+
+.spceItemC {
   height: 50px;
   display: flex;
   justify-content: space-between;
 }
 
-.labor_input input{
+.labor_input input {
   border: none;
 }
 
 
 
-.button_padding{
-  margin:25px auto;
+.button_padding {
+  margin: 25px auto;
 }
-.checkBox_Recorder{
+
+.checkBox_Recorder {
 
   display: grid;
   margin: 10px auto;
@@ -86,13 +85,14 @@ margin: 20px 0;
 
 
 
-.btn_pad{
+.btn_pad {
   padding: 30px;
 }
 
-.textfield_pad{
-  margin:38px auto;
+.textfield_pad {
+  margin: 38px auto;
 }
+
 .MuiFormControl-root.MuiTextField-root.css-1u3bzj6-MuiFormControl-root-MuiTextField-root {
   width: 49%;
   margin-bottom: 15px;
@@ -102,6 +102,7 @@ margin: 20px 0;
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -116,9 +117,11 @@ margin: 20px 0;
   justify-content: center;
   align-items: center;
 }
+
 .MuiFormControl {
   width: 100%;
 }
+
 .css-qbsdwg {
   margin-left: 0px !important;
   display: -webkit-box;
@@ -128,20 +131,22 @@ margin: 20px 0;
   justify-content: center;
 }
 
-.cardItemModal_name{
+.cardItemModal_name {
   border: #2295ff;
-  display:flex;
-  justify-content:space-around;
+  display: flex;
+  justify-content: space-around;
 }
-.cardItemModal_para{
-  margin-top:0;
-  text-transform:capitalize
+
+.cardItemModal_para {
+  margin-top: 0;
+  text-transform: capitalize
 }
 
 .MuiContainer-root.MuiContainer-maxWidthXl.css-19r6kue-MuiContainer-root {
   background: rgb(246 252 255);
   height: auto;
 }
+
 .MuiPaper-root.MuiPaper-outlined.css-mta8o9-MuiPaper-root {
   max-width: 900px;
   border-radius: 10px;
@@ -149,10 +154,11 @@ margin: 20px 0;
   display: inline-block;
   border: none;
   padding: 25px;
-  background:#f6fcff;
+  background: #f6fcff;
   text-align: initial;
-  box-shadow: 0px 0px 20px 0px #0000002b; 
+  box-shadow: 0px 0px 20px 0px #0000002b;
 }
+
 .MuiPaper-root.MuiPaper-outlined.css-mta8o9-MuiPaper-root h1 {
   font-size: 50px;
   margin: 0;
@@ -190,61 +196,65 @@ margin: 20px 0;
   width: 100%;
   margin-bottom: 15px;
 }
+
 .css-qbsdwg {
-   margin-left: 0;
+  margin-left: 0;
 }
+
 .css-qbsdwg>:not(style) {
-   margin: 8px;
-   height: auto !important;
+  margin: 8px;
+  height: auto !important;
 }
+
 .css-1ff8729-MuiInputBase-root-MuiFilledInput-root:before {
-   border-bottom: 1px solid rgb(255 255 255 / 0%);
-   left: 0;
-   bottom: 0;
-   display: none;
-   content: "\00a0";
-   position: absolute;
-   right: 0;
-   -webkit-transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-   transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-   pointer-events: none;
+  border-bottom: 1px solid rgb(255 255 255 / 0%);
+  left: 0;
+  bottom: 0;
+  display: none;
+  content: "\00a0";
+  position: absolute;
+  right: 0;
+  -webkit-transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  pointer-events: none;
 }
 
 
 .css-11h7cc0-MuiStack-root {
-   display: -webkit-box;
-   display: -webkit-flex;
-   display: -ms-flexbox;
-   display: flex;
-   -webkit-flex-direction: row;
-   -ms-flex-direction: row;
-   padding: 15px 0px;
-   justify-content: space-between;
-   flex-wrap: wrap;
-   flex-direction: row;
-   align-content: center;
-   margin: 0 !important;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  padding: 15px 0px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-content: center;
+  margin: 0 !important;
 }
+
 .MuiStack-root.css-11h7cc0-MuiStack-root button {
-   width: 24%;
-   padding: 15px 7px;
-   box-shadow: 0px 0px 17px #0000003b;
-   background: #339DFF;
-   letter-spacing: 0.3px;
-   font-size: 15px;
-   font-weight: 700;
-   margin-bottom: 13px !important;
+  width: 24%;
+  padding: 15px 7px;
+  box-shadow: 0px 0px 17px #0000003b;
+  background: #339DFF;
+  letter-spacing: 0.3px;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 13px !important;
 }
+
 .MuiStack-root.css-11h7cc0-MuiStack-root button:hover {
-   background: #2295ff;
+  background: #2295ff;
 }
 
 .Routes {
   background: #f6fcff;
 }
 
-.common_icon
-{
+.common_icon {
   background-color: rgb(0, 0, 0);
   width: 50px;
   height: 50px;
@@ -256,44 +266,40 @@ margin: 20px 0;
 
 /* Desgin Page Styling Starts Here */
 
-.navbar-expand .navbar-nav .nav-link{
+.navbar-expand .navbar-nav .nav-link {
   color: #fff;
 }
 
-.cart_box
-{
-  background: rgba( 255, 255, 255, 0.25 );
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-  backdrop-filter: blur( 4px );
-  -webkit-backdrop-filter: blur( 4px );
+.cart_box {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
-  border: 1px solid rgba( 255, 255, 255, 0.18 );
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 /* Cameras Details CSS */
 
-.camera_category_title
-{
-  color:black;
+.camera_category_title {
+  color: black;
   font-style: italic;
   font-size: 10px;
 }
 
-.poe_next_btn
-{
+.poe_next_btn {
   margin-left: auto;
 }
 
-.camera_thumbnail_img
-{
+.camera_thumbnail_img {
   border: 1px solid gray;
   cursor: pointer;
+  padding: 2px;
 }
 
 /* POE Switch Page CSS */
 
-.category_para
-{
+.category_para {
   font-weight: bold;
   font-style: italic;
   font-size: 10px;

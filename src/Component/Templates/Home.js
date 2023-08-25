@@ -167,7 +167,7 @@ const handleCameraDecre = () => {
         {/*Options Modal*/}
         <Modal show={show} onHide={() => setShow(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>First Modal
+            <Modal.Title>Options
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -190,7 +190,7 @@ const handleCameraDecre = () => {
             </Row>
           </Modal.Body>
           <Modal.Footer>
-            <Button className="d-block" variant="info" onClick={handleClick}>
+            <Button className="d-block" variant="dark" onClick={handleClick}>
               Next
             </Button>
           </Modal.Footer>
@@ -202,8 +202,8 @@ const handleCameraDecre = () => {
           </Modal.Header>
           <Modal.Body>Use Templates?</Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary">Yes</Button>
-            <Button variant="primary" onClick={() => setShowCam_num(true)}>No</Button>
+            <Button variant="dark">Yes</Button>
+            <Button variant="dark" onClick={() => setShowCam_num(true)}>No</Button>
           </Modal.Footer>
         </Modal>
 
@@ -232,7 +232,7 @@ const handleCameraDecre = () => {
             </Row>
           </Modal.Body>
           <Modal.Footer>
-            <Button className="d-block" variant="info" onClick={handleNext}>
+            <Button className="d-block" variant="dark" onClick={handleNext}>
               Next
             </Button>
           </Modal.Footer>

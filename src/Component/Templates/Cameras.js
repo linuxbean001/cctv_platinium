@@ -11,6 +11,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom"
+import noImage from '../../no_Image.jpg'
 
 function Cameras(props) {
   const navigate = useNavigate();
@@ -88,8 +89,6 @@ function Cameras(props) {
   function modal_1(e,id) {
     setShow2(true)
     setShow(false)
-    // console.log('id is', id) // getting id from product csv
-
      // Filter Condition-2
      const filteredData5 = test.filter((item) => {
       // console.log(test)
@@ -145,7 +144,7 @@ console.log('test 2 :',  test2)
                             <Card.Img
                               variant="top"
                               height={150}
-                              src={val.iconimage}
+                              src={val.iconimage ? val.iconimage : noImage}
                             />
                           </Col>
                           <Col
@@ -156,7 +155,7 @@ console.log('test 2 :',  test2)
                               {" "}
                               {val.category_name}
                             </Card.Text>
-                            <p className="camera_category_title"> {val.category_title}</p>
+                            <p className="camera_category_title"> {val.category_title ? val.category_title : 'No Category Available'}</p>
                           </Col>
                         </Row>
                       </Card.Body>
@@ -189,7 +188,7 @@ console.log('test 2 :',  test2)
               <Row className="my-4">
                 {test.map(item => (
                   <Col md={4} className="nvr_col" onClick={(e) => modal_1(e, item.id)} key={item.id}>
-                    <Card style={{ width: "", backgroundColor: "", height:'350px' }}>
+                    <Card style={{ width: "", backgroundColor: "", height:'320px' }}>
                       <Card.Body>
                         <Card.Title className="fw-bold">SKU : {item.id}</Card.Title>
                         <Card.Text>Description :  {item.description.split(' ').slice(0, 20).join(' ')}...</Card.Text>
