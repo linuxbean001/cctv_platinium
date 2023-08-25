@@ -142,6 +142,8 @@ function MyVerticallyCenteredModal2(props) {
 //Modal Ends
 
 function Hardware() {
+  const navigate = useNavigate();
+
   // Modal state-1
   const [modalShow, setModalShow] = React.useState(false);
   // Modal state-2
@@ -229,7 +231,7 @@ function Hardware() {
           <Row className="my-4">
           {productCSV.map((hardware) => {
             if (hardware.categories === 'Hardware')
-              
+
             {
               return (
               <>
@@ -261,20 +263,22 @@ function Hardware() {
                     </Card>
                   </Col>
 
+
               </>)
 
             }
           })}
-
-
 </Row>
 
+ {/* Button */}
+ <Row className="my-4" style={{ backgroundColor: "" }}>
+                        <Col className="d-flex justify-content-between">
 
-
+                            <Button className="poe_next_btn" variant="dark" onClick={()=>navigate('/special')} >Next</Button>
+                        </Col>
+                    </Row>
         </Container>
       </Container>
-
-
       <MyVerticallyCenteredModal
         show={modalShow}
         data={data}

@@ -72,7 +72,7 @@ function Cameras(props) {
 
   const handleButtonClick = (e, category_name) => {
     setShow(true)
-    setCategoryDatas(category_name) 
+    setCategoryDatas(category_name)
     // Filter Condition-2
     const filteredData4 = productCSV.filter((item) => {
       if (item.categories) {
@@ -86,11 +86,11 @@ function Cameras(props) {
   }
 
   // Modal_1
-  function modal_1(e,id) {
+  function modal_1(e, id) {
     setShow2(true)
     setShow(false)
-     // Filter Condition-2
-     const filteredData5 = test.filter((item) => {
+    // Filter Condition-2
+    const filteredData5 = test.filter((item) => {
       // console.log(test)
       if (item.id == id) {
         return item
@@ -98,7 +98,7 @@ function Cameras(props) {
     });
     setTest2(filteredData5)
   }
-console.log('test 2 :',  test2)
+  console.log('test 2 :', test2)
   console.log('imagess', thumbimg.img1)
 
   return (
@@ -188,7 +188,7 @@ console.log('test 2 :',  test2)
               <Row className="my-4">
                 {test.map(item => (
                   <Col md={4} className="nvr_col" onClick={(e) => modal_1(e, item.id)} key={item.id}>
-                    <Card style={{ width: "", backgroundColor: "", height:'320px' }}>
+                    <Card style={{ width: "", backgroundColor: "", height: '320px' }}>
                       <Card.Body>
                         <Card.Title className="fw-bold">SKU : {item.id}</Card.Title>
                         <Card.Text>Description :  {item.description.split(' ').slice(0, 20).join(' ')}...</Card.Text>
@@ -208,15 +208,12 @@ console.log('test 2 :',  test2)
                     </Card>
                   </Col>
                 ))}
-
-
               </Row>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="dark" onClick={() => setShow(false)}>Close</Button>
             </Modal.Footer>
           </Modal>
-
           {/* Modal-2 */}
           <Modal
             {...props}
@@ -229,85 +226,82 @@ console.log('test 2 :',  test2)
             </Modal.Header>
             <Modal.Body>
               <Container>
-
                 <Row>
-
                   {
+                    test2.map((val) => {
+                      return (
+                        <>
+                          <Col md={5} style={{ backgroundColor: '' }}>
+                            <Row>
+                              <Card.Img
+                                variant="top"
+                                height={150}
+                                src={thumbimg.img1}
+                              />
+                            </Row>
+                            <Row className="my-2">
+                              <Col> <Card.Img
+                                variant="top"
+                                height={40}
+                                className="camera_thumbnail_img"
+                                src={val.image1}
+                                onClick={() => { setThumbimg({ img1: val.image1 }) }}
 
-                      test2.map((val)=>{
-                        return(
-                          <>
-                        <Col md={5} style={{ backgroundColor: '' }}>
-                    <Row>
-                      <Card.Img
-                        variant="top"
-                        height={150}
-                        src= {thumbimg.img1}
-                      />
-                    </Row>
-                    <Row className="my-2">
-                      <Col> <Card.Img
-                        variant="top"
-                        height={40}
-                        className="camera_thumbnail_img"
-                        src={val.image1}
-                         onClick={()=>{setThumbimg({img1:val.image1})}}
+                              /></Col>
+                              <Col> <Card.Img
+                                variant="top"
+                                height={40}
+                                className="camera_thumbnail_img"
+                                src={val.image2}
+                                onClick={() => { setThumbimg({ img1: val.image2 }) }}
 
-                      /></Col>
-                      <Col> <Card.Img
-                        variant="top"
-                        height={40}
-                        className="camera_thumbnail_img"
-                        src={val.image2}
-                        onClick={()=>{setThumbimg({img1:val.image2})}}
+                              /></Col>
+                              <Col> <Card.Img
+                                variant="top"
+                                height={40}
+                                className="camera_thumbnail_img"
+                                src={val.image3}
+                                onClick={() => { setThumbimg({ img1: val.image3 }) }}
 
-                      /></Col>
-                      <Col> <Card.Img
-                        variant="top"
-                        height={40}
-                        className="camera_thumbnail_img"
-                        src={val.image3}
-                        onClick={()=>{setThumbimg({img1:val.image3})}}
+                              /></Col>
+                              <Col> <Card.Img
+                                variant="top"
+                                height={40}
+                                className="camera_thumbnail_img"
+                                src={val.image4}
+                                onClick={() => { setThumbimg({ img1: val.image4 }) }}
+                              /></Col>
 
-                      /></Col>
-                        <Col> <Card.Img
-                        variant="top"
-                        height={40}
-                        className="camera_thumbnail_img"
-                        src={val.image4}
-                        onClick={()=>{setThumbimg({img1:val.image4})}}
-                      /></Col>
+                            </Row>
 
-                    </Row>
+                          </Col>
+                          <Col md={7}>
+                            <p>{val.name}
+                            </p>
+                            <p>
+                              {val.name}
+                            </p>
+                            <DropdownButton variant="dark" id="dropdown-basic-button" title="Options">
+                              <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                              <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                            </DropdownButton>
 
-                  </Col>
-                  <Col md={7}>
-                    <p>{val.name}
-                    </p>
-                    <p>
-                    {val.name}
-                    </p>
-                    <DropdownButton variant="dark" id="dropdown-basic-button" title="Options">
-                      <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                      <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                    </DropdownButton>
-
-                    <div className="d-flex align-items-end justify-content-end" style={{ backgroundColor: '' }}>
-                      <Button variant="dark" onClick={handleIncrement}>
-                        +
-                      </Button>
-                      <h6 className="mx-3">{count}</h6>
-                      <Button variant="dark" onClick={handleDecrement}>
-                        -
-                      </Button>
-                    </div>
-                  </Col>
-                          </>
-                        )
-                      })
+                            <div className="d-flex align-items-end justify-content-end" style={{ backgroundColor: '' }}>
+                              <Button variant="dark" onClick={handleIncrement}>
+                                +
+                              </Button>
+                              <h6 className="mx-3">{count}</h6>
+                              <Button variant="dark" onClick={handleDecrement}>
+                                -
+                              </Button>
+                            </div>
+                          </Col>
+                        </>
+                      )
+                    })
                   }
-                  
+
                 </Row>
               </Container>
             </Modal.Body>
