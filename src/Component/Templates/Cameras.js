@@ -188,7 +188,7 @@ console.log('test 2 :',  test2)
               <Row className="my-4">
                 {test.map(item => (
                   <Col md={4} className="nvr_col" onClick={(e) => modal_1(e, item.id)} key={item.id}>
-                    <Card style={{ width: "", backgroundColor: "", height:'350px' }}>
+                    <Card style={{ width: "", backgroundColor: "", height:'320px' }}>
                       <Card.Body>
                         <Card.Title className="fw-bold">SKU : {item.id}</Card.Title>
                         <Card.Text>Description :  {item.description.split(' ').slice(0, 20).join(' ')}...</Card.Text>

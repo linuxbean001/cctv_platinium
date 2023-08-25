@@ -11,9 +11,10 @@ import Papa from "papaparse";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { useNavigate } from "react-router-dom"
+import noImage from '../../../no_Image.jpg'
+import Form from 'react-bootstrap/Form';
 
 
-const onlineImageURL = 'https://images.pexels.com/photos/326508/pexels-photo-326508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
 
 
 // Modal-1 Starts
@@ -47,7 +48,7 @@ function MyVerticallyCenteredModal(props) {
                                 <Card.Img
                                     variant="top"
                                     height={150}
-                                    src={props.heading.thumb}
+                                    src={props.heading.thumb ? props.heading.thumb : noImage }
                                 />
                             </Row>
                             <Row className="my-2">
@@ -75,23 +76,20 @@ function MyVerticallyCenteredModal(props) {
                             <p>{props.heading.desc}
 
                             </p>
-                        Options:
-                              
-                        
+                            <Form.Select aria-label="Default select example">
 
-                            <DropdownButton variant="dark" id="dropdown-basic-button" title="Options">
                                 {props.productOption.map((options) => {
                                     if (options.featurecaption === "PoE Switch") {
                                         return (
-                                            <Dropdown.Item>
+                                            <option value="1">
                                                 {options.featurename}
-                                            </Dropdown.Item>
+                                             </option>
                                         )
                                     }
                                 })}
+                            </Form.Select>
 
-                            </DropdownButton>
-                            <div className="d-flex align-items-end justify-content-end" style={{ backgroundColor: '' }}>
+                            <div className="d-flex align-items-end justify-content-end mt-5">
                                 <Button variant="dark" onClick={handleIncrement}>
                                     +
                                 </Button>
@@ -119,9 +117,8 @@ function MyVerticallyCenteredModal2(props) {
     return (
         <Modal
             {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
+           
+            
         >
             <Modal.Header closeButton>
                 <Modal.Title> <h6> Warning ! There are not enough PoE Ports for cameras
@@ -129,7 +126,7 @@ function MyVerticallyCenteredModal2(props) {
             </Modal.Header>
             <Modal.Body>Are you sure want to continue ?</Modal.Body>
             <Modal.Footer className="d-flex justify-content-between">
-                <Button variant="dark" onClick={() => navigate("/cameras")}>
+                <Button variant="dark" onClick={() => navigate("/hardware")}>
                     Yes
                 </Button>
                 <Button variant="dark" onClick={props.onHide}>
@@ -201,9 +198,11 @@ function PoeSwitches() {
 
     // Modal-1 Open
     function handleButtonClick(e, val) {
+        // console.log('val is',val)
         setModalShow(true)
-        setHeading({ id: val.id, thumb: val.thumbnail, img1: val.image1, img1: val.image1, img2: val.image2, img3: val.image3, desc: val.description })
+        setHeading({ id: val.id, thumb: val.thumbnail, img1: val.image1, img1: val.image1, img2: val.image2, img3: val.image3, desc: val.description, name: val.name })
     }
+    console.log('heading is',heading)
 
     return (
         <>
@@ -239,10 +238,10 @@ function PoeSwitches() {
                         {
                             poeSwitchData.map((val) => {
 
-                                //   console.log(val)
+                                console.log(val)
                                 return (
                                     <>
-                                        <Col md={4} className="nvr_col" onClick={(e) => handleButtonClick(e, val)}>
+                                        <Col md={4} className="nvr_col my-2" onClick={(e) => handleButtonClick(e, val)}>
                                             <Card style={{ width: "", margin: "" }}>
                                                 <Card.Body>
                                                     <Card.Title className="fw-bold">SKU : {val.id}</Card.Title>
@@ -258,7 +257,7 @@ function PoeSwitches() {
                                                             <Card.Img
                                                                 variant="top"
                                                                 height={150}
-                                                                src={val.thumbnail}
+                                                                src={val.thumbnail ? val.thumbnail : noImage}
                                                             />
                                                         </Col>
                                                         <Col

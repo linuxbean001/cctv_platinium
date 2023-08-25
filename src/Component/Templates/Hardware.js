@@ -11,6 +11,7 @@ import Papa from "papaparse";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { useNavigate } from "react-router-dom"
+import noImage from '../../no_Image.jpg'
 
 
 const onlineImageURL = 'https://images.pexels.com/photos/326508/pexels-photo-326508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
@@ -36,9 +37,12 @@ function MyVerticallyCenteredModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
+      {
+        console.log('props are',props)
+      }
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          16-Port PoE Switch with 480 Watts
+          {props.data.id}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -49,31 +53,30 @@ function MyVerticallyCenteredModal(props) {
                 <Card.Img
                   variant="top"
                   height={150}
-                  src={onlineImageURL}
+                  src={props.data.thumbnail === '' ? noImage : ''}
                 />
               </Row>
               <Row className="my-2">
                 <Col> <Card.Img
                   variant="top"
                   height={50}
-                  src={onlineImageURL}
+                  src={props.data.image1 === '' ? noImage : ''}
+                /></Col>
+    
+                <Col> <Card.Img
+                  variant="top"
+                  height={50}
+                  src={props.data.image2 === '' ? noImage : ''}
                 /></Col>
                 <Col> <Card.Img
                   variant="top"
                   height={50}
-                  src={onlineImageURL}
-                /></Col>
-                <Col> <Card.Img
-                  variant="top"
-                  height={50}
-                  src={onlineImageURL}
+                  src={props.data.image3 === '' ? noImage : ''}
                 /></Col>
               </Row>
             </Col>
             <Col md={8}>
-              <p>Description:
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Autem, corrupti?
-              </p>
+              <p> {props.data.name} </p>
               <p>Options:
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit.
               </p>
@@ -147,6 +150,8 @@ function Hardware() {
   const [produtOption, setProductOptionCSV] = useState([])
   const [productCSV, setProductCSV] = useState([])
 
+  const [data, setData]= useState([])
+
 
   React.useEffect(() => {
     const parseCSVFiles2 = async () => {
@@ -173,8 +178,18 @@ function Hardware() {
   // console.log(productCSV)
 
   // Modal-1 Open
-  function handleButtonClick(e) {
+  function handleButtonClick(e,id,name,thumbnail,image1,image2,image3) {
+    // console.log(val)
     setModalShow(true)
+      setData({
+        id:id,
+        name:name,
+        thumbnail:thumbnail,
+        image1:image1,
+        image2:image2,
+        image3:image3
+
+      })
   }
 
   // Modal-2 Open
@@ -213,13 +228,12 @@ function Hardware() {
           {/* Box Row */}
           <Row className="my-4">
           {productCSV.map((hardware) => {
-             console.log(hardware.name)
             if (hardware.categories === 'Hardware')
-             
+              
             {
-              return (<>
-
-                  <Col style={{backgroundColor:''}} md={4} className="nvr_col" onClick={(e) => handleButtonClick(e)}>
+              return (
+              <>
+                  <Col style={{backgroundColor:''}} md={4} className="nvr_col my-3" onClick={(e) => handleButtonClick(e,hardware.id, hardware.name, hardware.thumbnail,hardware.image1,hardware.image2,hardware.image3)}>
                     <Card style={{ width: "", margin: "" }}>
                       <Card.Body>
 
@@ -233,7 +247,7 @@ function Hardware() {
                             <Card.Img
                               variant="top"
                               height={150}
-                              src={onlineImageURL}
+                              src={hardware.thumbnail === '' ? noImage : ''}
                             />
                           </Col>
                           <Col
@@ -263,6 +277,7 @@ function Hardware() {
 
       <MyVerticallyCenteredModal
         show={modalShow}
+        data={data}
         onHide={() => setModalShow(false)}
       />
 
