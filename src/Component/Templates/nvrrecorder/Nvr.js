@@ -65,6 +65,7 @@ function MyVerticallyCenteredModal(props) {
                   <Card.Img
                     variant="top"
                     height={50}
+                    className="camera_thumbnail_img"
                     src={
                       props.modalTitle === "MicroNVR"
                         ? props.data[0].thumbnail
@@ -81,6 +82,7 @@ function MyVerticallyCenteredModal(props) {
                   <Card.Img
                     variant="top"
                     height={50}
+                    className="camera_thumbnail_img"
                     src={
                       props.modalTitle === "MicroNVR"
                         ? props.data[0].thumbnail
@@ -97,6 +99,7 @@ function MyVerticallyCenteredModal(props) {
                   <Card.Img
                     variant="top"
                     height={50}
+                    className="camera_thumbnail_img"
                     src={
                       props.modalTitle === "MicroNVR"
                         ? props.data[0].thumbnail

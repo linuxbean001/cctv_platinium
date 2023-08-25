@@ -8,6 +8,7 @@ import Papa from "papaparse";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Registration from "./Registration";
 
 function Home(props) {
   console.log('redux', props)
@@ -131,7 +132,8 @@ const handleCameraDecre = () => {
   }
   return (
     <>
-    
+    <Registration/>
+
       <Container className="my-4" fluid style={{ backgroundColor: "" }}>
         <Row className="p-1">
           {/* Left */}
