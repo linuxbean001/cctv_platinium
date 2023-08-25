@@ -5,24 +5,29 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-import Modal from 'react-bootstrap/Modal';
+import Modal from "react-bootstrap/Modal";
 import "./index.css";
 import Papa from "papaparse";
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import { useNavigate } from "react-router-dom"
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import { useNavigate } from "react-router-dom";
 
 //Modal Starts Here
 
-
 function MyVerticallyCenteredModal(props) {
+ 
   const [count, setCount] = useState(0);
-  const handleIncrement = () => {
-    setCount(count + 1);
+  const addNvrCart = () => {
+    props.state({
+      sku: props.modalTitle,
+      quantity:count,
+      price: props.data[0].price,
+      // description:props.data[0].description
+    });
+    props.onHide(false);
   };
-  const handleDecrement = () => {
-    setCount(count - 1);
-  };
+  
+ 
   return (
     <Modal
       {...props}
@@ -43,62 +48,101 @@ function MyVerticallyCenteredModal(props) {
                 <Card.Img
                   variant="top"
                   height={150}
-                  src={props.modalTitle === 'MicroNVR' ? props.data[0].thumbnail
-                    : props.modalTitle === 'MidNVR' ? props.data[1].thumbnail
-                      : props.modalTitle === 'PlatinumNVR' ? props.data[2].thumbnail
-                        : null}
+                  src={
+                    props.modalTitle === "MicroNVR"
+                      ? props.data[0].thumbnail
+                      : props.modalTitle === "MidNVR"
+                      ? props.data[1].thumbnail
+                      : props.modalTitle === "PlatinumNVR"
+                      ? props.data[2].thumbnail
+                      : null
+                  }
                 />
               </Row>
               <Row className="my-2">
-                <Col> <Card.Img
-                  variant="top"
-                  height={50}
-                  src={props.modalTitle === 'MicroNVR' ? props.data[0].thumbnail
-                    : props.modalTitle === 'MidNVR' ? props.data[1].thumbnail
-                      : props.modalTitle === 'PlatinumNVR' ? props.data[2].thumbnail
-                        : null}
-                /></Col>
-                <Col> <Card.Img
-                  variant="top"
-                  height={50}
-                  src={props.modalTitle === 'MicroNVR' ? props.data[0].thumbnail
-                    : props.modalTitle === 'MidNVR' ? props.data[1].thumbnail
-                      : props.modalTitle === 'PlatinumNVR' ? props.data[2].thumbnail
-                        : null}
-                /></Col>
-                <Col> <Card.Img
-                  variant="top"
-                  height={50}
-                  src={props.modalTitle === 'MicroNVR' ? props.data[0].thumbnail
-                    : props.modalTitle === 'MidNVR' ? props.data[1].thumbnail
-                      : props.modalTitle === 'PlatinumNVR' ? props.data[2].thumbnail
-                        : null}
-                /></Col>
+                <Col>
+                  {" "}
+                  <Card.Img
+                    variant="top"
+                    height={50}
+                    src={
+                      props.modalTitle === "MicroNVR"
+                        ? props.data[0].thumbnail
+                        : props.modalTitle === "MidNVR"
+                        ? props.data[1].thumbnail
+                        : props.modalTitle === "PlatinumNVR"
+                        ? props.data[2].thumbnail
+                        : null
+                    }
+                  />
+                </Col>
+                <Col>
+                  {" "}
+                  <Card.Img
+                    variant="top"
+                    height={50}
+                    src={
+                      props.modalTitle === "MicroNVR"
+                        ? props.data[0].thumbnail
+                        : props.modalTitle === "MidNVR"
+                        ? props.data[1].thumbnail
+                        : props.modalTitle === "PlatinumNVR"
+                        ? props.data[2].thumbnail
+                        : null
+                    }
+                  />
+                </Col>
+                <Col>
+                  {" "}
+                  <Card.Img
+                    variant="top"
+                    height={50}
+                    src={
+                      props.modalTitle === "MicroNVR"
+                        ? props.data[0].thumbnail
+                        : props.modalTitle === "MidNVR"
+                        ? props.data[1].thumbnail
+                        : props.modalTitle === "PlatinumNVR"
+                        ? props.data[2].thumbnail
+                        : null
+                    }
+                  />
+                </Col>
               </Row>
             </Col>
             <Col md={8}>
-              <p>Description:
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Autem, corrupti?
+              <p>
+                Description: Lorem, ipsum dolor sit amet consectetur adipisicing
+                elit. Autem, corrupti?
               </p>
-              <p>Options:
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              <p>
+                Options: Lorem, ipsum dolor sit amet consectetur adipisicing
+                elit.
               </p>
-              <DropdownButton variant="dark" id="dropdown-basic-button" title="Options">
+              <DropdownButton
+                variant="dark"
+                id="dropdown-basic-button"
+                title="Options"
+              >
                 <Dropdown.Item href="#/action-1">
-                  {
-                    props.modalTitle === 'MicroNVR' ? props.data3[0].featurename
-                      : props.modalTitle === 'MidNVR' ? props.data3[1].featurename
-                        : props.modalTitle === 'PlatinumNVR' ? props.data3[2].featurename
-                          : null
-                  }
+                  {props.modalTitle === "MicroNVR"
+                    ? props.data3[0].featurename
+                    : props.modalTitle === "MidNVR"
+                    ? props.data3[1].featurename
+                    : props.modalTitle === "PlatinumNVR"
+                    ? props.data3[2].featurename
+                    : null}
                 </Dropdown.Item>
               </DropdownButton>
-              <div className="d-flex align-items-end justify-content-end" style={{ backgroundColor: '' }}>
-                <Button variant="dark" onClick={handleIncrement}>
+              <div
+                className="d-flex align-items-end justify-content-end"
+                style={{ backgroundColor: "" }}
+              >
+                <Button variant="dark" onClick={()=>setCount(count + 1)}>
                   +
                 </Button>
                 <h6 className="mx-3">{count}</h6>
-                <Button variant="dark" onClick={handleDecrement}>
+                <Button variant="dark" onClick={()=>setCount(count - 1)}>
                   -
                 </Button>
               </div>
@@ -107,12 +151,15 @@ function MyVerticallyCenteredModal(props) {
         </Container>
       </Modal.Body>
       <Modal.Footer>
-
-        <div className="w-100 my-4 d-flex align-items-end justify-content-between" >
-          <Button className="mx-3" variant="dark" onClick={() => props.onHide(false)}>
+        <div className="w-100 my-4 d-flex align-items-end justify-content-between">
+          <Button
+            className="mx-3"
+            variant="dark"
+            onClick={() => props.onHide(false)}
+          >
             Back
           </Button>
-          <Button variant="dark" onClick={() => props.onHide(false)}>
+          <Button variant="dark" onClick={addNvrCart}>
             Add
           </Button>
         </div>
@@ -123,61 +170,83 @@ function MyVerticallyCenteredModal(props) {
 //Modal Ends Here
 
 function Nvr(props) {
+ 
   const navigate = useNavigate();
-  // Modal Click Button Text Changed
-  // Modal State Starts
   const [modalShow, setModalShow] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState([]); // Initialize with a default title
-  //Modal State Ends
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
-
+  const [addCart, setAddCart] = useState([]);
 
   React.useEffect(() => {
     const parseCSVFiles = async () => {
       try {
-        const productData = await fetch('assets/CSVs/products.csv');
-        const productOptionData = await fetch('assets/CSVs/products_options.csv');
+        const productData = await fetch("assets/CSVs/products.csv");
+        const productOptionData = await fetch(
+          "assets/CSVs/products_options.csv"
+        );
         const productArray = await productData.text();
         const productArray2 = await productOptionData.text();
         const products = Papa.parse(productArray, { header: true }).data;
         const products2 = Papa.parse(productArray2, { header: true }).data;
-        setData(products) // product data
-        setData2(products2) // product_options data
-
+        setData(products); // product data
+        setData2(products2); // product_options data
       } catch (error) {
-        console.error('Error parsing CSV files:', error);
+        console.error("Error parsing CSV files:", error);
       }
     };
     parseCSVFiles();
   }, []);
 
-  const handleButtonClick = (e, id, image1) => {
-    setModalTitle(id)
-    setModalShow(true)
-  }
+  const handleButtonClick = (e, id, image1, val) => {
+    setModalTitle(id, val);
+    setModalShow(true);
+  };
 
   // Filter Condition
-  const targetIds = ['PlatinumNVR', 'MicroNVR', 'MidNVR'];
-  const filteredData = data.filter(item => targetIds.includes(item.id));
+  const targetIds = ["PlatinumNVR", "MicroNVR", "MidNVR"];
+  const filteredData = data.filter((item) => 
+  targetIds.includes(item.id));
 
   // Filter Condition 2
-  const targetIds2 = ['57', '58', '59'];
-  const filteredData2 = data2.filter(item => targetIds2.includes(item.optionid));
+  const targetIds2 = ["57", "58", "59"];
+  const filteredData2 = data2.filter((item) =>
+    targetIds2.includes(item.optionid)
+  );
 
   // Filter Condition 3
-  const targetIds3 = ['1956', '1966', '1982'];
-  const filteredData3 = data2.filter(item => targetIds3.includes(item.optionid));
-
+  const targetIds3 = ["1956", "1966", "1982"];
+  const filteredData3 = data2.filter((item) =>
+    targetIds3.includes(item.optionid)
+  );
 
   // Warning Modals state
   const [show2, setShow2] = useState(false);
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => setShow2(true);
   // Warning Modals state
+  // Create an object to track unique camera numbers and their corresponding index
+  const cameraNumberMap = {};
+  props.userDetail.forEach((item, index) => {
+    if (item.cameraNumber !== undefined) {
+      if (cameraNumberMap[item.cameraNumber] !== undefined) {
+        // Update the existing object with the new cameraNumber
+        props.userDetail[cameraNumberMap[item.cameraNumber]].cameraNumber =
+          item.cameraNumber;
+      } else {
+        // Store the index for the cameraNumber
+        cameraNumberMap[item.cameraNumber] = index;
+      }
+    }
+  });
 
-
-
+  // Filter the array to remove duplicates
+  const uniqueArray = props.userDetail.filter(
+    (item, index) => cameraNumberMap[item.cameraNumber] === index
+  );
+  const lastIndex = uniqueArray.length - 1;
+  // props.addToCartHandler(addCart)
+   console.log( addCart)
   return (
     <>
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
@@ -191,11 +260,20 @@ function Nvr(props) {
             </Col>
             {/* Right */}
             <Col className="" style={{ backgroundColor: "" }}>
-              <Row>
-                <Col className="text-end">
-                  Number of Cameras : <span className="fw-bold">??</span>
-                </Col>
-              </Row>
+              {uniqueArray.map((item, index) => {
+                if (index === lastIndex) {
+                  return (
+                    <Row key={index}>
+                      <Col className="text-end">
+                        Number of Cameras:{" "}
+                        <span className="fw-bold">{item.cameraNumber}</span>
+                      </Col>
+                    </Row>
+                  );
+                }
+                return null;
+              })}
+
               <Row>
                 <Col className="text-end">
                   <h6>
@@ -208,39 +286,38 @@ function Nvr(props) {
 
           {/* Box Row */}
           <Row className="my-4">
-            {
-              filteredData.map((val) => {
-                return (
-                  <Col className="nvr_col" onClick={(e) => handleButtonClick(e, val.id, val.image1)}>
-                    <Card style={{ width: "", margin: "" }}>
-                      <Card.Body>
-                        <Card.Title className="fw-bold">SKU :  {val.id}</Card.Title>
-                        <Card.Text>
-                          {" "}
-                          Description :
-                          {val.name}
-                        </Card.Text>
-                        <Row>
-                          <Col xs={8}>
-                            <Card.Img
-                              variant="top"
-                              height={150}
-                              src={val.thumbnail}
-                            />
-                          </Col>
-                          <Col
-                            xs={4}
-                            className="d-flex align-items-center justify-content-center fw-bold"
-                          >
-                            $ {val.price}
-                          </Col>
-                        </Row>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                )
-              })
-            }
+            {filteredData.map((val) => {
+              return (
+                <Col
+                  className="nvr_col"
+                  onClick={(e) => handleButtonClick(e, val.id, val.image1, val)}
+                >
+                  <Card style={{ width: "", margin: "" }}>
+                    <Card.Body>
+                      <Card.Title className="fw-bold">
+                        SKU : {val.id}
+                      </Card.Title>
+                      <Card.Text> Description :{val.name}</Card.Text>
+                      <Row>
+                        <Col xs={8}>
+                          <Card.Img
+                            variant="top"
+                            height={150}
+                            src={val.thumbnail}
+                          />
+                        </Col>
+                        <Col
+                          xs={4}
+                          className="d-flex align-items-center justify-content-center fw-bold"
+                        >
+                          $ {val.price}
+                        </Col>
+                      </Row>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              );
+            })}
             <MyVerticallyCenteredModal
               show={modalShow}
               onHide={() => setModalShow(false)}
@@ -248,6 +325,8 @@ function Nvr(props) {
               data={filteredData}
               data2={filteredData2}
               data3={filteredData3}
+              state={setAddCart}
+              setRedux = {props}
             />
           </Row>
           {/* Table */}
@@ -257,38 +336,17 @@ function Nvr(props) {
                 <Table striped hover>
                   <thead></thead>
                   <tbody>
+                    {" "}
                     <tr>
-                      <td>Adding to Cart</td>
-                      <td>QTY</td>
-                      <td>SKU</td>
-                      <td>Description</td>
-                      <td>Total:</td>
-                      <td>Licenses:</td>
-                    </tr>
+                      {" "}
+                      <td>Adding to Cart</td> <td>QTY</td> <td>SKU</td>{" "}
+                      <td>Description</td> <td>Total:</td> <td>Licenses:</td>{" "}
+                    </tr>{" "}
                     <tr>
-                      <td></td>
-                      <td>QTY</td>
-                      <td>SKU</td>
-                      <td>Description</td>
-                      <td>Total:</td>
-                      <td>Licenses:</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>QTY</td>
-                      <td>SKU</td>
-                      <td>Description</td>
-                      <td>Total:</td>
-                      <td>Licenses:</td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>Total:</td>
-                      <td>Total:</td>
-                      <td>Licenses:</td>
-                    </tr>
+                      {" "}
+                      <td></td> <td>{addCart.quantity}</td> <td>{addCart.sku}</td> <td>Description</td>{" "}
+                      <td>Total: {addCart.price * addCart.quantity} </td> <td>Licenses:</td>{" "}
+                    </tr>{" "}
                   </tbody>
                 </Table>
               </div>
@@ -299,7 +357,9 @@ function Nvr(props) {
           <Row className="my-4" style={{ backgroundColor: "" }}>
             <Col className="d-flex justify-content-between">
               <Button variant="dark">Previous</Button>
-              <Button variant="dark" onClick={handleShow2}>Next</Button>
+              <Button variant="dark" onClick={handleShow2}>
+                Next
+              </Button>
             </Col>
           </Row>
         </Container>
@@ -307,7 +367,10 @@ function Nvr(props) {
 
       <Modal show={show2} onHide={handleClose2}>
         <Modal.Header closeButton>
-          <Modal.Title> <h6> Warning ! Less Licenses than number of cameras</h6> </Modal.Title>
+          <Modal.Title>
+            {" "}
+            <h6> Warning ! Less Licenses than number of cameras</h6>{" "}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>Are you sure want to continue</Modal.Body>
         <Modal.Footer>

@@ -4,50 +4,50 @@ import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-// import hotelImage from "../../assets/images/Categories/Restaurant-Security-Cameras-1.jpg";
-// import hotelImage from "assets/";
-
 import Papa from "papaparse";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Home(props) {
+  console.log('redux', props)
 const [numboptions, setNumbOptions] = useState(0);
+const [numbcamera, setNumbCamera] = useState(0);
+const navigate = useNavigate();
+const [options, setOptions] = useState([]);
+const [data, setData] = useState([]);
+const [show, setShow] = useState(false);
+const [showTemp, setShowTemp] = useState(false);
+const [showCam_num, setShowCam_num] = useState(false)
+let categoriesData = [];
+let productOptionsDetails = []
 const handleOptionsIncre = () => {
   setNumbOptions(numboptions + 1);
-  props.addToCartHandler({numboptions:numboptions})
+
 };
 
 const handleOptionsDecre = () => {
   if (numboptions > 0) {
     setNumbOptions(numboptions - 1);
-  props.addToCartHandler({numboptions:numboptions})
+
   }
 };
 // Storing value of + and - button in state (No. of options)
-const [numbcamera, setNumbCamera] = useState(0);
+
 const handleCameraIncre = () => {
   setNumbCamera(numbcamera + 1);
-  props.addToCartHandler({numbcamera:numbcamera})
+
 };
 
 const handleCameraDecre = () => {
   if (numbcamera > 0) {
     setNumbCamera(numbcamera - 1);
-  props.addToCartHandler({numbcamera:numbcamera})
+
   }
 };
 
 // Storing value (Camera of options) ends
-  const navigate = useNavigate();
-  const [options, setOptions] = useState([]);
-  const [data, setData] = useState([]);
-  const [show, setShow] = useState(false);
-  const [showTemp, setShowTemp] = useState(false);
-  const [showCam_num, setShowCam_num] = useState(false)
-  let categoriesData = [];
-  let productOptionsDetails = []
+ 
 
   const cameraOptions = [
     { location_name: "Home" },
@@ -125,6 +125,7 @@ const handleCameraDecre = () => {
   };
 
   const handleNext=()=>{
+    props.addToCartHandler({cameraNumber:numbcamera})
     props.addToCartHandler(options)
     navigate("/recorder")
   }

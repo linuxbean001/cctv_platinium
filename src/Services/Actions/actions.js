@@ -10,13 +10,4 @@ export const addToCart = (data) => {
   };
 };
 
-// Options Starts
-export const incrementOpt = () => ({
-  type: INCREMENTOPT,
-});
-export const decrementOpt = () => ({
-  type: DECREMENTOPT,
-});
-// Options Ends
-
 
