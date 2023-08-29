@@ -25,7 +25,10 @@ function MyVerticallyCenteredModal(props) {
         setCount(count + 1);
     };
     const handleDecrement = () => {
+        if (count > 0) {
         setCount(count - 1);
+            
+        }
     };
 
     return (
@@ -76,9 +79,10 @@ function MyVerticallyCenteredModal(props) {
                             <p>{props.heading.desc}
 
                             </p>
-                            <Form.Select aria-label="Default select example">
+                            {/* <Form.Select aria-label="Default select example">
 
                                 {props.productOption.map((options) => {
+                                    console.log('prod options', options)
                                     if (options.featurecaption === "PoE Switch") {
                                         return (
                                             <option value="1">
@@ -87,7 +91,7 @@ function MyVerticallyCenteredModal(props) {
                                         )
                                     }
                                 })}
-                            </Form.Select>
+                            </Form.Select> */}
 
                             <div className="d-flex align-items-end justify-content-end mt-5">
                                 <Button variant="dark" onClick={handleIncrement}>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -11,23 +11,25 @@ import Papa from "papaparse";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { useNavigate } from "react-router-dom";
+import Form from 'react-bootstrap/Form';
 
 //Modal Starts Here
 
+
 function MyVerticallyCenteredModal(props) {
- 
+
   const [count, setCount] = useState(0);
+
   const addNvrCart = () => {
     props.state({
       sku: props.modalTitle,
-      quantity:count,
+      quantity: count,
       price: props.data[0].price,
       // description:props.data[0].description
     });
     props.onHide(false);
   };
-  
- 
+
   return (
     <Modal
       {...props}
@@ -35,6 +37,7 @@ function MyVerticallyCenteredModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
+     
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           {props.modalTitle}
@@ -52,10 +55,10 @@ function MyVerticallyCenteredModal(props) {
                     props.modalTitle === "MicroNVR"
                       ? props.data[0].thumbnail
                       : props.modalTitle === "MidNVR"
-                      ? props.data[1].thumbnail
-                      : props.modalTitle === "PlatinumNVR"
-                      ? props.data[2].thumbnail
-                      : null
+                        ? props.data[1].thumbnail
+                        : props.modalTitle === "PlatinumNVR"
+                          ? props.data[2].thumbnail
+                          : null
                   }
                 />
               </Row>
@@ -70,10 +73,10 @@ function MyVerticallyCenteredModal(props) {
                       props.modalTitle === "MicroNVR"
                         ? props.data[0].thumbnail
                         : props.modalTitle === "MidNVR"
-                        ? props.data[1].thumbnail
-                        : props.modalTitle === "PlatinumNVR"
-                        ? props.data[2].thumbnail
-                        : null
+                          ? props.data[1].thumbnail
+                          : props.modalTitle === "PlatinumNVR"
+                            ? props.data[2].thumbnail
+                            : null
                     }
                   />
                 </Col>
@@ -87,10 +90,10 @@ function MyVerticallyCenteredModal(props) {
                       props.modalTitle === "MicroNVR"
                         ? props.data[0].thumbnail
                         : props.modalTitle === "MidNVR"
-                        ? props.data[1].thumbnail
-                        : props.modalTitle === "PlatinumNVR"
-                        ? props.data[2].thumbnail
-                        : null
+                          ? props.data[1].thumbnail
+                          : props.modalTitle === "PlatinumNVR"
+                            ? props.data[2].thumbnail
+                            : null
                     }
                   />
                 </Col>
@@ -104,10 +107,10 @@ function MyVerticallyCenteredModal(props) {
                       props.modalTitle === "MicroNVR"
                         ? props.data[0].thumbnail
                         : props.modalTitle === "MidNVR"
-                        ? props.data[1].thumbnail
-                        : props.modalTitle === "PlatinumNVR"
-                        ? props.data[2].thumbnail
-                        : null
+                          ? props.data[1].thumbnail
+                          : props.modalTitle === "PlatinumNVR"
+                            ? props.data[2].thumbnail
+                            : null
                     }
                   />
                 </Col>
@@ -118,34 +121,59 @@ function MyVerticallyCenteredModal(props) {
                 Description: Lorem, ipsum dolor sit amet consectetur adipisicing
                 elit. Autem, corrupti?
               </p>
-              <p>
-                Options: Lorem, ipsum dolor sit amet consectetur adipisicing
-                elit.
+              <p className="fw-bold">
+                Choose Options :
               </p>
-              <DropdownButton
-                variant="dark"
-                id="dropdown-basic-button"
-                title="Options"
-              >
-                <Dropdown.Item href="#/action-1">
-                  {props.modalTitle === "MicroNVR"
-                    ? props.data3[0].featurename
-                    : props.modalTitle === "MidNVR"
-                    ? props.data3[1].featurename
-                    : props.modalTitle === "PlatinumNVR"
-                    ? props.data3[2].featurename
-                    : null}
-                </Dropdown.Item>
-              </DropdownButton>
+              {/* Options */}
+
+              <Form.Select aria-label="Default select example" className="mb-3">
+                <option> CPU :</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </Form.Select>
+
+                    {/* Select RAM */}
+              <Form.Select aria-label="Default select example" className="mb-3">
+                <option> RAM :</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </Form.Select>
+
+                 {/* Select M2 Drive */}
+                 <Form.Select aria-label="Default select example" className="mb-3">
+                <option> M2 Drive :</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </Form.Select>
+
+                {/* Select Licenses */}
+                <Form.Select aria-label="Default select example" className="mb-3">
+                <option> Licenses :</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </Form.Select>
+
+                   {/* Hard Drive Sizes */}
+                   <Form.Select aria-label="Default select example" className="mb-3">
+                <option> Hard Drive Sizes :</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </Form.Select>
+
               <div
-                className="d-flex align-items-end justify-content-end"
+                className="d-flex align-items-end justify-content-end my-4"
                 style={{ backgroundColor: "" }}
               >
-                <Button variant="dark" onClick={()=>setCount(count + 1)}>
+                <Button variant="dark" onClick={() => setCount(count + 1)}>
                   +
                 </Button>
                 <h6 className="mx-3">{count}</h6>
-                <Button variant="dark" onClick={()=>setCount(count - 1)}>
+                <Button variant="dark" onClick={() => count > 0 ? setCount(count - 1) : null}>
                   -
                 </Button>
               </div>
@@ -173,12 +201,11 @@ function MyVerticallyCenteredModal(props) {
 //Modal Ends Here
 
 function Nvr(props) {
- 
   const navigate = useNavigate();
   const [modalShow, setModalShow] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState([]); // Initialize with a default title
-  const [data, setData] = useState([]);
-  const [data2, setData2] = useState([]);
+  const [data, setData] = useState([]);  // product.csv data
+  const [data2, setData2] = useState([]); // product_options.csv data
   const [addCart, setAddCart] = useState([]);
 
   React.useEffect(() => {
@@ -208,21 +235,20 @@ function Nvr(props) {
 
   // Filter Condition
   const targetIds = ["PlatinumNVR", "MicroNVR", "MidNVR"];
-  const filteredData = data.filter((item) => 
-  targetIds.includes(item.id));
+  const filteredData = data.filter((item) =>
+    targetIds.includes(item.id));
 
   // Filter Condition 2
   const targetIds2 = ["57", "58", "59"];
   const filteredData2 = data2.filter((item) =>
     targetIds2.includes(item.optionid)
+
   );
+  // console.log('my filter data', filteredData2)
 
   // Filter Condition 3
-  const targetIds3 = ["1956", "1966", "1982"];
-  const filteredData3 = data2.filter((item) =>
-    targetIds3.includes(item.optionid)
-  );
-
+ const filteredData3 = data2.filter(item => item.catalogid === '75').sort((a, b) => a.sorting - b.sorting)
+console.log('uyyy',filteredData3)
   // Warning Modals state
   const [show2, setShow2] = useState(false);
   const handleClose2 = () => setShow2(false);
@@ -248,8 +274,10 @@ function Nvr(props) {
     (item, index) => cameraNumberMap[item.cameraNumber] === index
   );
   const lastIndex = uniqueArray.length - 1;
-  // props.addToCartHandler(addCart)
-   console.log( addCart)
+
+
+  // console.log('data first',data2)
+
   return (
     <>
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
@@ -329,7 +357,7 @@ function Nvr(props) {
               data2={filteredData2}
               data3={filteredData3}
               state={setAddCart}
-              setRedux = {props}
+              setRedux={props}
             />
           </Row>
           {/* Table */}
