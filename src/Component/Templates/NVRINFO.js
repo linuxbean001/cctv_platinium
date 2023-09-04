@@ -29,7 +29,6 @@ function NVRINFO(props) {
   };
 
   const handleClickOpen = (e) => {
-    props.addToCartHandler(numValues);
     if (numValues.license === "") {
       return {
         message: "Please enter the number of values",

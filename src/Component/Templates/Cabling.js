@@ -54,7 +54,6 @@ function Cabling(props) {
   };
 
   const nextPage = () => {
-    props.addToCartHandler(cable)
     navigate("/extra_hardware")
   }
 

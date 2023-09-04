@@ -126,8 +126,7 @@ const handleCameraDecre = () => {
   };
 
   const handleNext=()=>{
-    props.addToCartHandler({cameraNumber:numbcamera})
-    props.addToCartHandler(options)
+  
     navigate("/recorder")
   }
   return (

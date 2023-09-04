@@ -51,7 +51,6 @@ function ExtraHardware(props) {
   }
 
   const onNext = (e) => {
-    props.addToCartHandler({ extraHardware: extraHardware })
     navigate("/special")
   }
 

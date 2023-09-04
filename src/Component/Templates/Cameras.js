@@ -12,13 +12,17 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom"
 import noImage from '../../no_Image.jpg'
+import Form from 'react-bootstrap/Form';
+
+
+const onLineImg = 'https://images.pexels.com/photos/5703527/pexels-photo-5703527.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
 
 function Cameras(props) {
   const navigate = useNavigate();
 
-  const [data, setData] = useState([]); // for category csv
+  const [categoryCSV, setCategoryCSV] = useState([]); // for category csv
   const [productCSV, setProductCSV] = useState([]); // for products csv
-  const [categoryDatas, setCategoryDatas] = useState([]); // for products csv
+  const [productOption, setProductOptionCSV] = useState([]); // product_options.csv data
 
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
@@ -29,6 +33,13 @@ function Cameras(props) {
   const [test2, setTest2] = useState([])
   const [thumbimg, setThumbimg] = useState([])
 
+  //
+  const [filteredData, setfilteredData] = useState([])
+  const [categoryName, setCategoryName] = useState([])
+  const [filteredData2, setfilteredData2] = useState([])
+  const [categoryName2, setCategoryName2] = useState([])
+// by sir
+const [finalData, setFinalData] = useState([])
 
   const handleIncrement = () => {
     setCount(count + 1);
@@ -54,10 +65,14 @@ function Cameras(props) {
         const productsCSV = await fetch('assets/CSVs/products.csv');
         const categoryArray2 = await productsCSV.text();
         const products2 = Papa.parse(categoryArray2, { header: true }).data;
+        // Product Options CSV
+        const productOptionsCSV = await fetch('assets/CSVs/products_options.csv');
+        const categoryArray3 = await productOptionsCSV.text();
+        const products3 = Papa.parse(categoryArray3, { header: true }).data;
 
-        setData(products1)
+        setCategoryCSV(products1)
         setProductCSV(products2)
-
+        setProductOptionCSV(products3)
 
       } catch (error) {
         console.error('Error parsing CSV files:', error);
@@ -66,40 +81,73 @@ function Cameras(props) {
     parseCSVFiles2();
   }, []);
 
-  // Filter Condition-1
-  const targetIds = ['Moving PTZ Cameras', 'Domes', 'Turrets', 'NDAA', 'LPR - License Plate Recognition', 'Bullets'];
-  const filteredData = data.filter(item => targetIds.includes(item.category_name));
 
-  const handleButtonClick = (e, category_name) => {
+  const handleButtonClick = (e,category_name) => {
+    setCategoryName(category_name)
     setShow(true)
-    setCategoryDatas(category_name)
-    // Filter Condition-2
-    const filteredData4 = productCSV.filter((item) => {
-      if (item.categories) {
-        const categoriesWords = item.categories.split('/');
-        // console.log('items are' ,categoriesWords)
-        return categoriesWords.some(word => category_name == word);
-      }
-      return false
-    });
-    setTest(filteredData4)
-  }
 
+  const cameraData2 = productCSV.filter((item) => {
+    if (item.categories) {
+      const categoriesWords = item.categories.split('/');
+      return categoriesWords.some(word => category_name == word);
+    }
+    return false
+  });
+  setfilteredData(cameraData2)  
+}
   // Modal_1
   function modal_1(e, id) {
+    let firstIndex = -1;
+    let lastIndex = -1;
+    // Find the index of the first '83' value and the index of the last '83' value
+    for (let i = 0; i < productOption.length; i++) {
+      if (productOption[i].productid === id && firstIndex === -1) {
+        firstIndex = i;
+      }
+      if (productOption[i].productid === id) {
+        lastIndex = i;
+      }
+    }
+    if (firstIndex !== -1 && lastIndex !== -1) {
+      const valuesBetween = [];
+      for (let i = firstIndex; i <= lastIndex; i++) {
+        if (productOption[i].productid === id || productOption[i].productid === '') {
+          valuesBetween.push(productOption[i]);
+        }
+      }
+      const separatedArrays = [];
+      let currentArray = [];
+      valuesBetween.forEach(item => {
+        if (item.optionid !== '') {
+          if (currentArray.length > 0) {
+            separatedArrays.push([...currentArray]);
+            currentArray = [];
+          }
+        }
+        currentArray.push(item);
+      });
+      if (currentArray.length > 0) {
+        separatedArrays.push([...currentArray]);
+      }
+      setFinalData(separatedArrays)
+    } else {
+      console.log("No suitable data found in the data array with '83' cateId.");
+    }
+
+
     setShow2(true)
     setShow(false)
-    // Filter Condition-2
-    const filteredData5 = test.filter((item) => {
-      // console.log(test)
+  setCategoryName2(id)
+    const cameraData3 = filteredData.filter((item) => {
       if (item.id == id) {
         return item
       }
     });
-    setTest2(filteredData5)
+    setfilteredData2(cameraData3)
   }
-  console.log('test 2 :', test2)
-  console.log('imagess', thumbimg.img1)
+  const cameraData = categoryCSV.filter((item) => {
+    return item.category_parent && item.category_parent.includes('45');
+  });
 
   return (
     <>
@@ -134,34 +182,35 @@ function Cameras(props) {
           {/* Box */}
           <Row className="my-4" style={{ backgroundColor: '' }}>
             {
-              filteredData.map((val) => {
+              cameraData.map((item) => {
                 return (
-                  <Col md={4} className="mb-4" onClick={(e) => handleButtonClick(e, val.category_name)}>
-                    <Card style={{ width: "", margin: "" }}>
-                      <Card.Body>
-                        <Row>
-                          <Col xs={7} >
-                            <Card.Img
-                              variant="top"
-                              height={150}
-                              src={val.iconimage ? val.iconimage : noImage}
-                            />
-                          </Col>
-                          <Col
-                            xs={5}
-                            className=" align-items-center justify-content-center fw-bold"
-                          >
-                            <Card.Text className="fs-6">
-                              {" "}
-                              {val.category_name}
-                            </Card.Text>
-                            <p className="camera_category_title"> {val.category_title ? val.category_title : 'No Category Available'}</p>
-                          </Col>
-                        </Row>
-                      </Card.Body>
+                  <>
+                    <Col md={4} className="mb-4" onClick={(e) => handleButtonClick(e,item.category_name)}>
+                      <Card style={{ width: "", margin: "" }}>
+                        <Card.Body>
+                          <Row>
+                            <Col xs={7} >
+                              <Card.Img
+                                variant="top"
+                                height={150}
+                                src={item.iconimage ? item.iconimage : noImage}
+                              />
+                            </Col>
+                            <Col
+                              xs={5}
+                              className=" align-items-center justify-content-center fw-bold"
+                            >
+                              <Card.Text className="fs-6">
+                                {item.category_name}
+                              </Card.Text>
+                              <p className="camera_category_title"> {item.category_title ? item.category_title : 'No Title Found'}</p>
+                            </Col>
+                          </Row>
+                        </Card.Body>
 
-                    </Card>
-                  </Col>
+                      </Card>
+                    </Col>
+                  </>
                 )
               })
             }
@@ -181,21 +230,25 @@ function Cameras(props) {
             aria-labelledby="contained-modal-title-vcenter"
             centered
             show={show} onHide={() => setShow(false)}>
+
             <Modal.Header closeButton>
-              <Modal.Title>{categoryDatas}</Modal.Title>
+              <Modal.Title>{categoryName}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Row className="my-4">
-                {test.map(item => (
-                  <Col md={4} className="nvr_col" onClick={(e) => modal_1(e, item.id)} key={item.id}>
-                    <Card style={{ width: "", backgroundColor: "", height: '320px' }}>
+                {
+                  filteredData.map((item)=>{
+                    return(
+                      <>
+                    <Col md={4} className="nvr_col my-2" onClick={(e) => modal_1(e, item.id)} key={item.id}>
+                    <Card style={{ width: "", backgroundColor: "", height: '300px' }}>
                       <Card.Body>
                         <Card.Title className="fw-bold">SKU : {item.id}</Card.Title>
-                        <Card.Text>Description :  {item.description.split(' ').slice(0, 20).join(' ')}...</Card.Text>
+                        <Card.Text>Description :  {item.description.split(' ').slice(0, 10).join(' ')}...</Card.Text>
 
                         <Row>
                           <Col xs={8}>
-                            <Card.Img variant="top" height={100} src={item.thumbnail} />
+                            <Card.Img variant="top" height={100} src={item.thumbnail ? item.thumbnail : noImage} />
                           </Col>
                           <Col
                             xs={4}
@@ -207,7 +260,10 @@ function Cameras(props) {
                       </Card.Body>
                     </Card>
                   </Col>
-                ))}
+                      </>
+                    )
+                  })
+                }
               </Row>
             </Modal.Body>
             <Modal.Footer>
@@ -222,13 +278,13 @@ function Cameras(props) {
             centered
             show={show2} onHide={() => setShow2(false)}>
             <Modal.Header closeButton>
-              <Modal.Title>{categoryDatas}</Modal.Title>
+              <Modal.Title>{categoryName2}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Container>
                 <Row>
                   {
-                    test2.map((val) => {
+                    filteredData2.map((val) => {
                       return (
                         <>
                           <Col md={5} style={{ backgroundColor: '' }}>
@@ -278,15 +334,27 @@ function Cameras(props) {
                           <Col md={7}>
                             <p>{val.name}
                             </p>
-                            <p>
-                              {val.name}
-                            </p>
-                            <DropdownButton variant="dark" id="dropdown-basic-button" title="Options">
-                              <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                              <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                            </DropdownButton>
+                           
+                          {/* Add Dropdown */}
 
+                          {
+                finalData.map((item, index) => {
+                  return (
+                    <>
+                      <Form.Select key={index} aria-label="Default select example" className="mb-3">
+                        <option value={2}>{item[0].featurecaption}</option>
+                        {item.map((option, optionIndex) => (
+                          <option key={optionIndex} value={option.value}>
+                            {option.featurename}
+                          </option>
+                        ))}
+                      </Form.Select>
+
+
+                    </>
+                  )
+                })
+              }
                             <div className="d-flex align-items-end justify-content-end" style={{ backgroundColor: '' }}>
                               <Button variant="dark" onClick={handleIncrement}>
                                 +

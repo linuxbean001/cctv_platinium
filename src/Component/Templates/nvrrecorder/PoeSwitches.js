@@ -38,6 +38,10 @@ function MyVerticallyCenteredModal(props) {
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
+
+            {
+                console.log('my props', props.heading.desc)
+            }
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
                     Switch :{props.heading.id}
@@ -76,7 +80,7 @@ function MyVerticallyCenteredModal(props) {
                             </Row>
                         </Col>
                         <Col md={8}>
-                            <p>{props.heading.desc}
+                            <p>Product Description : {}
 
                             </p>
                             {/* <Form.Select aria-label="Default select example">
@@ -173,6 +177,8 @@ function PoeSwitches() {
                 const categoryArray2 = await productsCSV.text();
                 const products2 = Papa.parse(categoryArray2, { header: true }).data;
 
+                //Products Options CSV
+
                 const productsOtionCSV = await fetch('assets/CSVs/products_options.csv');
                 const productOption2 = await productsOtionCSV.text();
                 const productsOption2 = Papa.parse(productOption2, { header: true }).data;
@@ -187,10 +193,10 @@ function PoeSwitches() {
         parseCSVFiles2();
     }, []);
 
+   
     // Filter Condition
 
     const poeSwitchData = productCSV.filter((item) => {
-
         if (item.categories) {
             const categoriesWords = item.categories.split('/');
             return categoriesWords.some(word => word === 'PoE Switches');
@@ -198,7 +204,6 @@ function PoeSwitches() {
         return false
     });
 
-    // console.log( 'switch data',poeSwitchData)
 
     // Modal-1 Open
     function handleButtonClick(e, val) {
@@ -206,7 +211,7 @@ function PoeSwitches() {
         setModalShow(true)
         setHeading({ id: val.id, thumb: val.thumbnail, img1: val.image1, img1: val.image1, img2: val.image2, img3: val.image3, desc: val.description, name: val.name })
     }
-    console.log('heading is',heading)
+    // console.log('heading is',heading)
 
     return (
         <>
@@ -242,7 +247,7 @@ function PoeSwitches() {
                         {
                             poeSwitchData.map((val) => {
 
-                                console.log(val)
+                                // console.log(val)
                                 return (
                                     <>
                                         <Col md={4} className="nvr_col my-2" onClick={(e) => handleButtonClick(e, val)}>

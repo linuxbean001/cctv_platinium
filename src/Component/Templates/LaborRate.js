@@ -54,7 +54,6 @@ function LaborRate(props) {
     setNestModal(true);
     
   }
-  props.addToCartHandler(laborDetail)
   const navigate = useNavigate();
   return (
     <React.Fragment>

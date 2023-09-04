@@ -26,7 +26,6 @@ function POEs(props) {
   }
 
   const handleNext=()=>{
-   props.addToCartHandler({portvalues:portvalues,portsName:ports})
    navigate("/hardware")
   }
   return (
