@@ -26,8 +26,8 @@ function MyVerticallyCenteredModal(props) {
     };
     const handleDecrement = () => {
         if (count > 0) {
-        setCount(count - 1);
-            
+            setCount(count - 1);
+
         }
     };
 
@@ -40,7 +40,7 @@ function MyVerticallyCenteredModal(props) {
         >
 
             {
-                console.log('my props', props.heading.desc)
+                // console.log('my props', props.heading.desc)
             }
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
@@ -55,7 +55,7 @@ function MyVerticallyCenteredModal(props) {
                                 <Card.Img
                                     variant="top"
                                     height={150}
-                                    src={props.heading.thumb ? props.heading.thumb : noImage }
+                                    src={props.heading.thumb ? props.heading.thumb : noImage}
                                 />
                             </Row>
                             <Row className="my-2">
@@ -80,8 +80,13 @@ function MyVerticallyCenteredModal(props) {
                             </Row>
                         </Col>
                         <Col md={8}>
-                            <p>Product Description : {}
-
+                            <p>
+                                Product Description :{' '}
+                                {props.heading.name ? (
+                                    props.heading.name
+                                ) : (
+                                    <em>No Description found in CSV</em>
+                                )}
                             </p>
                             {/* <Form.Select aria-label="Default select example">
 
@@ -125,8 +130,8 @@ function MyVerticallyCenteredModal2(props) {
     return (
         <Modal
             {...props}
-           
-            
+
+
         >
             <Modal.Header closeButton>
                 <Modal.Title> <h6> Warning ! There are not enough PoE Ports for cameras
@@ -193,7 +198,7 @@ function PoeSwitches() {
         parseCSVFiles2();
     }, []);
 
-   
+
     // Filter Condition
 
     const poeSwitchData = productCSV.filter((item) => {
@@ -211,7 +216,6 @@ function PoeSwitches() {
         setModalShow(true)
         setHeading({ id: val.id, thumb: val.thumbnail, img1: val.image1, img1: val.image1, img2: val.image2, img3: val.image3, desc: val.description, name: val.name })
     }
-    // console.log('heading is',heading)
 
     return (
         <>
@@ -247,7 +251,6 @@ function PoeSwitches() {
                         {
                             poeSwitchData.map((val) => {
 
-                                // console.log(val)
                                 return (
                                     <>
                                         <Col md={4} className="nvr_col my-2" onClick={(e) => handleButtonClick(e, val)}>

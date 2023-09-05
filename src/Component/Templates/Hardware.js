@@ -37,9 +37,7 @@ function MyVerticallyCenteredModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      {
-        console.log('props are',props)
-      }
+      
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           {props.data.id}
@@ -62,7 +60,7 @@ function MyVerticallyCenteredModal(props) {
                   height={50}
                   src={props.data.image1 === '' ? noImage : ''}
                 /></Col>
-    
+
                 <Col> <Card.Img
                   variant="top"
                   height={50}
@@ -77,19 +75,7 @@ function MyVerticallyCenteredModal(props) {
             </Col>
             <Col md={8}>
               <p> {props.data.name} </p>
-              <p>Options:
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              </p>
-              <DropdownButton variant="dark" id="dropdown-basic-button" title="Options">
-                <Dropdown.Item href="#/action-1">
-                  {
-                    props.modalTitle === 'MicroNVR' ? props.data3[0].featurename
-                      : props.modalTitle === 'MidNVR' ? props.data3[1].featurename
-                        : props.modalTitle === 'PlatinumNVR' ? props.data3[2].featurename
-                          : null
-                  }
-                </Dropdown.Item>
-              </DropdownButton>
+            
               <div className="d-flex align-items-end justify-content-end" style={{ backgroundColor: '' }}>
                 <Button variant="dark" onClick={handleIncrement}>
                   +
@@ -152,7 +138,7 @@ function Hardware() {
   const [produtOption, setProductOptionCSV] = useState([])
   const [productCSV, setProductCSV] = useState([])
 
-  const [data, setData]= useState([])
+  const [data, setData] = useState([])
 
 
   React.useEffect(() => {
@@ -177,21 +163,21 @@ function Hardware() {
     parseCSVFiles2();
   }, []);
 
-  // console.log(productCSV)
+  console.log('my product csv',data)
 
   // Modal-1 Open
-  function handleButtonClick(e,id,name,thumbnail,image1,image2,image3) {
+  function handleButtonClick(e, id, name, thumbnail, image1, image2, image3) {
     // console.log(val)
     setModalShow(true)
-      setData({
-        id:id,
-        name:name,
-        thumbnail:thumbnail,
-        image1:image1,
-        image2:image2,
-        image3:image3
+    setData({
+      id: id,
+      name: name,
+      thumbnail: thumbnail,
+      image1: image1,
+      image2: image2,
+      image3: image3
 
-      })
+    })
   }
 
   // Modal-2 Open
@@ -229,54 +215,52 @@ function Hardware() {
 
           {/* Box Row */}
           <Row className="my-4">
-          {productCSV.map((hardware) => {
-            if (hardware.categories === 'Hardware')
+            {productCSV.map((hardware) => {
+              if (hardware.categories === 'Hardware') {
+                return (
+                  <>
+                    <Col style={{ backgroundColor: '' }} md={4} className="nvr_col my-3" onClick={(e) => handleButtonClick(e, hardware.id, hardware.name, hardware.thumbnail, hardware.image1, hardware.image2, hardware.image3)}>
+                      <Card style={{ width: "", margin: "" }}>
+                        <Card.Body>
 
-            {
-              return (
-              <>
-                  <Col style={{backgroundColor:''}} md={4} className="nvr_col my-3" onClick={(e) => handleButtonClick(e,hardware.id, hardware.name, hardware.thumbnail,hardware.image1,hardware.image2,hardware.image3)}>
-                    <Card style={{ width: "", margin: "" }}>
-                      <Card.Body>
-
-                        <Card.Title className="fw-bold">SKU :{hardware.id}</Card.Title>
-                        <Card.Text>
-                          {" "}
-                          {hardware.name}
-                        </Card.Text>
-                        <Row>
-                          <Col xs={8}>
-                            <Card.Img
-                              variant="top"
-                              height={150}
-                              src={hardware.thumbnail === '' ? noImage : ''}
-                            />
-                          </Col>
-                          <Col
-                            xs={4}
-                            className="d-flex align-items-center justify-content-center fw-bold"
-                          >
-                            ${hardware.price}
-                          </Col>
-                        </Row>
-                      </Card.Body>
-                    </Card>
-                  </Col>
+                          <Card.Title className="fw-bold">SKU :{hardware.id}</Card.Title>
+                          <Card.Text>
+                            {" "}
+                            {hardware.name}
+                          </Card.Text>
+                          <Row>
+                            <Col xs={8}>
+                              <Card.Img
+                                variant="top"
+                                height={150}
+                                src={hardware.thumbnail === '' ? noImage : ''}
+                              />
+                            </Col>
+                            <Col
+                              xs={4}
+                              className="d-flex align-items-center justify-content-center fw-bold"
+                            >
+                              ${hardware.price}
+                            </Col>
+                          </Row>
+                        </Card.Body>
+                      </Card>
+                    </Col>
 
 
-              </>)
+                  </>)
 
-            }
-          })}
-</Row>
+              }
+            })}
+          </Row>
 
- {/* Button */}
- <Row className="my-4" style={{ backgroundColor: "" }}>
-                        <Col className="d-flex justify-content-between">
+          {/* Button */}
+          <Row className="my-4" style={{ backgroundColor: "" }}>
+            <Col className="d-flex justify-content-between">
 
-                            <Button className="poe_next_btn" variant="dark" onClick={()=>navigate('/special')} >Next</Button>
-                        </Col>
-                    </Row>
+              <Button className="poe_next_btn" variant="dark" onClick={() => navigate('/special')} >Next</Button>
+            </Col>
+          </Row>
         </Container>
       </Container>
       <MyVerticallyCenteredModal

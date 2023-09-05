@@ -81,7 +81,7 @@ const [finalData, setFinalData] = useState([])
     parseCSVFiles2();
   }, []);
 
-
+// Category name coming from CAtegory.CSV
   const handleButtonClick = (e,category_name) => {
     setCategoryName(category_name)
     setShow(true)
@@ -95,6 +95,7 @@ const [finalData, setFinalData] = useState([])
   });
   setfilteredData(cameraData2)  
 }
+
   // Modal_1
   function modal_1(e, id) {
     let firstIndex = -1;
@@ -145,9 +146,12 @@ const [finalData, setFinalData] = useState([])
     });
     setfilteredData2(cameraData3)
   }
+
+  //
   const cameraData = categoryCSV.filter((item) => {
     return item.category_parent && item.category_parent.includes('45');
   });
+
 
   return (
     <>
@@ -270,6 +274,8 @@ const [finalData, setFinalData] = useState([])
               <Button variant="dark" onClick={() => setShow(false)}>Close</Button>
             </Modal.Footer>
           </Modal>
+
+          
           {/* Modal-2 */}
           <Modal
             {...props}
@@ -332,7 +338,7 @@ const [finalData, setFinalData] = useState([])
 
                           </Col>
                           <Col md={7}>
-                            <p>{val.name}
+                            <p className='fst-italic'>  <span className='fw-bold'>Description : </span> {val.name}
                             </p>
                            
                           {/* Add Dropdown */}
