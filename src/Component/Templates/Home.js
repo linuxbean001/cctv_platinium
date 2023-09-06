@@ -10,10 +10,17 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Registration from "./Registration";
 
-function Home(props) {
-  console.log('redux', props)
-const [numboptions, setNumbOptions] = useState(0);
-const [numbcamera, setNumbCamera] = useState(0);
+// Redux
+import { useSelector, useDispatch } from "react-redux";
+import { IncrementCamera,DecrementCamera,IncrementOptions,DecrementOptions } from "../../app/features/counter/counterSlice";
+
+function Home() {
+
+  // Redux
+  const countCamera = useSelector((state) => state.counter1);
+  console.log("count-1 is", countCamera);
+  const dispatch = useDispatch();
+
 const navigate = useNavigate();
 const [options, setOptions] = useState([]);
 const [data, setData] = useState([]);
@@ -22,32 +29,33 @@ const [showTemp, setShowTemp] = useState(false);
 const [showCam_num, setShowCam_num] = useState(false)
 let categoriesData = [];
 let productOptionsDetails = []
+
+// Storing value of + and - button in state (No. of Options)
+
 const handleOptionsIncre = () => {
-  setNumbOptions(numboptions + 1);
+  dispatch(IncrementOptions());
 
 };
 
 const handleOptionsDecre = () => {
-  if (numboptions > 0) {
-    setNumbOptions(numboptions - 1);
-
+  if (countCamera > 0) {
+    dispatch(DecrementOptions());
   }
+
 };
-// Storing value of + and - button in state (No. of options)
+// Storing value of + and - button in state (No. of Camera)
 
 const handleCameraIncre = () => {
-  setNumbCamera(numbcamera + 1);
-
+  dispatch(IncrementCamera());
 };
 
 const handleCameraDecre = () => {
-  if (numbcamera > 0) {
-    setNumbCamera(numbcamera - 1);
-
+  if (countCamera > 0) {
+  dispatch(DecrementCamera());
   }
+
 };
 
-// Storing value (Camera of options) ends
  
 
   const cameraOptions = [
@@ -131,7 +139,7 @@ const handleCameraDecre = () => {
   }
   return (
     <>
-    <Registration/>
+    {/* <Registration/> */}
 
       <Container className="my-4" fluid style={{ backgroundColor: "" }}>
         <Row className="p-1">
@@ -182,7 +190,7 @@ const handleCameraDecre = () => {
                 <Button variant="dark" onClick={handleOptionsIncre}>
                   +
                 </Button>
-                <h6 className="mx-3">{numboptions}</h6>
+                <h6 className="mx-3">{countCamera.totalOptions}</h6>
                 <Button variant="dark" onClick={handleOptionsDecre}>
                   -
                 </Button>
@@ -224,7 +232,7 @@ const handleCameraDecre = () => {
                 <Button variant="dark" onClick={handleCameraIncre}>
                   +
                 </Button>
-                <h6 className="mx-3"> {numbcamera}</h6>
+                <h6 className="mx-3"> {countCamera.totalCamera}</h6>
                 <Button variant="dark" onClick={handleCameraDecre}>
                   -
                 </Button>

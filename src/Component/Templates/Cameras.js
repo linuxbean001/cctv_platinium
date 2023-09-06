@@ -83,6 +83,7 @@ const [finalData, setFinalData] = useState([])
 
 // Category name coming from CAtegory.CSV
   const handleButtonClick = (e,category_name) => {
+
     setCategoryName(category_name)
     setShow(true)
 
@@ -95,6 +96,7 @@ const [finalData, setFinalData] = useState([])
   });
   setfilteredData(cameraData2)  
 }
+console.log('category',filteredData)
 
   // Modal_1
   function modal_1(e, id) {

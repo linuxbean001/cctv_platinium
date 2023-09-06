@@ -14,8 +14,8 @@ const onlineImage = 'https://images.pexels.com/photos/3205735/pexels-photo-32057
 
 function Special() {
 
-  const [categoryCSV, setCategoriesCSV] = useState([])
-  const [productCSV, setProductCSV] = useState([])
+  const [categoryCSV, setCategoriesCSV] = useState([]) // categoryCsv data
+  const [productCSV, setProductCSV] = useState([])  // productCSV data
   const [productOption, setProductOptionCSV] = useState([]); // product_options.csv data
 
 
@@ -93,7 +93,6 @@ function Special() {
     setfilteredData(specialData2)
 
   }
-console.log('file data',filteredData)
   //when modal-1 open , its box click funtionality below
   function modal_1(e, id) {
     setFinalData([])

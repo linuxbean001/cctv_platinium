@@ -13,6 +13,9 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import { useNavigate } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 
+// Redux
+import { useSelector, useDispatch } from "react-redux";
+
 
 
 
@@ -160,6 +163,10 @@ function MyVerticallyCenteredModal(props) {
 //Modal Ends Here
 
 function Nvr(props) {
+  // Redux
+  const countCamera = useSelector((state) => state.counter1);
+
+
   const navigate = useNavigate();
   const [modalShow, setModalShow] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState([]); // Initialize with a default title
@@ -209,11 +216,6 @@ function Nvr(props) {
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => setShow2(true);
   // Warning Modals state
-
-
-
- 
-
 
   // It'll search for NVR from ProductCSV (only from column "id") and Sending Filter Data in a state
   const recorderData = productCSV.filter((item) => {
@@ -283,6 +285,7 @@ function Nvr(props) {
 
   };
 
+  console.log('first')
   const isIdInRecorderData2 = recorderData2.filter((item) => {
     if (item.productid == idforOptions) {
       return idforOptions.includes(item.productid)
@@ -303,23 +306,24 @@ function Nvr(props) {
             </Col>
             {/* Right */}
             <Col className="" style={{ backgroundColor: "" }}>
-             
-              
-                    <Row>
-                      <Col className="text-end">
-                        Number of Cameras:{" "}
-                        <span className="fw-bold">100</span>
-                      </Col>
-                    </Row>
-                  );
-                
-                return null;
-           
+
 
               <Row>
                 <Col className="text-end">
+                  Number of Cameras:
+                  <span className="fw-bold">{countCamera.totalCamera}</span>
+                </Col>
+              </Row>
+              <Row>
+                <Col className="text-end">
+                  Number of Options:
+                  <span className="fw-bold">{countCamera.totalOptions}</span>
+                </Col>
+              </Row>
+              <Row>
+                <Col className="text-end">
                   <h6>
-                    Number of Licenses : <span className="fw-bold">??</span>
+                    Number of Licenses : <span className="fw-bold">{countCamera.totalCamera}</span>
                   </h6>
                 </Col>
               </Row>

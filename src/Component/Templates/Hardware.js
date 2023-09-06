@@ -167,7 +167,6 @@ function Hardware() {
 
   // Modal-1 Open
   function handleButtonClick(e, id, name, thumbnail, image1, image2, image3) {
-    // console.log(val)
     setModalShow(true)
     setData({
       id: id,
@@ -178,6 +177,8 @@ function Hardware() {
       image3: image3
 
     })
+
+    console.log(typeof data)
   }
 
   // Modal-2 Open
