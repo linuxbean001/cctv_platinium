@@ -1,176 +1,110 @@
 import React, { useState } from "react";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import { useNavigate } from "react-router-dom";
-import Stack from "@mui/material/Stack";
-import Modal from "@mui/material/Modal";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import Table from "react-bootstrap/Table";
+import Modal from 'react-bootstrap/Modal';
+import Papa from "papaparse";
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
+import noImage from '../../no_Image.jpg'
+import Form from 'react-bootstrap/Form';
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
-function LaborRate(props) {
-  const [laborDetail, setLaborDetail] = React.useState([]);
-  const [open, setOpen] = React.useState(false);
-  const [nestModal, setNestModal] = React.useState(false);
-  const labor_rate = [
-    "LEVEL-1",
-    "LEVEL-2",
-    "LEVEL-3",
-    "LEVEL-4",
-    "NO INSTALL",
-    "PRE VILLAGE",
-  ];
+const onLineImg = 'https://images.pexels.com/photos/5703527/pexels-photo-5703527.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
 
-  let cameraDetails = {};
-  for (let i = 0; i <= props.userDetail.length; i++) {
-    Object.assign(cameraDetails, props.userDetail[i]);
-  }
+function LaborRate() {
+  const [categoryCSV, setCategoryCSV] = useState([]); // for category csv
+  const [productCSV, setProductCSV] = useState([]); // for products csv
+  const [productOption, setProductOptionCSV] = useState([]); // product_options.csv data
 
-  const handleClose = () => {
-    setOpen(false);
+  const [show, setShow] = useState(false);
+  const [show2, setShow2] = useState(false);
+  const [show3, setShow3] = useState(false);
+  const [count, setCount] = useState(0);
+
+  const [test, setTest] = useState([])
+  const [test2, setTest2] = useState([])
+  const [thumbimg, setThumbimg] = useState([])
+
+  //
+  const [filteredData, setfilteredData] = useState([])
+  const [categoryName, setCategoryName] = useState([])
+  const [filteredData2, setfilteredData2] = useState([])
+  const [categoryName2, setCategoryName2] = useState([])
+
+
+// Fetching APIs data
+React.useEffect(() => {
+  const parseCSVFiles2 = async () => {
+    try {
+      //Category CSV
+      const categoryCSV = await fetch('assets/CSVs/categories.csv');
+      const categoryArray1 = await categoryCSV.text();
+      const products1 = Papa.parse(categoryArray1, { header: true }).data;
+      //Products CSV
+      const productsCSV = await fetch('assets/CSVs/products.csv');
+      const categoryArray2 = await productsCSV.text();
+      const products2 = Papa.parse(categoryArray2, { header: true }).data;
+      // Product Options CSV
+      const productOptionsCSV = await fetch('assets/CSVs/products_options.csv');
+      const categoryArray3 = await productOptionsCSV.text();
+      const products3 = Papa.parse(categoryArray3, { header: true }).data;
+
+      // Storing CSV data in separate state
+      setCategoryCSV(products1)  
+      setProductCSV(products2)
+      setProductOptionCSV(products3)
+
+    } catch (error) {
+      console.error('Error parsing CSV files:', error);
+    }
   };
+  parseCSVFiles2();
+}, []);
 
-  const handleOpen = (e) => {
-    setLaborDetail({ laborDetail: e.target.name });
-    setOpen(true);
-  };
-  const handleNestModal=()=>{
-    alert('hello')
-    setNestModal(true);
-    
-  }
-  const navigate = useNavigate();
+// 
+
+
   return (
-    <React.Fragment>
-      <Container
-        maxWidth="xl"
-        style={{
-          background: "rgba(181, 225, 243, 0.28)",
-          height: "100vh",
-          padding: "30px",
-        }}
-      >
-        <Box
-          sx={{
-            marginLeft: 20,
-            display: "flex",
-            "& > :not(style)": {
-              m: 1,
-              width: "125vh",
-              height: 600,
-            },
-          }}
-        >
-          <Paper variant="outlined" square={true} color="red">
-            <h1>Labor Rate</h1>
+      <>
+           <Container fluid className="my-4" style={{ backgroundColor: "" }}>
+        <Container>
+          <Row style={{ backgroundColor: "" }}>
+            <Col style={{ backgroundColor: "" }}>
+              <h2>
+                Labor{" "}
+                <span className="fst-italic fs-6">(Category)</span>
+              </h2>
+            </Col>
+            <Col className="" style={{ backgroundColor: "" }}>
+              <Row>
+                <Col className="text-end">
+                  Number of Cameras : <span className="fw-bold">??</span>
+                </Col>
+              </Row>
+              <Row>
+                <Col className="text-end">
 
-            <div className="labor_input">
-              <div className="spceItemA">
-                <label>Number of Camera</label>
-                <input
-                  type="text"
-                
-                  value={cameraDetails.cameraNumber}
-                  readOnly
-                />
-              </div>
+                  <Link to='/'>
+                    <h6>
+                      Edit here <span className="fw-bold"></span>
+                    </h6>
+                  </Link>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
 
-              <div className="spceItemB">
-                <label>No of Drops</label>
-                <input
-                  type="text"
-                  value={
-                    cameraDetails.cameraNumber + cameraDetails.specialDetails.tx
-                  }
-                  readOnly
-                />
-              </div>
-
-              <div className="spceItemC">
-                <label>Labor</label>
-                <input type="text" value={30} readOnly />
-              </div>
-            </div>
-            <Stack spacing={2} direction="row" m={3}>
-              {labor_rate.map((btn_types) => {
-                return (
-                  <div className="changes">
-                    <Button
-                      variant="contained"
-                      name={btn_types}
-                      onClick={handleOpen}
-                    >
-                      {btn_types}
-                    </Button>
-                  </div>
-                );
-              })}
-            </Stack>
-
-            <Button variant="contained" onClick={ handleNestModal}>
-              Next
-            </Button>
-
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                <Box>
-                  <h3>{laborDetail.laborDetail}</h3>
-                  <div className="spceItemB">
-                  <label>Quantity</label>
-                  <input
-                    type="text"
-                    value={
-                      cameraDetails.cameraNumber + cameraDetails.specialDetails.tx
-                    }
-                    readOnly
-                  />
-                </div>
-                  <Button
-                    variant="contained"
-                    style={{ margin: "0 5px" }}
-                    onClick={handleClose}
-                  >
-                    ADD
-                  </Button>
-                </Box>
-              
-              </Box>
-            </Modal>
-
-            <Dialog open={open} onClose={handleClose}>
-            <DialogContent>
-              <DialogContentText>ARE YOU SURE?</DialogContentText>
-              <Button onClick={handleClose}>No</Button>
-              <Button onClick={navigate("/svc_call")}>Yes</Button>
-              
-            </DialogContent>
-          </Dialog>
-  
-          </Paper>
-        </Box>
-      </Container>
-    </React.Fragment>
-  );
+            
+          </Container>
+          </Container>
+      </>
+  )
 }
 
-export default LaborRate;
+export default LaborRate
