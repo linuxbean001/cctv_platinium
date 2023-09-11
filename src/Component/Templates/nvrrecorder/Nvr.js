@@ -17,14 +17,11 @@ import { useSelector, useDispatch } from "react-redux";
 //Modal Starts Here
 
 function MyVerticallyCenteredModal(props) {
-  // console.log("mainPrice", props.mainPrice);
   const updatePrice = props.mainPrice;
   const [count, setCount] = useState(1);
   const [formData, setFormData] = useState({});
   const [totalPrice, setTotalPrice] = useState(0);
 
-  console.log('total price is', totalPrice)
-  // handle select
 
   useEffect(() => {
     const MUpdatePrice = parseInt(totalPrice) + parseInt(updatePrice);
@@ -36,7 +33,6 @@ function MyVerticallyCenteredModal(props) {
       ...prevData,
       [name]: value,
     }));
-
     const selectedOption = props.finalData
       .flat()
       .find((option) => option.featurename === value);
@@ -59,7 +55,7 @@ function MyVerticallyCenteredModal(props) {
     }
   };
 
-  // console.log("FormData", formData);
+  console.log("FormData", formData);
   return (
     <Modal
       {...props}
@@ -145,6 +141,7 @@ function MyVerticallyCenteredModal(props) {
                       value={formData[item[0].featurecaption] || ""}
                       onChange={(e) => handleSelectChange(e)}
                     >
+                      {/* <option>Select a option</option> */}
                       {item.map((option, optionIndex) => {
                         return (
                           <option
@@ -153,8 +150,8 @@ function MyVerticallyCenteredModal(props) {
                             value={option.featurename}
                           >
                             {option.featurename +
-                              "    " +
-                              "$" +
+                              " " +
+                              "$ " +
                               option.featureprice}
                           </option>
                         );

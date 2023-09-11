@@ -96,7 +96,7 @@ const [finalData, setFinalData] = useState([])
   });
   setfilteredData(cameraData2)  
 }
-console.log('category',filteredData)
+// console.log('category',filteredData)
 
   // Modal_1
   function modal_1(e, id) {

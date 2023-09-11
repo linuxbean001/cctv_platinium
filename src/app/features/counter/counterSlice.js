@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   totalOptions: 0,
   totalCamera: 0,
-  selectedNVR:[]
 };
 
 // console.log('state',initialState)
@@ -26,12 +25,12 @@ export const counterSlice = createSlice({
     },
 
     // For NVR
-
+   
 
   },
 });
 
 
 
-export const { IncrementCamera, DecrementCamera,IncrementOptions,DecrementOptions } = counterSlice.actions;
+export const { IncrementCamera, DecrementCamera,IncrementOptions,DecrementOptions} = counterSlice.actions;
 export default counterSlice.reducer;
