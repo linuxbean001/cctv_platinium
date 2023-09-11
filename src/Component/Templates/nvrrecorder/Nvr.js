@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -8,27 +8,27 @@ import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 import "./index.css";
 import Papa from "papaparse";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
 import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
 
-
-
-
 //Modal Starts Here
 
 function MyVerticallyCenteredModal(props) {
-  const [count, setCount] = useState(0);
-
-  // Options state
-
+  // console.log("mainPrice", props.mainPrice);
+  const updatePrice = props.mainPrice;
+  const [count, setCount] = useState(1);
   const [formData, setFormData] = useState({});
+  const [totalPrice, setTotalPrice] = useState(0);
 
+  console.log('total price is', totalPrice)
   // handle select
+
+  useEffect(() => {
+    const MUpdatePrice = parseInt(totalPrice) + parseInt(updatePrice);
+  }, [updatePrice, totalPrice]);
 
   function handleSelectChange(e) {
     const { name, value } = e.target;
@@ -36,8 +36,30 @@ function MyVerticallyCenteredModal(props) {
       ...prevData,
       [name]: value,
     }));
+
+    const selectedOption = props.finalData
+      .flat()
+      .find((option) => option.featurename === value);
+
+    if (selectedOption) {
+      const optionPrice = parseFloat(selectedOption.featureprice);
+      setTotalPrice((prevTotalPrice) => prevTotalPrice + optionPrice);
+    }
   }
-console.log(formData)
+
+  const handlePlusClick = () => {
+    setCount(count * 2);
+    setTotalPrice(updatePrice * 2);
+  };
+
+  const handleMinusClick = () => {
+    if (count > 1) {
+      setCount(count / 2);
+      setTotalPrice(updatePrice / 2);
+    }
+  };
+
+  // console.log("FormData", formData);
   return (
     <Modal
       {...props}
@@ -45,6 +67,7 @@ console.log(formData)
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
+      {/* {console.log("props",props)} */}
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           {props.dataforProduct.id}
@@ -90,7 +113,15 @@ console.log(formData)
                   />
                 </Col>
               </Row>
+              <Row>
+                {/* Total Value */}
+                {/* <Col className="fw-bold">Total : ${props.dataforProduct.price}</Col> */}
+                <Col className="fw-bold">
+                  Total : ${parseInt(props.dataforProduct.price) + parseInt(totalPrice)}
+                </Col>
+              </Row>
             </Col>
+
             <Col md={8}>
               <p>
                 Description:{" "}
@@ -101,45 +132,48 @@ console.log(formData)
               <p className="fw-bold">Choose Options :</p>
               {/* Options */}
 
+              {/* Form Section */}
               {props.finalData.map((item, index) => {
-
                 return (
                   <>
+                    <Form.Label>{item[0].featurecaption}</Form.Label>
                     <Form.Select
                       key={index}
                       aria-label="Default select example"
                       className="mb-3"
-                      name  = {item[0].featurecaption}
-                      value = {item[0].featurename || ''}
-                      onChange={(e) => handleSelectChange(e)} // Pass the field name
+                      name={item[0].featurecaption}
+                      value={formData[item[0].featurecaption] || ""}
+                      onChange={(e) => handleSelectChange(e)}
                     >
-                      <option>{item[0].featurecaption}</option>
                       {item.map((option, optionIndex) => {
                         return (
-                          <>
-                              <option name={option.featurecaption} key={optionIndex} value={option.value}>
-                                {option.featurename}
-                              </option>
-                          </>
+                          <option
+                            name={option.featurecaption}
+                            key={optionIndex}
+                            value={option.featurename}
+                          >
+                            {option.featurename +
+                              "    " +
+                              "$" +
+                              option.featureprice}
+                          </option>
                         );
                       })}
                     </Form.Select>
                   </>
                 );
               })}
+              {/* Form Section */}
 
               <div
                 className="d-flex align-items-end justify-content-end my-4"
                 style={{ backgroundColor: "" }}
               >
-                <Button variant="dark" onClick={() => setCount(count + 1)}>
+                <Button variant="dark" onClick={handlePlusClick}>
                   +
                 </Button>
                 <h6 className="mx-3">{count}</h6>
-                <Button
-                  variant="dark"
-                  onClick={() => (count > 0 ? setCount(count - 1) : null)}
-                >
+                <Button variant="dark" onClick={handleMinusClick}>
                   -
                 </Button>
               </div>
@@ -167,8 +201,8 @@ console.log(formData)
 function Nvr(props) {
   // Redux
   const countCamera = useSelector((state) => state.counter1);
-
   const navigate = useNavigate();
+  const [mainPrice, setMainPrice] = useState(0);
   const [modalShow, setModalShow] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState([]); // Initialize with a default title
   const [productCSV, setProductCSV] = useState([]); // product.csv data
@@ -210,7 +244,7 @@ function Nvr(props) {
     parseCSVFiles();
   }, []);
 
-  console.log('final data',finalData)
+  // console.log("final data", finalData);
 
   // Warning Modals state
   const [show2, setShow2] = useState(false);
@@ -282,6 +316,7 @@ function Nvr(props) {
       image3: val.image3,
       thumbnail: val.thumbnail,
       description: val.description,
+      price: val.price,
     });
     setExtra(isIdInRecorderData2);
   };
@@ -336,7 +371,10 @@ function Nvr(props) {
                   <Col
                     md={4}
                     className="nvr_col my-3"
-                    onClick={(e) => handleButtonClick(e, val, val.id)}
+                    onClick={(e) => {
+                      handleButtonClick(e, val, val.id);
+                      setMainPrice(val.price);
+                    }}
                   >
                     <Card style={{ width: "", margin: "" }}>
                       <Card.Body>
@@ -375,6 +413,7 @@ function Nvr(props) {
               extra={extra}
               state={setAddCart}
               setRedux={props}
+              mainPrice={mainPrice}
             />
           </Row>
           {/* Table */}
