@@ -25,3 +25,11 @@
       border: 1px solid gray;
       /* transform: scale(1.03); */
   }
+
+  .tops{
+    margin-top: 19.8rem !important;
+  }
+
+  .text{
+    font-size: 20px;
+  }
