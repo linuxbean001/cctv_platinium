@@ -92,7 +92,16 @@ function LaborRate() {
   function modal_1(e, id) {
     setShow2(true);
     setShow(false);
+
+    const laborData3 = filteredData.filter((item) => {
+      if (item.id == id) {
+        return item
+      }
+    });
+    setfilteredData2(laborData3)
+
   }
+console.log(filteredData2)
 
   function modal_3() {
     setShow3(true);
@@ -185,7 +194,6 @@ function LaborRate() {
             <Modal.Body>
               <Row className="my-4">
                 {filteredData.map((item) => {
-                  console.log('item')
                   return (
                     <>
                       <Col
@@ -256,13 +264,18 @@ function LaborRate() {
             <Modal.Body>
               <Container>
                 <Row>
-                      <>
+
+                  {
+
+                    filteredData2.map((val)=>{
+                      return(
+                        <>
                         <Col md={5} style={{ backgroundColor: "" }}>
                           <Row>
                             <Card.Img
                               variant="top"
                               height={150}
-                              src={onlineImg}
+                              src={val.thumbnail ? val.thumbnail : noImage}
                             />
                           </Row>
                           <Row className="my-2">
@@ -272,7 +285,7 @@ function LaborRate() {
                                 variant="top"
                                 height={40}
                                 className="camera_thumbnail_img"
-                                src={onlineImg}
+                                src={val.image1 ? val.imgae1 : noImage}
                                 // onClick={() => { setThumbimg({ img1: onlineImg }) }}
                               />
                             </Col>
@@ -282,7 +295,7 @@ function LaborRate() {
                                 variant="top"
                                 height={40}
                                 className="camera_thumbnail_img"
-                                src={onlineImg}
+                                src={val.image2 ? val.imgae2 : noImage}
                                 // onClick={() => { setThumbimg({ img1: onlineImg }) }}
                               />
                             </Col>
@@ -292,7 +305,7 @@ function LaborRate() {
                                 variant="top"
                                 height={40}
                                 className="camera_thumbnail_img"
-                                src={onlineImg}
+                                src={val.image3 ? val.imgae3 : noImage}
                                 // onClick={() => { setThumbimg({ img1: onlineImg }) }}
                               />
                             </Col>
@@ -302,7 +315,7 @@ function LaborRate() {
                                 variant="top"
                                 height={40}
                                 className="camera_thumbnail_img"
-                                src={onlineImg}
+                                src={val.image4 ? val.imgae4 : noImage}
                                 // onClick={() => { setThumbimg({ img1: image4 }) }}
                               />
                             </Col>
@@ -314,12 +327,18 @@ function LaborRate() {
                             <span className="fw-bold">
                               Description 22:{" "}
                             </span>{" "}
-                            xxxxxxxxxxxxxxxxxxx
+                            {
+                              val.name
+                            }
                           </p>
 
                        
                         </Col>
                       </>
+                      )
+                    })
+                  }
+                      
             
                 </Row>
               </Container>

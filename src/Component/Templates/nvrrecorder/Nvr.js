@@ -13,25 +13,30 @@ import Form from "react-bootstrap/Form";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
-import { setSelectedNVR } from "../../../app/features/counter/counterSlice";
+import  {setSelectedNVR} from "../../../app/features/counter/counterSlice";
 
 //Modal Starts Here
 function MyVerticallyCenteredModal(props) {
-
-  const [yourNVRFinalPrice, setYourNVRFinalPrice] = useState("$500");
-
+  console.log(props)
   const [finalNewState, setFinalNewState] = useState({});
 
+  // Passing State
   React.useEffect(() => {
-    setFinalNewState({ nvrName: props.dataforProduct.id, nvrBaseprice: props.mainPrice, nvrFinalPrice:'' });
+    props.onTestChange(finalNewState);
+  }, [finalNewState]);
+
+  React.useEffect(() => {
+    setFinalNewState({
+      nvrName: props.dataforProduct.id,
+      nvrBaseprice: props.mainPrice,
+      nvrFinalPrice: "",
+    });
   }, [props.dataforProduct.id, props.mainPrice]);
 
-  const updatePrice = props.mainPrice;  // NVR first value like (1599, 1699)
-  const [count, setCount] = useState(0);
-  const [formData, setFormData] = useState({});
+  const updatePrice = props.mainPrice; // NVR first value like (1599, 1699)
+  const [count, setCount] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0); // 1+2+3+4 = 10 (child items)
   const [finalPrice, setFinalPrice] = useState(0);
-
 
   useEffect(() => {
     const initialSelectedOptions = {};
@@ -42,28 +47,62 @@ function MyVerticallyCenteredModal(props) {
           firstOption.featurename;
       }
     });
-    setFormData(initialSelectedOptions);
+    props.formData1(initialSelectedOptions);
   }, [props.finalData]);
+
+  // function handleSelectChange(e) {
+  //   const { name, value } = e.target;
+  //   props.formData1((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
+  //   const selectedOption = props.finalData
+  //     .flat()
+  //     .find((option) => option.featurename === value);
+
+  //   if (selectedOption) {
+  //     const optionPrice = parseFloat(selectedOption.featureprice); // Inner DropDown
+  //     setTotalPrice((prevTotalPrice) => prevTotalPrice + optionPrice);
+  //   }
+  // }
 
   function handleSelectChange(e) {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    
     const selectedOption = props.finalData
-      .flat()
-      .find((option) => option.featurename === value);
-
-    if (selectedOption) {
-      const optionPrice = parseFloat(selectedOption.featureprice);  // Inner DropDown
-      setTotalPrice((prevTotalPrice) => prevTotalPrice + optionPrice);
+    .flat()
+    .find((option) => option.featurename === value);
+    
+    // Get the previous option's price
+    const prevOptionPrice =
+    props.formData1[name] &&
+    props.finalData
+    .flat()
+    .find((option) => option.featurename === props.formData1[name])
+    ? parseFloat(
+    props.finalData
+    .flat()
+    .find((option) => option.featurename === props.formData1[name])
+    .featureprice
+    )
+    : 0;
+    
+    // Calculate the price difference between the new and old option
+    const optionPrice = selectedOption
+    ? parseFloat(selectedOption.featureprice)
+    : 0;
+    const priceDifference = optionPrice - prevOptionPrice;
+    
+    setTotalPrice((prevTotalPrice) => prevTotalPrice + priceDifference);
+    props.formData1((prevData) => ({
+    ...prevData,
+    [name]: value,
+    }));
     }
-  }
 
   const handlePlusClick = () => {
     setCount(count + 1);
-    setFinalPrice( updatePrice * count);
+    setFinalPrice(updatePrice * count);
   };
 
   const handleMinusClick = () => {
@@ -130,8 +169,7 @@ function MyVerticallyCenteredModal(props) {
                   Totalss : $
                   {parseInt(props.dataforProduct.price) +
                     parseInt(totalPrice) +
-                    parseInt(finalPrice)
-                  }
+                    parseInt(finalPrice)}
                 </Col>
                 {/* Total Value */}
               </Row>
@@ -157,7 +195,7 @@ function MyVerticallyCenteredModal(props) {
                       aria-label="Default select example"
                       className="mb-3"
                       name={item[0].featurecaption}
-                      value={formData[item[0].featurecaption] || ""}
+                      value={props.formDataState[item[0].featurecaption] || ""}
                       onChange={(e) => handleSelectChange(e)}
                     >
                       {/* <option>Select a option</option> */}
@@ -183,7 +221,6 @@ function MyVerticallyCenteredModal(props) {
                 );
               })}
               {/* Form Section */}
-
               <div
                 className="d-flex align-items-end justify-content-end my-4"
                 style={{ backgroundColor: "" }}
@@ -218,30 +255,50 @@ function MyVerticallyCenteredModal(props) {
 //Modal Ends Here
 
 function Nvr(props) {
-  // Redux
+  const dispatch = useDispatch();
+  const [formData1, setFormData1] = useState({}); // Receivng value from Modal State
+  const [formData2, setFormData2] = React.useState({}); // Receiving value from Modal State
+  const [mergedState , setMergedState] = useState({})
   const countCamera = useSelector((state) => state.counter1);
-  const navigate = useNavigate(); // moving to another page
+  const navigate = useNavigate();
   const [mainPrice, setMainPrice] = useState(0);
   const [modalShow, setModalShow] = React.useState(false);
-  const [modalTitle, setModalTitle] = React.useState([]); // Initialize with a default title
-  const [productCSV, setProductCSV] = useState([]); // product.csv data
-  const [produtOption, setProductOptionCSV] = useState([]); // product_options.csv data
+  const [modalTitle, setModalTitle] = React.useState([]);
+  const [productCSV, setProductCSV] = useState([]);
+  const [produtOption, setProductOptionCSV] = useState([]);
   const [addCart, setAddCart] = useState([]);
-
-  // Sending Filter Data in a state
   const [recorderFilter, setRecorderFilter] = useState([]);
-
-  // dataforProduct data from other csv
   const [dataforProduct, setdataForProduct] = useState([]);
-
-  // for id
   const [idforOptions, setIdforOptions] = useState([]);
-
-  // extra
   const [extra, setExtra] = useState([]);
-
-  // by sir
   const [finalData, setFinalData] = useState([]);
+  // Warning Modals state
+  const [show2, setShow2] = useState(false);
+  const handleClose2 = () => setShow2(false);
+  const handleShow2 = () => setShow2(true);
+
+// Combining FormData1 and FormData2 into MergedState
+
+const updateMergedState = () => {
+  setMergedState({
+    ...formData1,
+    ...formData2,
+  });
+};
+
+
+
+// Call the updateMergedState function whenever formData1 or formData2 changes
+useEffect(() => {
+  updateMergedState();
+}, [formData1, formData2]);
+
+useEffect(() => {
+  console.log("Dispatching with payload:", mergedState);
+  dispatch(setSelectedNVR(mergedState));
+}, [dispatch, mergedState]);
+
+// Merging Done
 
   React.useEffect(() => {
     const parseCSVFiles = async () => {
@@ -263,13 +320,9 @@ function Nvr(props) {
     parseCSVFiles();
   }, []);
 
-  // console.log("final data", finalData);
-
-  // Warning Modals state
-  const [show2, setShow2] = useState(false);
-  const handleClose2 = () => setShow2(false);
-  const handleShow2 = () => setShow2(true);
-  // Warning Modals state
+  const handleTestChange = (newValue) => {
+    setFormData2(newValue);
+  };
 
   // It'll search for NVR from ProductCSV (only from column "id") and Sending Filter Data in a state
   const recorderData = productCSV.filter((item) => {
@@ -338,6 +391,8 @@ function Nvr(props) {
       price: val.price,
     });
     setExtra(isIdInRecorderData2);
+
+
   };
 
   const isIdInRecorderData2 = recorderData2.filter((item) => {
@@ -345,6 +400,9 @@ function Nvr(props) {
       return idforOptions.includes(item.productid);
     }
   });
+
+
+  // console.log(mergedState)
 
   return (
     <>
@@ -433,6 +491,9 @@ function Nvr(props) {
               state={setAddCart}
               setRedux={props}
               mainPrice={mainPrice}
+              formData1={setFormData1}
+              formDataState={formData1}
+              onTestChange={handleTestChange}
             />
           </Row>
           {/* Table */}

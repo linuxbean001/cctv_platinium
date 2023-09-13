@@ -6,7 +6,7 @@ const initialState = {
   selectedNVR :{}
 };
 
-// console.log('state',initialState)
+console.log('my state',initialState)
 export const counterSlice = createSlice({
   name: "counter",
   initialState,
@@ -25,10 +25,10 @@ export const counterSlice = createSlice({
       state.totalOptions -= 1;
     },
     // For NVR
-   
     setSelectedNVR: (state, action) => {
-      state.selectedNVR = action.payload; // Assuming action.payload is an object
+      state.selectedNVR = action.payload;
     },
+
   },
 });
 
