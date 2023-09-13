@@ -9,7 +9,6 @@ import LaborRate from '../Templates/LaborRate'
 import Home from "../Templates/Home";
 import FinalCart from "../CheckItem/finalcart/FinalCart";
 import PoeSwitches from "../Templates/nvrrecorder/PoeSwitches";
-import SpecialItems from "../Templates/SpecialItems";
 import Test from "../Templates/Registration";
 import Nvr from "../Templates/nvrrecorder/Nvr";
 import Cameras from "../Templates/Cameras";
@@ -41,7 +40,6 @@ function RoutesMiddleware() {
           <Route exact path="/svc_call" element={<SVCCall />} />
           <Route exact path="/add_to_cart" element={<FinalCart />} />
           <Route exact path="/poe-switch" element={<PoeSwitches />} />
-          <Route exact path="/special-items" element={<SpecialItems />} />
 
           <Route exact path="/test" element={<Test/>} />
 

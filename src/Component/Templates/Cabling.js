@@ -294,7 +294,7 @@ function Cabling() {
           <Button variant="dark" onClick={handleClose2}>
             Go Back
           </Button>
-          <Button variant="dark" onClick={()=>navigate('/cameras')} >
+          <Button variant="dark" onClick={()=>navigate('/labor_rate')} >
             Continue Anyways
           </Button>
         </Modal.Footer>

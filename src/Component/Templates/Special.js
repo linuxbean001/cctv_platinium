@@ -74,12 +74,9 @@ function Special() {
     return item.category_parent && (item.category_parent.includes('101') || item.category_parent.includes('107'));
   });
 
-
-
   // Category name coming from CAtegory.CSV
   const handleButtonClick = (e, category_name) => {
     setCategoryName(category_name)
-
     // modal-1 opens
     setShow(true)
 
@@ -93,6 +90,8 @@ function Special() {
     setfilteredData(specialData2)
 
   }
+
+
   //when modal-1 open , its box click funtionality below
   function modal_1(e, id) {
     setFinalData([])
@@ -328,7 +327,6 @@ function Special() {
                             {/* Add Dropdown */}
                             {
                               finalData.map((item, index) => {
-                                console.log('check',item)
                                 return (
                                   <>
                                     <Form.Select key={index} aria-label="Default select example" className="mb-3">

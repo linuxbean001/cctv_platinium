@@ -140,7 +140,7 @@ const [finalData, setFinalData] = useState([])
 
     setShow2(true)
     setShow(false)
-  setCategoryName2(id)
+    setCategoryName2(id)
     const cameraData3 = filteredData.filter((item) => {
       if (item.id == id) {
         return item

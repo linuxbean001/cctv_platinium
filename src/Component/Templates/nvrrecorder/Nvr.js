@@ -13,19 +13,37 @@ import Form from "react-bootstrap/Form";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
+import { setSelectedNVR } from "../../../app/features/counter/counterSlice";
 
 //Modal Starts Here
-
 function MyVerticallyCenteredModal(props) {
-  const updatePrice = props.mainPrice;
-  const [count, setCount] = useState(1);
+
+  const [yourNVRFinalPrice, setYourNVRFinalPrice] = useState("$500");
+
+  const [finalNewState, setFinalNewState] = useState({});
+
+  React.useEffect(() => {
+    setFinalNewState({ nvrName: props.dataforProduct.id, nvrBaseprice: props.mainPrice, nvrFinalPrice:'' });
+  }, [props.dataforProduct.id, props.mainPrice]);
+
+  const updatePrice = props.mainPrice;  // NVR first value like (1599, 1699)
+  const [count, setCount] = useState(0);
   const [formData, setFormData] = useState({});
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0); // 1+2+3+4 = 10 (child items)
+  const [finalPrice, setFinalPrice] = useState(0);
 
 
   useEffect(() => {
-    const MUpdatePrice = parseInt(totalPrice) + parseInt(updatePrice);
-  }, [updatePrice, totalPrice]);
+    const initialSelectedOptions = {};
+    props.finalData.forEach((item) => {
+      if (item.length > 0) {
+        const firstOption = item[0];
+        initialSelectedOptions[firstOption.featurecaption] =
+          firstOption.featurename;
+      }
+    });
+    setFormData(initialSelectedOptions);
+  }, [props.finalData]);
 
   function handleSelectChange(e) {
     const { name, value } = e.target;
@@ -38,24 +56,23 @@ function MyVerticallyCenteredModal(props) {
       .find((option) => option.featurename === value);
 
     if (selectedOption) {
-      const optionPrice = parseFloat(selectedOption.featureprice);
+      const optionPrice = parseFloat(selectedOption.featureprice);  // Inner DropDown
       setTotalPrice((prevTotalPrice) => prevTotalPrice + optionPrice);
     }
   }
 
   const handlePlusClick = () => {
-    setCount(count * 2);
-    setTotalPrice(updatePrice * 2);
+    setCount(count + 1);
+    setFinalPrice( updatePrice * count);
   };
 
   const handleMinusClick = () => {
     if (count > 1) {
-      setCount(count / 2);
-      setTotalPrice(updatePrice / 2);
+      setCount(count - 1);
+      setFinalPrice((prevFinalPrice) => prevFinalPrice - updatePrice);
     }
   };
 
-  console.log("FormData", formData);
   return (
     <Modal
       {...props}
@@ -63,7 +80,6 @@ function MyVerticallyCenteredModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      {/* {console.log("props",props)} */}
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           {props.dataforProduct.id}
@@ -109,12 +125,15 @@ function MyVerticallyCenteredModal(props) {
                   />
                 </Col>
               </Row>
-              <Row>
-                {/* Total Value */}
-                {/* <Col className="fw-bold">Total : ${props.dataforProduct.price}</Col> */}
-                <Col className="fw-bold">
-                  Total : ${parseInt(props.dataforProduct.price) + parseInt(totalPrice)}
+              <Row className="tops">
+                <Col className="fw-bold text">
+                  Totalss : $
+                  {parseInt(props.dataforProduct.price) +
+                    parseInt(totalPrice) +
+                    parseInt(finalPrice)
+                  }
                 </Col>
+                {/* Total Value */}
               </Row>
             </Col>
 
@@ -144,16 +163,19 @@ function MyVerticallyCenteredModal(props) {
                       {/* <option>Select a option</option> */}
                       {item.map((option, optionIndex) => {
                         return (
-                          <option
-                            name={option.featurecaption}
-                            key={optionIndex}
-                            value={option.featurename}
-                          >
-                            {option.featurename +
-                              " " +
-                              "$ " +
-                              option.featureprice}
-                          </option>
+                          <>
+                            <option
+                              name={option.featurecaption}
+                              key={optionIndex}
+                              value={option.featurename}
+                            >
+                              {option.featurename +
+                                " " +
+                                "  " +
+                                "$ " +
+                                option.featureprice}
+                            </option>
+                          </>
                         );
                       })}
                     </Form.Select>
@@ -198,7 +220,7 @@ function MyVerticallyCenteredModal(props) {
 function Nvr(props) {
   // Redux
   const countCamera = useSelector((state) => state.counter1);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // moving to another page
   const [mainPrice, setMainPrice] = useState(0);
   const [modalShow, setModalShow] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState([]); // Initialize with a default title
