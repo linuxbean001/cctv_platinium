@@ -6,7 +6,7 @@ const initialState = {
   selectedNVR :{}
 };
 
-console.log('my state',initialState)
+
 export const counterSlice = createSlice({
   name: "counter",
   initialState,
@@ -31,7 +31,7 @@ export const counterSlice = createSlice({
 
   },
 });
-
+// console.log('my state',initialState)
 
 
 export const { IncrementCamera, DecrementCamera,IncrementOptions,DecrementOptions,setSelectedNVR } = counterSlice.actions;

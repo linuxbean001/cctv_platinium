@@ -18,7 +18,6 @@ function Home() {
 
   // Redux
   const countCamera = useSelector((state) => state.counter1);
-  console.log("count-1 is", countCamera);
   const dispatch = useDispatch();
 
 const navigate = useNavigate();

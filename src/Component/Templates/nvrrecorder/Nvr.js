@@ -13,30 +13,36 @@ import Form from "react-bootstrap/Form";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
-import  {setSelectedNVR} from "../../../app/features/counter/counterSlice";
+import { setSelectedNVR } from "../../../app/features/counter/counterSlice";
 
 //Modal Starts Here
 function MyVerticallyCenteredModal(props) {
-  console.log(props)
-  const [finalNewState, setFinalNewState] = useState({});
+  const [finalNewState, setFinalNewState] = useState({}); // state-1
+  const [finalNewState2, setFinalNewState2] = useState({}); // state-2
 
-  // Passing State
+  const [count, setCount] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0); // 1+2+3+4 = 10 (child items)
+  const [finalPrice, setFinalPrice] = useState(0);
+
+  // Passing State-1
   React.useEffect(() => {
-    props.onTestChange(finalNewState);
+    props.onTestChange1(finalNewState);
   }, [finalNewState]);
+
+  // Passing State-2
+  React.useEffect(() => {
+    props.onTestChange(finalNewState2);
+  }, [finalNewState2]);
 
   React.useEffect(() => {
     setFinalNewState({
-      nvrName: props.dataforProduct.id,
-      nvrBaseprice: props.mainPrice,
-      nvrFinalPrice: "",
+      NVR_Name : props.dataforProduct.id,
+      NVR_Base_Price: props.mainPrice,
+      NVR_Final_Price: "",
     });
   }, [props.dataforProduct.id, props.mainPrice]);
 
   const updatePrice = props.mainPrice; // NVR first value like (1599, 1699)
-  const [count, setCount] = useState(1);
-  const [totalPrice, setTotalPrice] = useState(0); // 1+2+3+4 = 10 (child items)
-  const [finalPrice, setFinalPrice] = useState(0);
 
   useEffect(() => {
     const initialSelectedOptions = {};
@@ -47,58 +53,42 @@ function MyVerticallyCenteredModal(props) {
           firstOption.featurename;
       }
     });
-    props.formData1(initialSelectedOptions);
+    setFinalNewState2(initialSelectedOptions);
   }, [props.finalData]);
-
-  // function handleSelectChange(e) {
-  //   const { name, value } = e.target;
-  //   props.formData1((prevData) => ({
-  //     ...prevData,
-  //     [name]: value,
-  //   }));
-  //   const selectedOption = props.finalData
-  //     .flat()
-  //     .find((option) => option.featurename === value);
-
-  //   if (selectedOption) {
-  //     const optionPrice = parseFloat(selectedOption.featureprice); // Inner DropDown
-  //     setTotalPrice((prevTotalPrice) => prevTotalPrice + optionPrice);
-  //   }
-  // }
 
   function handleSelectChange(e) {
     const { name, value } = e.target;
-    
+
     const selectedOption = props.finalData
-    .flat()
-    .find((option) => option.featurename === value);
-    
+      .flat()
+      .find((option) => option.featurename === value);
+
     // Get the previous option's price
     const prevOptionPrice =
-    props.formData1[name] &&
-    props.finalData
-    .flat()
-    .find((option) => option.featurename === props.formData1[name])
-    ? parseFloat(
-    props.finalData
-    .flat()
-    .find((option) => option.featurename === props.formData1[name])
-    .featureprice
-    )
-    : 0;
-    
+      finalNewState2[name] &&
+      props.finalData
+        .flat()
+        .find((option) => option.featurename === finalNewState2[name])
+        ? parseFloat(
+            props.finalData
+              .flat()
+              .find((option) => option.featurename === finalNewState2[name])
+              .featureprice
+          )
+        : 0;
+
     // Calculate the price difference between the new and old option
     const optionPrice = selectedOption
-    ? parseFloat(selectedOption.featureprice)
-    : 0;
+      ? parseFloat(selectedOption.featureprice)
+      : 0;
     const priceDifference = optionPrice - prevOptionPrice;
-    
+
     setTotalPrice((prevTotalPrice) => prevTotalPrice + priceDifference);
-    props.formData1((prevData) => ({
-    ...prevData,
-    [name]: value,
+    setFinalNewState2((prevData) => ({
+      ...prevData,
+      [name]: value,
     }));
-    }
+  }
 
   const handlePlusClick = () => {
     setCount(count + 1);
@@ -137,7 +127,6 @@ function MyVerticallyCenteredModal(props) {
               </Row>
               <Row className="my-2">
                 <Col>
-                  {" "}
                   <Card.Img
                     variant="top"
                     height={50}
@@ -146,7 +135,6 @@ function MyVerticallyCenteredModal(props) {
                   />
                 </Col>
                 <Col>
-                  {" "}
                   <Card.Img
                     variant="top"
                     height={50}
@@ -155,7 +143,6 @@ function MyVerticallyCenteredModal(props) {
                   />
                 </Col>
                 <Col>
-                  {" "}
                   <Card.Img
                     variant="top"
                     height={50}
@@ -177,7 +164,7 @@ function MyVerticallyCenteredModal(props) {
 
             <Col md={8}>
               <p>
-                Description:{" "}
+                Description:
                 {props.dataforProduct.description
                   ? props.dataforProduct.description
                   : "No Description found"}
@@ -195,7 +182,8 @@ function MyVerticallyCenteredModal(props) {
                       aria-label="Default select example"
                       className="mb-3"
                       name={item[0].featurecaption}
-                      value={props.formDataState[item[0].featurecaption] || ""}
+                      // value={props.formDataState[item[0].featurecaption] || ""}
+                      value={finalNewState2[item[0].featurecaption] || ""}
                       onChange={(e) => handleSelectChange(e)}
                     >
                       {/* <option>Select a option</option> */}
@@ -258,7 +246,7 @@ function Nvr(props) {
   const dispatch = useDispatch();
   const [formData1, setFormData1] = useState({}); // Receivng value from Modal State
   const [formData2, setFormData2] = React.useState({}); // Receiving value from Modal State
-  const [mergedState , setMergedState] = useState({})
+  const [mergedState, setMergedState] = useState({});
   const countCamera = useSelector((state) => state.counter1);
   const navigate = useNavigate();
   const [mainPrice, setMainPrice] = useState(0);
@@ -277,28 +265,20 @@ function Nvr(props) {
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => setShow2(true);
 
-// Combining FormData1 and FormData2 into MergedState
+  // Merging Start
 
-const updateMergedState = () => {
-  setMergedState({
-    ...formData1,
-    ...formData2,
-  });
-};
+  const updateMergedState = () => {
+    setMergedState({
+      ...formData1,
+      ...formData2,
+    });
+  };
 
+  useEffect(() => {
+    updateMergedState();
+  }, [formData1, formData2]);
 
-
-// Call the updateMergedState function whenever formData1 or formData2 changes
-useEffect(() => {
-  updateMergedState();
-}, [formData1, formData2]);
-
-useEffect(() => {
-  console.log("Dispatching with payload:", mergedState);
-  dispatch(setSelectedNVR(mergedState));
-}, [dispatch, mergedState]);
-
-// Merging Done
+  // Merging Done
 
   React.useEffect(() => {
     const parseCSVFiles = async () => {
@@ -324,6 +304,24 @@ useEffect(() => {
     setFormData2(newValue);
   };
 
+  const handleTestChange1 = (newValue) => {
+    setFormData1(newValue);
+  };
+
+  useEffect(() => {
+    console.log("Dispatching with payload:", mergedState);
+    dispatch(setSelectedNVR(mergedState));
+  }, [dispatch, mergedState]);
+
+  const tableRows = Object.entries(countCamera.selectedNVR).map(
+    ([key, value]) => (
+      <tr key={key}>
+        <td>{key}</td>
+        <td>{value}</td>
+      </tr>
+    )
+  );
+
   // It'll search for NVR from ProductCSV (only from column "id") and Sending Filter Data in a state
   const recorderData = productCSV.filter((item) => {
     return item.id && item.id.includes("NVR");
@@ -336,8 +334,9 @@ useEffect(() => {
   });
 
   // Box Button Click
-
   const handleButtonClick = (e, val, id) => {
+    // dispatch(setSelectedNVR(mergedState));
+
     let firstIndex = -1;
     let lastIndex = -1;
     // Find the index of the first '83' value and the index of the last '83' value
@@ -391,8 +390,6 @@ useEffect(() => {
       price: val.price,
     });
     setExtra(isIdInRecorderData2);
-
-
   };
 
   const isIdInRecorderData2 = recorderData2.filter((item) => {
@@ -401,9 +398,6 @@ useEffect(() => {
     }
   });
 
-
-  // console.log(mergedState)
-
   return (
     <>
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
@@ -411,7 +405,7 @@ useEffect(() => {
           <Row style={{ backgroundColor: "" }}>
             <Col style={{ backgroundColor: "" }}>
               <h2>
-                NVR Recorders{" "}
+                NVR Recorders
                 <span className="fst-italic fs-6">(Category)</span>
               </h2>
             </Col>
@@ -432,8 +426,10 @@ useEffect(() => {
               <Row>
                 <Col className="text-end">
                   <h6>
-                    Number of Licenses :{" "}
-                    <span className="fw-bold">{countCamera.totalCamera}</span>
+                    Number of Licenses :
+                    <span className="fw-bold">
+                      {countCamera.selectedNVR.RAM}
+                    </span>
                   </h6>
                 </Col>
               </Row>
@@ -493,30 +489,28 @@ useEffect(() => {
               mainPrice={mainPrice}
               formData1={setFormData1}
               formDataState={formData1}
-              onTestChange={handleTestChange}
+              onTestChange1={handleTestChange}
+              onTestChange={handleTestChange1}
             />
           </Row>
           {/* Table */}
+
+          <Row>
+            <Col>
+              <h5 className="fw-bold">Selected NVR Details : </h5>
+            </Col>
+          </Row>
           <Row className="my-4" style={{ padding: "8px" }}>
             <Col style={{}}>
               <div className="table-border">
-                <Table striped hover>
-                  <thead></thead>
-                  <tbody>
-                    {" "}
+                <Table striped bordered hover responsive>
+                  <thead>
                     <tr>
-                      {" "}
-                      <td>Adding to Cart</td> <td>QTY</td> <td>SKU</td>{" "}
-                      <td>Description</td> <td>Total:</td> <td>Licenses:</td>{" "}
-                    </tr>{" "}
-                    <tr>
-                      {" "}
-                      <td></td> <td>{addCart.quantity}</td>{" "}
-                      <td>{addCart.sku}</td> <td>Description</td>{" "}
-                      <td>Total: {addCart.price * addCart.quantity} </td>{" "}
-                      <td>Licenses:</td>{" "}
-                    </tr>{" "}
-                  </tbody>
+                      <th>Product</th>
+                      <th>Selected Item Details</th>
+                    </tr>
+                  </thead>
+                  <tbody>{tableRows}</tbody>
                 </Table>
               </div>
             </Col>
@@ -537,8 +531,7 @@ useEffect(() => {
       <Modal show={show2} onHide={handleClose2}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {" "}
-            <h6> Warning ! Less Licenses than number of cameras</h6>{" "}
+            <h6> Warning ! Less Licenses than number of cameras</h6>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>Are you sure want to continue</Modal.Body>
