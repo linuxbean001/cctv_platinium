@@ -27,9 +27,11 @@
   }
 
   .tops{
-    margin-top: 19.8rem !important;
+    margin-top: 18.8rem !important;
+    margin-bottom: -25px;
   }
 
+  
   .text{
     font-size: 20px;
   }

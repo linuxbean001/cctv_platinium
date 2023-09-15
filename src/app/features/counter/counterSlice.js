@@ -3,9 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   totalOptions: 0,
   totalCamera: 0,
-  selectedNVR :{}
+  selectedNVR :[]
 };
-
 
 export const counterSlice = createSlice({
   name: "counter",
@@ -26,12 +25,12 @@ export const counterSlice = createSlice({
     },
     // For NVR
     setSelectedNVR: (state, action) => {
-      state.selectedNVR = action.payload;
+      state.selectedNVR.push(action.payload);
     },
 
   },
 });
-// console.log('my state',initialState)
+
 
 
 export const { IncrementCamera, DecrementCamera,IncrementOptions,DecrementOptions,setSelectedNVR } = counterSlice.actions;
