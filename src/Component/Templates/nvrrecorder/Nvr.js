@@ -13,15 +13,14 @@ import Form from "react-bootstrap/Form";
 import { useSelector, useDispatch } from "react-redux";
 import { setSelectedNVR } from "../../../app/features/counter/counterSlice";
 
-let nameMy ='';
+let nameMy = "";
 //Modal Starts Here
 function MyVerticallyCenteredModal(props) {
   const [finalNewState, setFinalNewState] = useState({}); // state-1
   const [finalNewState2, setFinalNewState2] = useState({}); // state-2
   const dispatch = useDispatch();
 
-  nameMy = finalNewState
-
+  nameMy = finalNewState;
 
   const [count, setCount] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0); // 1+2+3+4 = 10 (child items)
@@ -33,7 +32,7 @@ function MyVerticallyCenteredModal(props) {
   const [isDisabled, setIsDisabled] = useState(false);
   //------------- Chnages Finat Total Card Price -----------------//
 
-// console.log('my final price',priceList)
+  // console.log('my final price',priceList)
 
   // Passing State-1
   React.useEffect(() => {
@@ -51,9 +50,9 @@ function MyVerticallyCenteredModal(props) {
       NVR_Base_Price: props.mainPrice,
       NVR_Final_Price: "",
       NVR_Quantity: count,
-      cart_final_price:priceList
+      cart_final_price: priceList,
     });
-  }, [props.dataforProduct.id, props.mainPrice, count,priceList]);
+  }, [props.dataforProduct.id, props.mainPrice, count, priceList]);
 
   // const updatePrice = props.mainPrice; // NVR first value like (1599, 1699)
 
@@ -62,7 +61,7 @@ function MyVerticallyCenteredModal(props) {
     setFinalNewState2({});
     setCount(1);
     setTotalPrice(0);
-    setPriceData(0)
+    setPriceData(0);
     setPriceList(0);
   };
 
@@ -72,7 +71,6 @@ function MyVerticallyCenteredModal(props) {
       resetForm();
     }
   }, [props.show]);
-
 
   useEffect(() => {
     const initialSelectedOptions = {};
@@ -146,8 +144,8 @@ function MyVerticallyCenteredModal(props) {
   function addNvrQuantity() {
     dispatch(setSelectedNVR(props.mergedState));
     props.onHide(false); // Modal Close
-    console.log(props.mergedState)
-    setPriceList(0)
+    console.log(props.mergedState);
+    setPriceList(0);
   }
 
   return (
@@ -208,20 +206,13 @@ function MyVerticallyCenteredModal(props) {
               </Row>
               {/* Final Price */}
               <Row className="tops">
-                
                 <div className="w-100 d-flex align-items-start">
-                  
-                  <Button
-                    variant="dark"
-                    onClick={calculateTotalPrice}
-                  >
-                    Final Price 
+                  <Button variant="dark" onClick={calculateTotalPrice}>
+                    Final Price
                   </Button>
                 </div>
                 <div className="w-100 my-1 d-flex align-items-start">
-                  
                   <div className="text">
-                    
                     <Table
                       striped
                       bordered
@@ -229,12 +220,8 @@ function MyVerticallyCenteredModal(props) {
                       responsive
                       style={{ width: "14rem" }}
                     >
-                      
                       <thead>
-                        
                         <tr>
-                          
-                          
                           <th>
                             <b>$</b> {priceList}
                           </th>
@@ -355,7 +342,7 @@ function Nvr(props) {
 
   // Merging Start
 
-console.log(nameMy)
+  console.log(nameMy);
 
   const updateMergedState = () => {
     setMergedState({
@@ -363,18 +350,16 @@ console.log(nameMy)
       ...formData2,
     });
   };
-  
-// Everytime Product added, it'll console the value (Just for console)
+
+  // Everytime Product added, it'll console the value (Just for console)
 
   useEffect(() => {
-    // console.log(countCamera); 
-  }, [countCamera]); 
+    // console.log(countCamera);
+  }, [countCamera]);
 
-// Ends
+  // Ends
 
-const tableData = countCamera;
-
-
+  const tableData = countCamera;
 
   useEffect(() => {
     updateMergedState();
@@ -410,14 +395,9 @@ const tableData = countCamera;
     setFormData1(newValue);
   };
 
-  
-
   // useEffect(() => {
   //   dispatch(setSelectedNVR(mergedState));
   // }, [dispatch, mergedState]);
-
-  
-
 
   // It'll search for NVR from ProductCSV (only from column "id") and Sending Filter Data in a state
   const recorderData = productCSV.filter((item) => {
@@ -511,7 +491,6 @@ const tableData = countCamera;
                   Number of Cameras:
                   {/* <span className="fw-bold">{countCamera.totalCamera}</span> */}
                   <span className="fw-bold">5</span>
-
                 </Col>
               </Row>
               <Row>
@@ -519,7 +498,6 @@ const tableData = countCamera;
                   Number of Options:
                   {/* <span className="fw-bold">{countCamera.totalOptions}</span> */}
                   <span className="fw-bold">3</span>
-
                 </Col>
               </Row>
               <Row>
@@ -527,8 +505,7 @@ const tableData = countCamera;
                   <h6>
                     Number of Licenses :
                     {/* <span className="fw-bold">{countCamera.totalCamera}</span> */}
-                  <span className="fw-bold">5</span>
-
+                    <span className="fw-bold">5</span>
                   </h6>
                 </Col>
               </Row>
@@ -611,26 +588,23 @@ const tableData = countCamera;
                     </tr>
                   </thead>
                   <tbody>
-                  {tableData.map((val) => {
-                    console.log('val is',val)
-                    return(
-                      <tr key={val}>
-                      <td>{val.NVR_Quantity}</td>
-                      <td>{val.NVR_Name}</td>
-                      <td>{val.age}</td>
-                      <td> $ {val.cart_final_price}</td>
-                      <td>{val["Number of IP Licenses"]}</td>
-
-                    </tr>
-                    )
+                    {tableData.map((val) => {
+                      return (
+                        <tr key={val}>
+                          <td>{val.NVR_Quantity}</td>
+                          <td>{val.NVR_Name}</td>
+                          <td>{val.age}</td>
+                          <td> $ {val.cart_final_price}</td>
+                          <td>{val["Number of IP Licenses"]}</td>
+                        </tr>
+                      );
                     })}
-
                   </tbody>
                 </Table>
               </div>
             </Col>
           </Row>
-        
+
           {/* Button */}
           <Row className="my-4" style={{ backgroundColor: "" }}>
             <Col className="d-flex justify-content-between">
