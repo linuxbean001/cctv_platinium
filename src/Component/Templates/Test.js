@@ -14,17 +14,23 @@ import { useNavigate } from "react-router-dom";
 import noImage from "../../no_Image.jpg";
 import Form from "react-bootstrap/Form";
 
-function Cameras(props) {
+const onLineImg =
+  "https://images.pexels.com/photos/5703527/pexels-photo-5703527.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+
+function Test(props) {
   const navigate = useNavigate();
 
   const [categoryCSV, setCategoryCSV] = useState([]); // for category csv
   const [productCSV, setProductCSV] = useState([]); // for products csv
   const [productOption, setProductOptionCSV] = useState([]); // product_options.csv data
+
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
   const [count, setCount] = useState(0);
 
+  const [test, setTest] = useState([]);
+  const [test2, setTest2] = useState([]);
   const [thumbimg, setThumbimg] = useState([]);
 
   //
@@ -35,24 +41,12 @@ function Cameras(props) {
   // by sir
   const [finalData, setFinalData] = useState([]);
 
-  // Store Data from Modal
 
-  const [dataProduct, setdataProduct] = useState({});
-
-  const [finalNewState, setFinalNewState] = useState({}); // state-1
-  const [finalNewState2, setFinalNewState2] = useState({}); // state-2
-  const [totalPrice, setTotalPrice] = useState(0); // 1+2+3+4 = 10 (child items)
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [priceData, setPriceData] = useState(0);
-  const [priceList, setPriceList] = useState(0);
-
-  
 
   function modal_3() {
     setShow3(true);
     setShow2(false);
   }
-
   // Fetching APIs data
   React.useEffect(() => {
     const parseCSVFiles2 = async () => {
@@ -96,9 +90,10 @@ function Cameras(props) {
     });
     setfilteredData(cameraData2);
   };
+  // console.log('category',filteredData)
 
   // Modal_1
-  function modal_1(e, item, id) {
+  function modal_1(e, id) {
     let firstIndex = -1;
     let lastIndex = -1;
     // Find the index of the first '83' value and the index of the last '83' value
@@ -138,6 +133,7 @@ function Cameras(props) {
     } else {
       console.log("No suitable data found in the data array with '83' cateId.");
     }
+
     setShow2(true);
     setShow(false);
     setCategoryName2(id);
@@ -147,129 +143,15 @@ function Cameras(props) {
       }
     });
     setfilteredData2(cameraData3);
-
-    setdataProduct(item);
   }
-
   const cameraData = categoryCSV.filter((item) => {
     return item.category_parent && item.category_parent.includes("45");
   });
-
-  // console.log('count state', count)
-
-  React.useEffect(() => {
-    // storing data
-    setFinalNewState({
-      Camera_Name: dataProduct.id,
-      Camera_Base_Price: dataProduct.price,
-      Camera_Final_Price: "",
-      Camera_Quantity: count,
-      Cart_Final_Price: "1000",
-    });
-  }, [dataProduct.id, dataProduct.price, count]);
-
-  // Below Code is responsible for filling finalNewState-2
-
-  React.useEffect(() => {
-    const initialSelectedOptions = {};
-    finalData.forEach((item) => {
-      if (item.length > 0) {
-        const firstOption = item[0];
-        initialSelectedOptions[firstOption.featurecaption] =
-          firstOption.featurename;
-      }
-    });
-    setFinalNewState2(initialSelectedOptions);
-  }, [finalData]);
-
-  // Handle Change
-
-  function handleSelectChange(e) {
-    const { name, value } = e.target;
-    const selectedOption = finalData
-      .flat()
-      .find((option) => option.featurename === value);
-
-    //
-    const prevOptionPrice =
-      finalNewState2[name] &&
-      finalData
-        .flat()
-        .find((option) => option.featurename === finalNewState2[name])
-        ? parseFloat(
-            finalData
-              .flat()
-              .find((option) => option.featurename === finalNewState2[name])
-              .featureprice
-          )
-        : 0;
-    // Calculate the price difference between the new and old option
-    const optionPrice = selectedOption
-      ? parseFloat(selectedOption.featureprice)
-      : 0;
-    const priceDifference = optionPrice - prevOptionPrice;
-
-    setTotalPrice((prevTotalPrice) => prevTotalPrice + priceDifference);
-    setFinalNewState2((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  }
-
-  // Increasing Count Value
-
-  const handlePlusClick = () => {
-    setCount(count + 1);
-  };
-
-  const handleMinusClick = () => {
-    if (count > 1) {
-      setCount(count - 1);
-    }
-  };
-
-  // calculate price
-  const calculateTotalPrice = () => {
-    setIsDisabled(true);
-    const newTotalPrice = parseInt(dataProduct.price) + parseInt(totalPrice);
-    console.log('new price', newTotalPrice)
-    setPriceData(newTotalPrice);
-
-    if (priceData) {
-      setPriceList(priceData * count);
-    }
-  };
-
-
 
   return (
     <>
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
         <Container>
-          <Row style={{ backgroundColor: "" }}>
-            <Col style={{ backgroundColor: "" }}>
-              <h2>
-                Camera <span className="fst-italic fs-6">(Category)</span>
-              </h2>
-            </Col>
-            <Col className="" style={{ backgroundColor: "" }}>
-              <Row>
-                <Col className="text-end">
-                  Number of Cameras : <span className="fw-bold">??</span>
-                </Col>
-              </Row>
-              <Row>
-                <Col className="text-end">
-                  <Link to="/">
-                    <h6>
-                      Edit here <span className="fw-bold"></span>
-                    </h6>
-                  </Link>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-
           {/* Box */}
           <Row className="my-4" style={{ backgroundColor: "" }}>
             {cameraData.map((item) => {
@@ -313,14 +195,6 @@ function Cameras(props) {
             })}
           </Row>
 
-          <Row className="my-4" style={{ backgroundColor: "" }}>
-            <Col className="d-flex justify-content-end">
-              <Button variant="dark" onClick={() => navigate("/poe-switch")}>
-                Next
-              </Button>
-            </Col>
-          </Row>
-
           {/* Modal Code - 1 */}
           <Modal
             {...props}
@@ -341,7 +215,7 @@ function Cameras(props) {
                       <Col
                         md={4}
                         className="nvr_col my-2"
-                        onClick={(e) => modal_1(e, item, item.id)}
+                        onClick={(e) => modal_1(e, item.id)}
                         key={item.id}
                       >
                         <Card
@@ -472,38 +346,6 @@ function Cameras(props) {
                               />
                             </Col>
                           </Row>
-
-                          {/* Final Price */}
-                          <Row className="tops">
-                            <div className="w-100 d-flex align-items-start">
-                              <Button
-                                variant="dark"
-                                onClick={calculateTotalPrice}
-                              >
-                                Final Price
-                              </Button>
-                            </div>
-                            <div className="w-100 my-1 d-flex align-items-start">
-                              <div className="text">
-                                <Table
-                                  striped
-                                  bordered
-                                  hover
-                                  responsive
-                                  style={{ width: "14rem" }}
-                                >
-                                  <thead>
-                                    <tr>
-                                      <th>
-                                        <b>$</b> {priceList}
-                                      </th>
-                                    </tr>
-                                  </thead>
-                                </Table>
-                              </div>
-                            </div>
-                          </Row>
-                          {/* Final Price */}
                         </Col>
                         <Col md={7}>
                           <p className="fst-italic">
@@ -515,62 +357,30 @@ function Cameras(props) {
                           {/* Add Dropdown */}
 
                           {finalData.map((item, index) => {
+                            console.log('item',item)
                             return (
                               <>
-                                {/* <Form.Select key={index} aria-label="Default select example" className="mb-3">
-                        <option value={2}>{item[0].featurecaption}</option>
-                        {item.map((option, optionIndex) => (
-                          <option key={optionIndex} value={option.value}>
-                            {option.featurename}
-                          </option>
-                        ))}
-                      </Form.Select> */}
-
-                                <Form.Label>
-                                  {item[0].featurecaption}
-                                </Form.Label>
                                 <Form.Select
                                   key={index}
                                   aria-label="Default select example"
                                   className="mb-3"
-                                  name={item[0].featurecaption}
-                                  // value={finalNewState2[item[0].featurecaption] || ""}
-                                  onChange={(e) => handleSelectChange(e)}
                                 >
-                                  {/* <option>Select a option</option> */}
-                                  {item.map((option, optionIndex) => {
-                                    return (
-                                      <>
-                                        <option
-                                          name={option.featurecaption}
-                                          key={optionIndex}
-                                          value={option.featurename}
-                                        >
-                                          {option.featurename +
-                                            " " +
-                                            "  " +
-                                            "$ " +
-                                            option.featureprice}
-                                        </option>
-                                      </>
-                                    );
-                                  })}
+                                  <option value={2}>
+                                    {item[0].featurecaption}
+                                  </option>
+                                  {item.map((option, optionIndex) => (
+                                    <option
+                                      key={optionIndex}
+                                      value={option.value}
+                                    >
+                                      {option.featurename}
+                                    </option>
+                                  ))}
                                 </Form.Select>
                               </>
                             );
                           })}
-                          <div
-                            className="d-flex align-items-end justify-content-end my-4"
-                            style={{ backgroundColor: "" }}
-                          >
-                            <Button variant="dark" onClick={handlePlusClick}>
-                              +
-                            </Button>
-                            <h6 className="mx-3">{count}</h6>
-                            <Button variant="dark" onClick={handleMinusClick}>
-                              -
-                            </Button>
-                          </div>
+                       
                         </Col>
                       </>
                     );
@@ -629,4 +439,4 @@ function Cameras(props) {
   );
 }
 
-export default Cameras;
+export default Test;

@@ -6,16 +6,13 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Modal from 'react-bootstrap/Modal';
-import "./index.css";
+// import "./index.css";
 import Papa from "papaparse";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { useNavigate } from "react-router-dom"
-import noImage from '../../../no_Image.jpg'
+import noImage from '../../../src/no_Image.jpg'
 import Form from 'react-bootstrap/Form';
-
-
-
 
 // Modal-1 Starts
 function MyVerticallyCenteredModal(props) {

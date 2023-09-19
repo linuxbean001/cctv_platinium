@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   totalOptions: 0,
   totalCamera: 0,
-  selectedNVR :[]
+  selectedNVR :[],
+  selectedCamera:[]
 };
 
 export const counterSlice = createSlice({
