@@ -29,10 +29,15 @@ export const counterSlice = createSlice({
       state.selectedNVR.push(action.payload);
     },
 
+    // For Camera
+    setSelectedCamera:(state, action) => {
+      state.selectedCamera.push(action.payload);
+    },
+
   },
 });
 
 
 
-export const { IncrementCamera, DecrementCamera,IncrementOptions,DecrementOptions,setSelectedNVR } = counterSlice.actions;
+export const { IncrementCamera, DecrementCamera,IncrementOptions,DecrementOptions,setSelectedNVR,setSelectedCamera } = counterSlice.actions;
 export default counterSlice.reducer;

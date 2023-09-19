@@ -13,9 +13,12 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import noImage from "../../no_Image.jpg";
 import Form from "react-bootstrap/Form";
+import { setSelectedCamera } from "../../../src/app/features/counter/counterSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 function Cameras(props) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [categoryCSV, setCategoryCSV] = useState([]); // for category csv
   const [productCSV, setProductCSV] = useState([]); // for products csv
@@ -45,11 +48,37 @@ function Cameras(props) {
   const [isDisabled, setIsDisabled] = useState(false);
   const [priceData, setPriceData] = useState(0);
   const [priceList, setPriceList] = useState(0);
+  //Merging FinalState and FinalState2
+  const [mergedState, setMergedState] = useState({});
 
-  
+  // How many brackets you selected
+  const [bracketNumber, setBracketNumber] = useState("");
+
+// Redux
+const countCamera = useSelector((state) => state.counter1.selectedCamera);
+
+const tableData = countCamera;
+
+  const handleBracketChange = (event) => {
+    setBracketNumber(event.target.value);
+  };
+
+  const updateMergedState = () => {
+    setMergedState({
+      ...finalNewState,
+      ...finalNewState2,
+    });
+  };
+
+  React.useEffect(() => {
+    updateMergedState();
+  }, [finalNewState, finalNewState2]);
+
+  // console.log("merged data", mergedState);
 
   function modal_3() {
-    setShow3(true);
+    // setShow3(true);
+    dispatch(setSelectedCamera(mergedState));
     setShow2(false);
   }
 
@@ -155,18 +184,20 @@ function Cameras(props) {
     return item.category_parent && item.category_parent.includes("45");
   });
 
-  // console.log('count state', count)
+  console.log('xxx',priceList)
 
   React.useEffect(() => {
     // storing data
     setFinalNewState({
       Camera_Name: dataProduct.id,
       Camera_Base_Price: dataProduct.price,
-      Camera_Final_Price: "",
+      Camera_Final_Price: priceList,
       Camera_Quantity: count,
-      Cart_Final_Price: "1000",
+      Bracket_Selected:bracketNumber
     });
-  }, [dataProduct.id, dataProduct.price, count]);
+  }, [dataProduct.id, dataProduct.price, count, priceList,bracketNumber]);
+
+console.log(finalNewState)
 
   // Below Code is responsible for filling finalNewState-2
 
@@ -232,7 +263,6 @@ function Cameras(props) {
   const calculateTotalPrice = () => {
     setIsDisabled(true);
     const newTotalPrice = parseInt(dataProduct.price) + parseInt(totalPrice);
-    console.log('new price', newTotalPrice)
     setPriceData(newTotalPrice);
 
     if (priceData) {
@@ -240,7 +270,25 @@ function Cameras(props) {
     }
   };
 
+  React.useEffect(() => {
+    if (!props.show || !props.show2) {
+      
+      resetForm2();
+    }
+  }, [props.show2]);
 
+  // Reset Form
+  const resetForm2 = () => {
+    setFinalNewState({});
+    setFinalNewState2({});
+    setCount(0);
+    setTotalPrice(0);
+    setPriceData(0);
+    setPriceList(0);
+    setBracketNumber(0)
+  };
+
+ 
 
   return (
     <>
@@ -312,6 +360,44 @@ function Cameras(props) {
               );
             })}
           </Row>
+
+          <Row className="my-4" style={{ padding: "8px" }}>
+            <Col>
+              <h5 className="fw-bold">Add to Cart: </h5>
+
+              <div className="table-border">
+                <Table striped bordered hover responsive>
+                  <thead>
+                    <tr>
+                      <th>#</th> {/* Add a new column for the serial number */}
+                      <th>QTY: </th>
+                      <th>Camera Selected: </th>
+                      <th>Brackets: </th>
+                      <th>Total: </th>
+                    </tr>
+                  </thead>
+                   <tbody>
+                    {tableData.map((val, index) => {
+                      console.log('val is',val)
+                      return (
+                        <tr key={val}>
+                          <td>{index + 1}</td> {/* Display the serial number */}
+                          <td>{val.Camera_Quantity}</td>
+                          <td>
+                            {val.Camera_Name} 
+                          </td>
+                          <td> {val.Bracket_Selected} pcs</td>
+                          <td>$ {val.Camera_Final_Price}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </div>
+            </Col>
+          </Row>
+
+          {/* Next Page Code */}
 
           <Row className="my-4" style={{ backgroundColor: "" }}>
             <Col className="d-flex justify-content-end">
@@ -515,6 +601,11 @@ function Cameras(props) {
                           {/* Add Dropdown */}
 
                           {finalData.map((item, index) => {
+
+                           if(item[0].featurecaption === 'Mounting Bracket'){
+                              return null ;
+                           }
+
                             return (
                               <>
                                 {/* <Form.Select key={index} aria-label="Default select example" className="mb-3">
@@ -534,7 +625,9 @@ function Cameras(props) {
                                   aria-label="Default select example"
                                   className="mb-3"
                                   name={item[0].featurecaption}
-                                  // value={finalNewState2[item[0].featurecaption] || ""}
+                                  value={
+                                    finalNewState2[item[0].featurecaption] || ""
+                                  }
                                   onChange={(e) => handleSelectChange(e)}
                                 >
                                   {/* <option>Select a option</option> */}
@@ -559,6 +652,13 @@ function Cameras(props) {
                               </>
                             );
                           })}
+                          <Form.Label>Mounting Bracket</Form.Label>
+                          <Form.Control
+                            type="number"
+                            placeholder="Enter a value"
+                            value={bracketNumber}
+                            onChange={handleBracketChange}
+                          />
                           <div
                             className="d-flex align-items-end justify-content-end my-4"
                             style={{ backgroundColor: "" }}

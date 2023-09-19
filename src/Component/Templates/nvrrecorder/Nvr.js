@@ -141,13 +141,13 @@ function MyVerticallyCenteredModal(props) {
 
 
 
-  
+
   // Adding in Redux Store
 
   function addNvrQuantity() {
-    dispatch(setSelectedNVR(props.mergedState));
-    props.onHide(false); // Modal Close
-    setPriceList(0);
+      dispatch(setSelectedNVR(props.mergedState));
+      props.onHide(false); // Modal Close
+      setPriceList(0);
   }
 
   return (
