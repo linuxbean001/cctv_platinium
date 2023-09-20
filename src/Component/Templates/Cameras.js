@@ -26,7 +26,7 @@ function Cameras(props) {
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
 
   const [thumbimg, setThumbimg] = useState([]);
 
@@ -54,10 +54,10 @@ function Cameras(props) {
   // How many brackets you selected
   const [bracketNumber, setBracketNumber] = useState("");
 
-// Redux
-const countCamera = useSelector((state) => state.counter1.selectedCamera);
+  // Redux
+  const countCamera = useSelector((state) => state.counter1.selectedCamera);
 
-const tableData = countCamera;
+  const tableData = countCamera;
 
   const handleBracketChange = (event) => {
     setBracketNumber(event.target.value);
@@ -69,6 +69,26 @@ const tableData = countCamera;
       ...finalNewState2,
     });
   };
+
+  // Clearing Form Data
+  const resetState = () => {
+    setBracketNumber("");
+    setFinalNewState({});
+    setFinalNewState2({});
+    setTotalPrice(0);
+    setIsDisabled(false);
+    setPriceData(0);
+    setPriceList(0);
+  };
+
+  React.useEffect(() => {
+    updateMergedState();
+    if (!show2) {
+      resetState();
+    }
+  }, [show2]);
+  //
+
 
   React.useEffect(() => {
     updateMergedState();
@@ -184,7 +204,7 @@ const tableData = countCamera;
     return item.category_parent && item.category_parent.includes("45");
   });
 
-  console.log('xxx',priceList)
+
 
   React.useEffect(() => {
     // storing data
@@ -193,11 +213,11 @@ const tableData = countCamera;
       Camera_Base_Price: dataProduct.price,
       Camera_Final_Price: priceList,
       Camera_Quantity: count,
-      Bracket_Selected:bracketNumber
+      Bracket_Selected: bracketNumber,
     });
-  }, [dataProduct.id, dataProduct.price, count, priceList,bracketNumber]);
+  }, [dataProduct.id, dataProduct.price, count, priceList, bracketNumber]);
 
-console.log(finalNewState)
+  console.log(finalNewState);
 
   // Below Code is responsible for filling finalNewState-2
 
@@ -268,24 +288,6 @@ console.log(finalNewState)
     if (priceData) {
       setPriceList(priceData * count);
     }
-  };
-
-  React.useEffect(() => {
-    if (!props.show || !props.show2) {
-      
-      resetForm2();
-    }
-  }, [props.show2]);
-
-  // Reset Form
-  const resetForm2 = () => {
-    setFinalNewState({});
-    setFinalNewState2({});
-    setCount(0);
-    setTotalPrice(0);
-    setPriceData(0);
-    setPriceList(0);
-    setBracketNumber(0)
   };
 
  
@@ -376,16 +378,14 @@ console.log(finalNewState)
                       <th>Total: </th>
                     </tr>
                   </thead>
-                   <tbody>
+                  <tbody>
                     {tableData.map((val, index) => {
-                      console.log('val is',val)
+                      console.log("val is", val);
                       return (
                         <tr key={val}>
                           <td>{index + 1}</td> {/* Display the serial number */}
                           <td>{val.Camera_Quantity}</td>
-                          <td>
-                            {val.Camera_Name} 
-                          </td>
+                          <td>{val.Camera_Name}</td>
                           <td> {val.Bracket_Selected} pcs</td>
                           <td>$ {val.Camera_Final_Price}</td>
                         </tr>
@@ -601,10 +601,9 @@ console.log(finalNewState)
                           {/* Add Dropdown */}
 
                           {finalData.map((item, index) => {
-
-                           if(item[0].featurecaption === 'Mounting Bracket'){
-                              return null ;
-                           }
+                            if (item[0].featurecaption === "Mounting Bracket") {
+                              return null;
+                            }
 
                             return (
                               <>
