@@ -15,7 +15,6 @@ import { setSelectedNVR } from "../../../app/features/counter/counterSlice";
 
 //Modal Starts Here
 function MyVerticallyCenteredModal(props) {
-
   const [finalNewState, setFinalNewState] = useState({}); // state-1
   const [finalNewState2, setFinalNewState2] = useState({}); // state-2
   const dispatch = useDispatch();
@@ -77,7 +76,6 @@ function MyVerticallyCenteredModal(props) {
     setFinalNewState2(initialSelectedOptions);
   }, [props.finalData]);
 
-
   function handleSelectChange(e) {
     const { name, value } = e.target;
 
@@ -98,7 +96,6 @@ function MyVerticallyCenteredModal(props) {
               .featureprice
           )
         : 0;
-
 
     // Calculate the price difference between the new and old option
     const optionPrice = selectedOption
@@ -124,30 +121,25 @@ function MyVerticallyCenteredModal(props) {
     }
   };
 
-
-
   const calculateTotalPrice = () => {
     setIsDisabled(true);
     const newTotalPrice =
       parseInt(props.dataforProduct.price) + parseInt(totalPrice);
-      console.log('new price', newTotalPrice)
+    console.log("new price", newTotalPrice);
 
-      setPriceData(newTotalPrice);
+    setPriceData(newTotalPrice);
 
     if (priceData) {
       setPriceList(priceData * count);
     }
   };
 
-
-
-
   // Adding in Redux Store
 
   function addNvrQuantity() {
-      dispatch(setSelectedNVR(props.mergedState));
-      props.onHide(false); // Modal Close
-      setPriceList(0);
+    dispatch(setSelectedNVR(props.mergedState));
+    props.onHide(false); // Modal Close
+    setPriceList(0);
   }
 
   return (
@@ -200,7 +192,7 @@ function MyVerticallyCenteredModal(props) {
                 </Col>
               </Row>
               {/*------------------- Chnages Today ------------------*/}
-           
+
               {/* Final Price */}
               <Row className="tops">
                 <div className="w-100 d-flex align-items-start">
@@ -320,6 +312,10 @@ function Nvr(props) {
   const [formData2, setFormData2] = React.useState({}); // Receiving value from Modal State
   const [mergedState, setMergedState] = useState({});
   const countCamera = useSelector((state) => state.counter1.selectedNVR);
+  const countCamera2 = useSelector((state) => state.counter1);
+
+
+
   const navigate = useNavigate();
   const [mainPrice, setMainPrice] = useState(0);
   const [modalShow, setModalShow] = React.useState(false);
@@ -336,7 +332,6 @@ function Nvr(props) {
   const [show2, setShow2] = useState(false);
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => setShow2(true);
-
 
   // Merging Start
 
@@ -484,27 +479,24 @@ function Nvr(props) {
             <Col className="" style={{ backgroundColor: "" }}>
               <Row>
                 <Col className="text-end">
-                  Number of Cameras:
-                  {/* <span className="fw-bold">{countCamera.totalCamera}</span> */}
-                  <span className="fw-bold">5</span>
+                  Number of Cameras:&nbsp;
+                  <span className="fw-bold">{countCamera2.totalCamera}</span>
                 </Col>
               </Row>
               <Row>
                 <Col className="text-end">
-                  Number of Options:
-                  {/* <span className="fw-bold">{countCamera.totalOptions}</span> */}
-                  <span className="fw-bold">3</span>
+                  Number of Options: &nbsp;
+                  <span className="fw-bold">{countCamera2.totalOptions}</span>
                 </Col>
               </Row>
-              <Row>
+              {/* <Row>
                 <Col className="text-end">
                   <h6>
                     Number of Licenses :
-                    {/* <span className="fw-bold">{countCamera.totalCamera}</span> */}
-                    <span className="fw-bold">5</span>
+                    <span className="fw-bold">{countCamera2.totalCamera}</span>
                   </h6>
                 </Col>
-              </Row>
+              </Row> */}
             </Col>
           </Row>
 

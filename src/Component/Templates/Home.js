@@ -37,7 +37,7 @@ const handleOptionsIncre = () => {
 };
 
 const handleOptionsDecre = () => {
-  if (countCamera > 0) {
+  if (countCamera.totalOptions > 0) {
     dispatch(DecrementOptions());
   }
 
@@ -49,10 +49,9 @@ const handleCameraIncre = () => {
 };
 
 const handleCameraDecre = () => {
-  if (countCamera > 0) {
+  if (countCamera.totalCamera > 0) {
   dispatch(DecrementCamera());
   }
-
 };
 
  

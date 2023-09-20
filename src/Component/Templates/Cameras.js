@@ -94,7 +94,6 @@ function Cameras(props) {
     updateMergedState();
   }, [finalNewState, finalNewState2]);
 
-  // console.log("merged data", mergedState);
 
   function modal_3() {
     // setShow3(true);
@@ -601,9 +600,9 @@ function Cameras(props) {
                           {/* Add Dropdown */}
 
                           {finalData.map((item, index) => {
-                            if (item[0].featurecaption === "Mounting Bracket") {
-                              return null;
-                            }
+                            // if (item[0].featurecaption === "Mounting Bracket") {
+                            //   return null;
+                            // }
 
                             return (
                               <>
