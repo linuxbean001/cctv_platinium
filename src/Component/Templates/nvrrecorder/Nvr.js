@@ -311,10 +311,10 @@ function Nvr(props) {
   const [formData1, setFormData1] = useState({}); // Receivng value from Modal State
   const [formData2, setFormData2] = React.useState({}); // Receiving value from Modal State
   const [mergedState, setMergedState] = useState({});
-  const countCamera = useSelector((state) => state.counter1.selectedNVR);
-  const countCamera2 = useSelector((state) => state.counter1);
 
 
+  const selectedNvrDetails = useSelector((state) => state.counter1.selectedNVR); // Showing Data
+  const selectedCameraNumber = useSelector((state) => state.counter1.totalCamera);
 
   const navigate = useNavigate();
   const [mainPrice, setMainPrice] = useState(0);
@@ -345,12 +345,14 @@ function Nvr(props) {
   // Everytime Product added, it'll console the value (Just for console)
 
   useEffect(() => {
-    // console.log(countCamera);
-  }, [countCamera]);
+    // console.log(selectedNvrDetails);
+  }, [selectedNvrDetails]);
 
   // Ends
 
-  const tableData = countCamera;
+  const tableData = selectedNvrDetails;
+
+  console.log('table data', tableData)
 
   useEffect(() => {
     updateMergedState();
@@ -480,20 +482,20 @@ function Nvr(props) {
               <Row>
                 <Col className="text-end">
                   Number of Cameras:&nbsp;
-                  <span className="fw-bold">{countCamera2.totalCamera}</span>
-                </Col>
-              </Row>
-              <Row>
-                <Col className="text-end">
-                  Number of Options: &nbsp;
-                  <span className="fw-bold">{countCamera2.totalOptions}</span>
+                  <span className="fw-bold">{selectedCameraNumber}</span>
                 </Col>
               </Row>
               {/* <Row>
                 <Col className="text-end">
+                  Number of Options: &nbsp;
+                  <span className="fw-bold">{selectedCameraNumber}</span>
+                </Col>
+              </Row> */}
+              {/* <Row>
+                <Col className="text-end">
                   <h6>
                     Number of Licenses :
-                    <span className="fw-bold">{countCamera2.totalCamera}</span>
+                    <span className="fw-bold">{selectedCameraNumber.totalCamera}</span>
                   </h6>
                 </Col>
               </Row> */}
