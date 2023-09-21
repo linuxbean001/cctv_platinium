@@ -22,11 +22,11 @@ function MyVerticallyCenteredModal(props) {
   const [totalPrice, setTotalPrice] = useState(0); // 1+2+3+4 = 10 (child items)
   const [finalPrice, setFinalPrice] = useState(0);
 
-  //------------- Changes Finat Total Card Price -----------------//
-  const [priceData, setPriceData] = useState(0);
+  //------------- ChangesFinat Total Card Price -----------------//
+  // const [priceData, setPriceData] = useState(0);
   const [priceList, setPriceList] = useState(0);
   const [isDisabled, setIsDisabled] = useState(false);
-  //------------- Chnages Finat Total Card Price -----------------//
+  //------------- ChnagesFinat Total Card Price -----------------//
 
   // Passing State-1
   React.useEffect(() => {
@@ -53,7 +53,6 @@ function MyVerticallyCenteredModal(props) {
     setFinalNewState2({});
     setCount(1);
     setTotalPrice(0);
-    setPriceData(0);
     setPriceList(0);
   };
 
@@ -125,13 +124,8 @@ function MyVerticallyCenteredModal(props) {
     setIsDisabled(true);
     const newTotalPrice =
       parseInt(props.dataforProduct.price) + parseInt(totalPrice);
-    console.log("new price", newTotalPrice);
 
-    setPriceData(newTotalPrice);
-
-    if (priceData) {
-      setPriceList(priceData * count);
-    }
+    setPriceList(newTotalPrice * count);
   };
 
   // Adding in Redux Store
@@ -312,9 +306,10 @@ function Nvr(props) {
   const [formData2, setFormData2] = React.useState({}); // Receiving value from Modal State
   const [mergedState, setMergedState] = useState({});
 
-
-  const selectedNvrDetails = useSelector((state) => state.counter1.selectedNVR); // Showing Data
-  const selectedCameraNumber = useSelector((state) => state.counter1.totalCamera);
+  const selectedNvrDetails = useSelector((state) => state.counter1.selectedNVR); // Showing NVR Details Data
+  const selectedCameraNumber = useSelector(
+    (state) => state.counter1.totalCamera
+  ); // Showing Camera Number Data
 
   const navigate = useNavigate();
   const [mainPrice, setMainPrice] = useState(0);
@@ -333,8 +328,29 @@ function Nvr(props) {
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => setShow2(true);
 
-  // Merging Start
+  // Table Added by Prashant
+  const calculateTotalPrice = () => {
+    let totalPrice = 0;
+    tableData.forEach((val) => {
+      totalPrice += parseFloat(val.cart_final_price);
+    });
+    return totalPrice.toFixed(2);
+  };
 
+  // const [aaa, setAAA] = useState([]);
+
+  const calculateTotalLicenses = () => {
+    let totalLicenses = 0;
+    tableData.forEach((val) => {
+      totalLicenses += parseInt(val["Number of IP Licenses"], 10);
+      console.log("first", totalLicenses);
+    });
+    return totalLicenses;
+  };
+
+  // Table Added by Prashant Ends
+
+  // Merging Start
   const updateMergedState = () => {
     setMergedState({
       ...formData1,
@@ -351,8 +367,6 @@ function Nvr(props) {
   // Ends
 
   const tableData = selectedNvrDetails;
-
-  console.log('table data', tableData)
 
   useEffect(() => {
     updateMergedState();
@@ -485,6 +499,13 @@ function Nvr(props) {
                   <span className="fw-bold">{selectedCameraNumber}</span>
                 </Col>
               </Row>
+              <Row>
+                <Col className="text-end">
+                  Number of Licenses: &nbsp;
+                  <span className="fw-bold">{calculateTotalLicenses()}</span>
+                </Col>
+              </Row>
+
               {/* <Row>
                 <Col className="text-end">
                   Number of Options: &nbsp;
@@ -592,6 +613,21 @@ function Nvr(props) {
                         </tr>
                       );
                     })}
+                    {/* Final Section */}
+                    <tr>
+                      <th></th>
+                      <td></td>
+                      <td>
+                        <b>Total (Price & Licenses) :</b>
+                      </td>
+                      <td>
+                        <b>$ {calculateTotalPrice()}</b>
+                      </td>
+                      <td>
+                        <b>{calculateTotalLicenses()} Licenses</b>
+                      </td>
+                    </tr>
+                    {/* Final Section */}
                   </tbody>
                 </Table>
               </div>

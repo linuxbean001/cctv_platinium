@@ -4,7 +4,8 @@ const initialState = {
   totalOptions: 0,
   totalCamera: 0,
   selectedNVR :[],
-  selectedCamera:[]
+  selectedCamera:[],
+  selectedPoE:[]
 };
 
 export const counterSlice = createSlice({
@@ -34,10 +35,15 @@ export const counterSlice = createSlice({
       state.selectedCamera.push(action.payload);
     },
 
+     // For PoE Switches
+     setSelectedPoE:(state, action) => {
+      state.selectedPoE.push(action.payload);
+    },
+
   },
 });
 
 
 
-export const { IncrementCamera, DecrementCamera,IncrementOptions,DecrementOptions,setSelectedNVR,setSelectedCamera } = counterSlice.actions;
+export const { IncrementCamera, DecrementCamera,IncrementOptions,DecrementOptions,setSelectedNVR,setSelectedCamera,setSelectedPoE } = counterSlice.actions;
 export default counterSlice.reducer;

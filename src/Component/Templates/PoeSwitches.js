@@ -6,26 +6,92 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
-// import "./index.css";
 import Papa from "papaparse";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { useNavigate } from "react-router-dom";
 import noImage from "../../../src/no_Image.jpg";
 import Form from "react-bootstrap/Form";
+import { useSelector, useDispatch } from "react-redux";
+import { setSelectedPoE } from "../../app/features/counter/counterSlice";
+
+let globalState;
 
 // Modal-1 Starts
 function MyVerticallyCenteredModal(props) {
-  // Increment and Decrement
+  const dispatch = useDispatch();
+
   const [count, setCount] = useState(0);
-  const handleIncrement = () => {
+  // (11) Product Quantity Increaasing/Decreasing Code Starts in Modal-1
+  const handlePlusClick = () => {
     setCount(count + 1);
   };
-  const handleDecrement = () => {
-    if (count > 0) {
+
+  const handleMinusClick = () => {
+    if (count > 1) {
       setCount(count - 1);
     }
   };
+  // Product Quantity Increaasing/Decreasing Code Ends
+
+  // (2) When User Click on Any Box, its values get stored in State
+  const [finalNewState, setFinalNewState] = useState({}); // state-1
+  React.useEffect(() => {
+    setFinalNewState({
+      Port_Name: props.dataForProduct.id,
+      Port_Base_Price: props.dataForProduct.price,
+      Port_Quantity: count,
+      Extra_Field: props.dataForProduct.extra_field_3,
+    });
+  }, [
+    props.dataForProduct.id,
+    props.dataForProduct.price,
+    count,
+    props.dataForProduct.extra_field_3,
+  ]);
+
+  // (3)
+  const [showPrice, setshowPrice] = useState([]);
+  const calculateTotalPrice = () => {
+    const basePrice = props.dataForProduct.price;
+    const countQuantity = count;
+    const countPlusBasePrice = basePrice * count;
+    setshowPrice(countPlusBasePrice);
+  };
+
+  //(4) Adding Two state (my state + finalPrice) into > mergedState
+  const [mergedState, setMergedState] = useState({});
+  const updateMergedState = () => {
+    setMergedState({
+      ...finalNewState,
+      showPrice,
+    });
+  };
+  React.useEffect(() => {
+    updateMergedState();
+  }, [finalNewState, showPrice]);
+
+  //(5) Sending State to Redux after "add" button click
+  function addSwitchesQuantity() {
+    dispatch(setSelectedPoE(mergedState));
+    props.onHide(false); // Modal Close
+  }
+  globalState = mergedState;
+
+//(6)  Reset the Form
+
+const resetForm = () => {
+    setFinalNewState({});
+    setCount(1);
+    setshowPrice(0);
+  };
+
+  React.useEffect(() => {
+    if (!props.show) {
+      // Modal is closed, reset the form
+      resetForm();
+    }
+  }, [props.show]);
 
   return (
     <Modal
@@ -34,7 +100,6 @@ function MyVerticallyCenteredModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-   
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           Switch :{props.dataForProduct.id}
@@ -48,7 +113,11 @@ function MyVerticallyCenteredModal(props) {
                 <Card.Img
                   variant="top"
                   height={150}
-                  src={props.dataForProduct.thumb ? props.dataForProduct.thumb : noImage}
+                  src={
+                    props.dataForProduct.thumb
+                      ? props.dataForProduct.thumb
+                      : noImage
+                  }
                 />
               </Row>
               <Row className="my-2">
@@ -77,6 +146,35 @@ function MyVerticallyCenteredModal(props) {
                   />
                 </Col>
               </Row>
+
+              {/* Final Price */}
+              <Row  className='my-5'>
+                <div className="w-100 d-flex align-items-start">
+                  <Button variant="dark" onClick={calculateTotalPrice}>
+                    Final Price
+                  </Button>
+                </div>
+                <div className="w-100 my-3 d-flex align-items-start">
+                  <div >
+                    <Table
+                      striped
+                      bordered
+                      hover
+                      responsive
+                      style={{ width: "14rem" }}
+                    >
+                      <thead>
+                        <tr>
+                          <th>
+                            <b className="fs-5">${showPrice}</b>
+                          </th>
+                        </tr>
+                      </thead>
+                    </Table>
+                  </div>
+                </div>
+              </Row>
+              {/* Final Price */}
             </Col>
             <Col md={8}>
               <p>
@@ -87,26 +185,15 @@ function MyVerticallyCenteredModal(props) {
                   <em>No Description found in CSV</em>
                 )}
               </p>
-              {/* <Form.Select aria-label="Default select example">
-
-                                {props.productOption.map((options) => {
-                                    console.log('prod options', options)
-                                    if (options.featurecaption === "PoE Switch") {
-                                        return (
-                                            <option value="1">
-                                                {options.featurename}
-                                             </option>
-                                        )
-                                    }
-                                })}
-                            </Form.Select> */}
-
-              <div className="d-flex align-items-end justify-content-end mt-5">
-                <Button variant="dark" onClick={handleIncrement}>
+              <div
+                className="d-flex align-items-end justify-content-end my-4"
+                style={{ backgroundColor: "" }}
+              >
+                <Button variant="dark" onClick={handlePlusClick}>
                   +
                 </Button>
                 <h6 className="mx-3">{count}</h6>
-                <Button variant="dark" onClick={handleDecrement}>
+                <Button variant="dark" onClick={handleMinusClick}>
                   -
                 </Button>
               </div>
@@ -118,7 +205,7 @@ function MyVerticallyCenteredModal(props) {
         <Button variant="dark" onClick={props.onHide}>
           Back
         </Button>
-        <Button variant="dark" onClick={props.onHide}>
+        <Button variant="dark" onClick={addSwitchesQuantity}>
           Add
         </Button>
       </Modal.Footer>
@@ -164,6 +251,11 @@ function PoeSwitches() {
   const [dataForProduct, setDataForProduct] = useState([]);
   //product option csv
   const [produtOption, setProductOptionCSV] = useState([]);
+
+  // Redux State
+  const selectedCameraNumber = useSelector(
+    (state) => state.counter1.totalCamera
+  ); // Showing Camera Number Data
 
   // Modal-2 Open
   function handleButtonClick2(e) {
@@ -220,11 +312,15 @@ function PoeSwitches() {
       img3: val.image3,
       desc: val.description,
       name: val.name,
-      price:val.price
+      price: val.price,
+      extra_field_3: val.extra_field_3,
     });
   }
 
-console.log('dataForProduct is', dataForProduct)
+  // Redux
+  const selectedNvrDetails = useSelector((state) => state.counter1.selectedPoE); // Showing Switch Details Data
+
+  const tableData = selectedNvrDetails;
 
   return (
     <>
@@ -241,16 +337,19 @@ console.log('dataForProduct is', dataForProduct)
             <Col className="" style={{ backgroundColor: "" }}>
               <Row>
                 <Col className="text-end">
-                  Total Number of Cameras : <span className="fw-bold">10</span>
+                  Total Number of Cameras :{" "}
+                  {/* <span className="fw-bold">{selectedCameraNumber}</span> */}
+                  <span className="fw-bold">10</span>
+
                 </Col>
               </Row>
-              <Row>
+              {/* <Row>
                 <Col className="text-end">
                   <h6>
-                    Toal Number of Ports : <span className="fw-bold">10</span>
+                    Toal Number of Ports : <span className="fw-bold">?</span>
                   </h6>
                 </Col>
-              </Row>
+              </Row> */}
             </Col>
           </Row>
 
@@ -295,6 +394,47 @@ console.log('dataForProduct is', dataForProduct)
                 </>
               );
             })}
+          </Row>
+
+          {/* Table */}
+
+          <Row className="my-4" style={{ padding: "8px" }}>
+            <Col>
+              <h5 className="fw-bold">Add to Cart: </h5>
+
+              <div className="table-border">
+                <Table striped bordered hover responsive>
+                  <thead>
+                    <tr>
+                      <th>#</th> {/* Add a new column for the serial number */}
+                      <th>QTY: </th>
+                      <th>SKU: </th>
+                      <th>Price: </th>
+                      <th>Total: </th>
+                      <th>PoE Port (Extra Field): </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tableData.map((val, index) => {
+                      console.log("val", val);
+                      return (
+                        <>
+                          <tr key={val}>
+                            <td>{index + 1}</td>{" "}
+                            {/* Display the serial number */}
+                            <td>{val.Port_Quantity}</td>
+                            <td>{val.Port_Name}</td>
+                            <td> $ {val.Port_Base_Price} / pcs</td>
+                            <td> $ {val.showPrice} </td>
+                            <td> {val.Extra_Field} </td>
+                          </tr>
+                        </>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </div>
+            </Col>
           </Row>
 
           {/* Button */}
