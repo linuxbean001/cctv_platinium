@@ -133,7 +133,7 @@ const handleCameraDecre = () => {
 
   const handleNext=()=>{
   
-    navigate("/recorder")
+    navigate("/nvr")
   }
   return (
     <>
@@ -142,11 +142,11 @@ const handleCameraDecre = () => {
       <Container className="my-4" fluid style={{ backgroundColor: "" }}>
         <Row className="p-1">
           {/* Left */}
-          <Col md={9}>
+          <Col >
             <Row className="my-4">
               {cameraOptions.map((details) => {
                 return (
-                  <Col className="my-4" style={{ backgroundColor: "" }}>
+                  <Col md={4} className="my-4" style={{ backgroundColor: "" }}>
                     <Card style={{ width: "18rem" }}>
                       <Card.Img variant="top" height={200} src={'assets/images/Categories/Restaurant-Security-Cameras-1.jpg'} />
                       <Card.Body>

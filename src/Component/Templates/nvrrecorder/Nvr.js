@@ -326,7 +326,13 @@ function Nvr(props) {
   // Warning Modals state
   const [show2, setShow2] = useState(false);
   const handleClose2 = () => setShow2(false);
-  const handleShow2 = () => setShow2(true);
+  const handleShow2 = () => {
+    if (selectedCameraNumber >= calculateTotalLicenses()) {
+      setShow2(true);
+    } else {
+      navigate("/cameras");
+    }
+  };
 
   // Table Added by Prashant
   const calculateTotalPrice = () => {

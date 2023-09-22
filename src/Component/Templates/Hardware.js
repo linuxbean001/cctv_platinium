@@ -98,32 +98,6 @@ function MyVerticallyCenteredModal(props) {
 }
 
 
-// Modal-2 Starts
-function MyVerticallyCenteredModal2(props) {
-  const navigate = useNavigate();
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title> <h6> Warning ! There are not enough PoE Ports for cameras
-        </h6> </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>Are you sure want to continue ?</Modal.Body>
-      <Modal.Footer className="d-flex justify-content-between">
-        <Button variant="dark" onClick={() => navigate("/cameras")}>
-          Yes
-        </Button>
-        <Button variant="dark" onClick={props.onHide}>
-          No
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  );
-}
 
 //Modal Ends
 
@@ -163,7 +137,6 @@ function Hardware() {
     parseCSVFiles2();
   }, []);
 
-  console.log('my product csv',data)
 
   // Modal-1 Open
   function handleButtonClick(e, id, name, thumbnail, image1, image2, image3) {
@@ -181,10 +154,7 @@ function Hardware() {
     console.log(typeof data)
   }
 
-  // Modal-2 Open
-  function handleButtonClick2(e) {
-    setModalShow2(true)
-  }
+ 
 
   return (
     <>
@@ -270,10 +240,6 @@ function Hardware() {
         onHide={() => setModalShow(false)}
       />
 
-      <MyVerticallyCenteredModal2
-        show={modalShow2}
-        onHide={() => setModalShow2(false)}
-      />
     </>
   )
 }

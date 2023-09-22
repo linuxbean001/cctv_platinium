@@ -13,13 +13,14 @@ import Nvr from "../Templates/nvrrecorder/Nvr";
 import Cameras from "../Templates/Cameras";
 import Cabling from "../Templates/Cabling";
 import Hardware from "../Templates/Hardware";
+import NoFound from "../Templates/NoFound";
 function RoutesMiddleware() {
   return (
     <div className="Routes">
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route exact path="/recorder" element={<Nvr />} />
+          <Route exact path="/nvr" element={<Nvr />} />
           <Route exact path="/nvr_info" element={<NVRINFO />} />
           <Route exact path="/cameras" element={<Cameras />} />
           <Route exact path="/hardware" element={<Hardware />} />
@@ -32,6 +33,9 @@ function RoutesMiddleware() {
           <Route exact path="/poe-switch" element={<PoeSwitches />} />
           <Route exact path="/test" element={<Test />} />
           <Route exact path="/add_to_cart" element={<FinalCart />} />
+
+          {/* Add the 404 route at the end */}
+          <Route path="*" element={<NoFound/>} />
         </Routes>
       </BrowserRouter>
     </div>
