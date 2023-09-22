@@ -71,6 +71,8 @@ function MyVerticallyCenteredModal(props) {
     updateMergedState();
   }, [finalNewState, showPrice]);
 
+  console.log('xxx',finalNewState)
+
   //(5) Sending State to Redux after "add" button click
   function addSwitchesQuantity() {
     dispatch(setSelectedPoE(mergedState));
@@ -416,7 +418,6 @@ function PoeSwitches() {
                   </thead>
                   <tbody>
                     {tableData.map((val, index) => {
-                      console.log("val", val);
                       return (
                         <>
                           <tr key={val}>

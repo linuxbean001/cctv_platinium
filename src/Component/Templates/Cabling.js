@@ -176,29 +176,7 @@ function Cabling() {
             }
           </Row>
 
-          {/* Table */}
-          <Row className="my-4" style={{ padding: "8px" }}>
-            <Col style={{}}>
-              <div className="table-border">
-                <Table striped hover>
-                  <thead></thead>
-                  <tbody>
-                    {" "}
-                    <tr>
-                      {" "}
-                      <td>Adding to Cart</td> <td>QTY</td> <td>SKU</td>{" "}
-                      <td>Description</td> <td>Total:</td> <td>Licenses:</td>{" "}
-                    </tr>{" "}
-                    <tr>
-                      {" "}
-                      <td></td> <td>10</td> <td>10</td> <td>Description</td>
-                      <td>Total: 100 </td> <td>Licenses:</td>
-                    </tr>{" "}
-                  </tbody>
-                </Table>
-              </div>
-            </Col>
-          </Row>
+        
 
           {/* Button */}
           <Row className="my-4" style={{ backgroundColor: "" }}>

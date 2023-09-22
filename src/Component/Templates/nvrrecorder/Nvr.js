@@ -11,7 +11,7 @@ import Papa from "papaparse";
 import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import { useSelector, useDispatch } from "react-redux";
-import { setSelectedNVR } from "../../../app/features/counter/counterSlice";
+import { setSelectedNVR,deleteNVR } from "../../../app/features/counter/counterSlice";
 
 //Modal Starts Here
 function MyVerticallyCenteredModal(props) {
@@ -44,7 +44,8 @@ function MyVerticallyCenteredModal(props) {
       NVR_Base_Price: props.mainPrice,
       NVR_Final_Price: "",
       NVR_Quantity: count,
-      cart_final_price: priceList,
+      cart_final_price: priceList
+      
     });
   }, [props.dataforProduct.id, props.mainPrice, count, priceList]);
 
@@ -143,6 +144,8 @@ function MyVerticallyCenteredModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
+
+
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           {props.dataforProduct.id}
@@ -306,6 +309,7 @@ function Nvr(props) {
   const [formData2, setFormData2] = React.useState({}); // Receiving value from Modal State
   const [mergedState, setMergedState] = useState({});
 
+  const dispatch = useDispatch();
   const selectedNvrDetails = useSelector((state) => state.counter1.selectedNVR); // Showing NVR Details Data
   const selectedCameraNumber = useSelector(
     (state) => state.counter1.totalCamera
@@ -348,8 +352,8 @@ function Nvr(props) {
   const calculateTotalLicenses = () => {
     let totalLicenses = 0;
     tableData.forEach((val) => {
-      totalLicenses += parseInt(val["Number of IP Licenses"], 10);
-      console.log("first", totalLicenses);
+      totalLicenses +=
+        parseInt(val["Number of IP Licenses"], 10) * val.NVR_Quantity;
     });
     return totalLicenses;
   };
@@ -486,6 +490,14 @@ function Nvr(props) {
     }
   });
 
+  // Delete By Ravi
+
+  function deleteFromTable(index)
+  {
+    dispatch(deleteNVR(index))
+  }
+
+
   return (
     <>
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
@@ -616,6 +628,10 @@ function Nvr(props) {
                           </td>
                           <td> $ {val.cart_final_price}</td>
                           <td>{val["Number of IP Licenses"]}</td>
+                          <td>
+                            {" "}
+                            <Button variant="danger" onClick={()=>deleteFromTable(index)}>Delete</Button>
+                          </td>
                         </tr>
                       );
                     })}

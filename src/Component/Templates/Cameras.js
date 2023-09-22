@@ -14,12 +14,15 @@ import { useNavigate } from "react-router-dom";
 import noImage from "../../no_Image.jpg";
 import Form from "react-bootstrap/Form";
 import { setSelectedCamera } from "../../../src/app/features/counter/counterSlice";
+
 import { useSelector, useDispatch } from "react-redux";
 
 function Cameras(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const selectedCameraNumber = useSelector(
+    (state) => state.counter1.totalCamera
+  ); // Showing Camera Number Data
   const [categoryCSV, setCategoryCSV] = useState([]); // for category csv
   const [productCSV, setProductCSV] = useState([]); // for products csv
   const [productOption, setProductOptionCSV] = useState([]); // product_options.csv data
@@ -89,11 +92,9 @@ function Cameras(props) {
   }, [show2]);
   //
 
-
   React.useEffect(() => {
     updateMergedState();
   }, [finalNewState, finalNewState2]);
-
 
   function modal_3() {
     // setShow3(true);
@@ -203,8 +204,6 @@ function Cameras(props) {
     return item.category_parent && item.category_parent.includes("45");
   });
 
-
-
   React.useEffect(() => {
     // storing data
     setFinalNewState({
@@ -289,8 +288,6 @@ function Cameras(props) {
     }
   };
 
- 
-
   return (
     <>
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
@@ -303,8 +300,9 @@ function Cameras(props) {
             </Col>
             <Col className="" style={{ backgroundColor: "" }}>
               <Row>
-                <Col className="text-end">
-                  Number of Cameras : <span className="fw-bold">??</span>
+              <Col className="text-end">
+                 Number of Cameras:&nbsp;
+                  <span className="fw-bold">{selectedCameraNumber}</span>
                 </Col>
               </Row>
               <Row>

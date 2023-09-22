@@ -3,9 +3,10 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   totalOptions: 0,
   totalCamera: 0,
-  selectedNVR :[],
-  selectedCamera:[],
-  selectedPoE:[]
+  selectedNVR: [],
+  selectedCamera: [],
+  selectedPoE: [],
+  selectedHardWare: [],
 };
 
 export const counterSlice = createSlice({
@@ -30,20 +31,40 @@ export const counterSlice = createSlice({
       state.selectedNVR.push(action.payload);
     },
 
+    // Remove Selected NVR
+
+    deleteNVR:(state,action)=>{
+      state.selectedNVR.splice(action.payload, 1)
+    },
+
     // For Camera
-    setSelectedCamera:(state, action) => {
+    setSelectedCamera: (state, action) => {
       state.selectedCamera.push(action.payload);
     },
 
-     // For PoE Switches
-     setSelectedPoE:(state, action) => {
+    // For PoE Switches
+    setSelectedPoE: (state, action) => {
       state.selectedPoE.push(action.payload);
     },
 
+    // For HardWare
+    setSelectedHardWare: (state, action) => {
+      state.selectedHardWare = action.payload;
+    },
+
+    
   },
 });
 
-
-
-export const { IncrementCamera, DecrementCamera,IncrementOptions,DecrementOptions,setSelectedNVR,setSelectedCamera,setSelectedPoE } = counterSlice.actions;
+export const {
+  IncrementCamera,
+  DecrementCamera,
+  IncrementOptions,
+  DecrementOptions,
+  setSelectedNVR,
+  setSelectedCamera,
+  setSelectedPoE,
+  setSelectedHardWare,
+  deleteNVR
+} = counterSlice.actions;
 export default counterSlice.reducer;
