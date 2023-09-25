@@ -13,7 +13,10 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import noImage from "../../no_Image.jpg";
 import Form from "react-bootstrap/Form";
-import { setSelectedCamera } from "../../../src/app/features/counter/counterSlice";
+import {
+  setSelectedCamera,
+  deleteCamera,
+} from "../../../src/app/features/counter/counterSlice";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -32,7 +35,7 @@ function Cameras(props) {
   const [count, setCount] = useState(1);
 
   const [thumbimg, setThumbimg] = useState([]);
-
+  const [totalPriceInTable, setTotalPriceInTable] = useState(0);
   //
   const [filteredData, setfilteredData] = useState([]);
   const [categoryName, setCategoryName] = useState([]);
@@ -61,6 +64,14 @@ function Cameras(props) {
   const countCamera = useSelector((state) => state.counter1.selectedCamera);
 
   const tableData = countCamera;
+
+  React.useEffect(() => {
+    let total = 0;
+    tableData.forEach((item) => {
+      total += parseFloat(item.Camera_Final_Price);
+    });
+    setTotalPriceInTable(total);
+  }, [tableData]);
 
   const handleBracketChange = (event) => {
     setBracketNumber(event.target.value);
@@ -288,6 +299,10 @@ function Cameras(props) {
     }
   };
 
+  const deleteFromCamera = (index) => {
+    dispatch(deleteCamera(index));
+  };
+
   return (
     <>
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
@@ -300,8 +315,8 @@ function Cameras(props) {
             </Col>
             <Col className="" style={{ backgroundColor: "" }}>
               <Row>
-              <Col className="text-end">
-                 Number of Cameras:&nbsp;
+                <Col className="text-end">
+                  Number of Cameras:&nbsp;
                   <span className="fw-bold">{selectedCameraNumber}</span>
                 </Col>
               </Row>
@@ -373,6 +388,7 @@ function Cameras(props) {
                       <th>Camera Selected: </th>
                       <th>Brackets: </th>
                       <th>Total: </th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -385,9 +401,30 @@ function Cameras(props) {
                           <td>{val.Camera_Name}</td>
                           <td> {val.Bracket_Selected} pcs</td>
                           <td>$ {val.Camera_Final_Price}</td>
+                          <td>
+                            {" "}
+                            <Button
+                              variant="danger"
+                              onClick={() => deleteFromCamera(index)}
+                            >
+                              Delete
+                            </Button>
+                          </td>
                         </tr>
                       );
                     })}
+                    {/* Final Section */}
+                    <tr>
+                      <th></th>
+                      <td></td>
+                      <td>
+                        <b>Total Price</b>
+                      </td>
+                      <td></td>
+                      <td>$ {totalPriceInTable}</td>
+                      <td></td>
+                    </tr>
+                    {/* Final Section */}
                   </tbody>
                 </Table>
               </div>

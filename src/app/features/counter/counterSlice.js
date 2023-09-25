@@ -5,6 +5,7 @@ const initialState = {
   totalCamera: 0,
   selectedNVR: [],
   selectedCamera: [],
+  selectedCabling: 0,
   selectedPoE: [],
   selectedHardWare: [],
 };
@@ -32,7 +33,6 @@ export const counterSlice = createSlice({
     },
 
     // Remove Selected NVR
-
     deleteNVR:(state,action)=>{
       state.selectedNVR.splice(action.payload, 1)
     },
@@ -41,6 +41,25 @@ export const counterSlice = createSlice({
     setSelectedCamera: (state, action) => {
       state.selectedCamera.push(action.payload);
     },
+
+    //************** Remove Selected Camera **************//
+    deleteCamera:(state,action)=>{
+      state.selectedCamera.splice(action.payload, 1)
+    },
+    //************** Remove Selected Camera **************//
+
+    //********************* Cabling *********************//
+    setSelectedCabling:(state,action)=>{
+      state.selectedCabling.push(action.payload)
+    },
+    //********************* Cabling **********************//
+
+    //************** Remove Selected Cabling **************//
+    deleteCabling: (state, action) => {
+      const index = action.payload;
+      state.selectedCabling.splice(index, 1); 
+    },
+    //************** Remove Selected Cabling **************//
 
     // For PoE Switches
     setSelectedPoE: (state, action) => {
@@ -63,8 +82,11 @@ export const {
   DecrementOptions,
   setSelectedNVR,
   setSelectedCamera,
+  setSelectedCabling,
   setSelectedPoE,
   setSelectedHardWare,
-  deleteNVR
+  deleteNVR,
+  deleteCamera,
+  deleteCabling
 } = counterSlice.actions;
 export default counterSlice.reducer;
