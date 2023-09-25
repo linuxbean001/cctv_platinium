@@ -8,11 +8,14 @@ import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 // import "./index.css";
 import Papa from "papaparse";
-import Dropdown from "react-bootstrap/Dropdown";  
+import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { Navigate, useNavigate } from "react-router-dom";
 import noImage from "../../no_Image.jpg";
-import { setSelectedCabling, deleteCabling } from "../../../src/app/features/counter/counterSlice";
+import {
+  setSelectedCabling,
+  deleteCabling,
+} from "../../../src/app/features/counter/counterSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 const onlineImageURL =
@@ -20,6 +23,7 @@ const onlineImageURL =
 
 function Cabling() {
   const navigate = useNavigate();
+  const countCabling = useSelector((state) => state.counter1.selectedCabling);
   const [totalPrice, setTotalPrice] = useState(0);
   const [categoryCSV, setCategoriesCSV] = useState([]); // categoryCsv data
   const [productCSV, setProductCSV] = useState([]); // productCSV data
@@ -44,7 +48,15 @@ function Cabling() {
   const [cartItems, setCartItems] = useState([]);
   const dispatch = useDispatch();
 
-  
+  React.useEffect(() => {
+    setCartItems(countCabling || []);
+    let totalPrice = 0;
+    countCabling.forEach((item) => {
+      totalPrice += item.totalPriceForItem;
+    });
+    setTotalPrice(totalPrice);
+  }, []);
+
   const handlePlusClicks = () => {
     setCount(count + 1);
   };
@@ -89,8 +101,7 @@ function Cabling() {
     return item.categories && item.categories.includes("Hardware/Cabling");
   });
 
-
-//****************** Changes Saturday *******************//
+  //****************** Changes Saturday *******************//
   function handleButtonClick(
     e,
     id,
@@ -126,7 +137,7 @@ function Cabling() {
   };
   //****************** Changes Saturday *******************//
 
-//****************** Changes Saturday *******************//
+  //****************** Changes Saturday *******************//
   const handleCablingData = () => {
     setShow(false);
     const totalPriceForItem = initialPrice * count;
@@ -141,7 +152,7 @@ function Cabling() {
     setCartItems((prevCartItems) => [...prevCartItems, newItem]);
     setTotalPrice((prevTotalPrice) => prevTotalPrice + totalPriceForItem);
     setCount(1);
-    setPriceCab(0); 
+    setPriceCab(0);
   };
   //****************** Changes Saturday *******************//
 
@@ -153,28 +164,19 @@ function Cabling() {
   };
   //****************** Changes Saturday *******************//
 
- 
-
-
   //****************** Changes Saturday *******************//
   const handleDelete = (index) => {
     dispatch(deleteCabling(index));
     const updatedCartItems = [...cartItems];
     const itemToRemove = updatedCartItems[index];
     const newTotalPrice = totalPrice - itemToRemove.totalPriceForItem;
-  
+
     updatedCartItems.splice(index, 1);
-  
+
     setCartItems(updatedCartItems);
     setTotalPrice(newTotalPrice);
   };
   //****************** Changes Saturday *******************//
-
-
-
-  
-
- 
 
   return (
     <>
@@ -294,7 +296,12 @@ function Cabling() {
                         <td>{item.pricePerItem}</td>
                         <td>$ {item.totalPriceForItem.toFixed(2)}</td>
                         <td>
-                          <Button variant="danger" onClick={() => handleDelete(index)}>Delete</Button>
+                          <Button
+                            variant="danger"
+                            onClick={() => handleDelete(index)}
+                          >
+                            Delete
+                          </Button>
                         </td>
                       </tr>
                     ))}
