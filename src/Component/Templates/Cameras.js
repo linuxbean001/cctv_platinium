@@ -54,7 +54,7 @@ function Cameras(props) {
   const [finalNewState2, setFinalNewState2] = useState({}); // state-2
   const [totalPrice, setTotalPrice] = useState(0); // 1+2+3+4 = 10 (child items)
   const [isDisabled, setIsDisabled] = useState(false);
-  const [priceData, setPriceData] = useState(0);
+  // const [priceData, setPriceData] = useState(0);
   const [priceList, setPriceList] = useState(0);
   //Merging FinalState and FinalState2
   const [mergedState, setMergedState] = useState({});
@@ -93,7 +93,6 @@ function Cameras(props) {
     setFinalNewState2({});
     setTotalPrice(0);
     setIsDisabled(false);
-    setPriceData(0);
     setPriceList(0);
   };
 
@@ -294,11 +293,7 @@ function Cameras(props) {
   const calculateTotalPrice = () => {
     setIsDisabled(true);
     const newTotalPrice = parseInt(dataProduct.price) + parseInt(totalPrice);
-    setPriceData(newTotalPrice);
-
-    if (priceData) {
-      setPriceList(priceData * count);
-    }
+    setPriceList(newTotalPrice * count);
   };
 
   const deleteFromCamera = (index) => {

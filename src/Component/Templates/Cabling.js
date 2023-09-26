@@ -23,6 +23,9 @@ const onlineImageURL =
 
 function Cabling() {
   const navigate = useNavigate();
+  const selectedCameraNumber = useSelector(
+    (state) => state.counter1.totalCamera
+  );
   const countCabling = useSelector((state) => state.counter1.selectedCabling);
   const [totalPrice, setTotalPrice] = useState(0);
   const [categoryCSV, setCategoriesCSV] = useState([]); // categoryCsv data
@@ -192,7 +195,8 @@ function Cabling() {
             <Col className="" style={{ backgroundColor: "" }}>
               <Row className="mb-2">
                 <Col className="text-end">
-                  Total Number of Cameras : <span className="fw-bold">10</span>
+                  Number of Cameras :{" "}
+                  <span className="fw-bold">{selectedCameraNumber}</span>
                 </Col>
               </Row>
               {/* <Row className="mb-2">
@@ -413,17 +417,17 @@ function Cabling() {
               </Col>
             </Row>
             {/* Final Price */}
-            <Row className="mt-5 justify-content-end">
+            <Row className="mt-5 justify-content-start">
               {" "}
               {/* Aligning to the right */}
-              <div className="w-100 d-flex justify-content-end">
+              <div className="w-100 d-flex justify-content-start">
                 {" "}
                 {/* Aligning to the right */}
                 <Button variant="dark" onClick={calculatePrice}>
                   Final Price
                 </Button>
               </div>
-              <div className="w-100 my-1 d-flex justify-content-end">
+              <div className="w-100 my-1 d-flex justify-content-start">
                 {" "}
                 {/* Aligning to the right */}
                 <div className="text">

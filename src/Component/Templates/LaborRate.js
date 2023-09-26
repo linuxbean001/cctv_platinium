@@ -411,8 +411,8 @@ function LaborRate() {
                           </div>
                         </Col>
                         {/* Final Price */}
-                        <Row className="mt-5 justify-content-end">
-                          <div className="w-100 d-flex justify-content-end">
+                        <Row className="mt-5 justify-content-start">
+                          <div className="w-100 d-flex justify-content-start">
                             <Button
                               variant="dark"
                               onClick={calculateFinalPrice}
@@ -420,7 +420,7 @@ function LaborRate() {
                               Final Price
                             </Button>
                           </div>
-                          <div className="w-100 my-1 d-flex justify-content-end">
+                          <div className="w-100 my-1 d-flex justify-content-start">
                             <div className="text">
                               <Table
                                 striped
@@ -433,9 +433,9 @@ function LaborRate() {
                                   <tr>
                                     <th>
                                       {basePrice1 ? (
-                                        <b>$ {basePrice1}</b>
+                                        <b>$ {basePrice1.toFixed(2)}</b>
                                       ) : (
-                                        <b>$ {basePrice}</b>
+                                        <b>$ {basePrice.toFixed(2)}</b>
                                       )}
                                     </th>
                                   </tr>
@@ -481,6 +481,7 @@ function LaborRate() {
                       <th>SKU: </th>
                       <th>Labor Base Price: </th>
                       <th>Total: </th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
