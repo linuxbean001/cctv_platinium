@@ -44,6 +44,8 @@ function Cameras(props) {
   // by sir
   const [finalData, setFinalData] = useState([]);
 
+  console.log('apidata',categoryCSV)
+
   // Store Data from Modal
 
   const [dataProduct, setdataProduct] = useState({});

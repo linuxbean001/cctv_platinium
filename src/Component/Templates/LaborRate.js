@@ -13,29 +13,35 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import noImage from "../../no_Image.jpg";
 import Form from "react-bootstrap/Form";
+import {
+  setSelectedLabor,
+  deleteLabor
+} from "../../../src/app/features/counter/counterSlice";
 
-const onlineImg =
-  "https://images.pexels.com/photos/5703527/pexels-photo-5703527.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+import { useSelector, useDispatch } from "react-redux";
+
 
 function LaborRate() {
   const [categoryCSV, setCategoryCSV] = useState([]); // for category csv
   const [productCSV, setProductCSV] = useState([]); // for products csv
   const [productOption, setProductOptionCSV] = useState([]); // product_options.csv data
-
+  const selectedCameraNumber = useSelector(
+    (state) => state.counter1.totalCamera
+  );
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
-  const [count, setCount] = useState(0);
-
-  const [test, setTest] = useState([]);
-  const [test2, setTest2] = useState([]);
-  const [thumbimg, setThumbimg] = useState([]);
-
-  //
+  const [count, setCount] = useState(1);
+  const [basePrice, setBasePrice] = useState(0);
+  const [basePrice1, setBasePrice1] = useState(0);
+  const dispatch = useDispatch();
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [cartItems, setCartItems] = useState([]);
   const [filteredData, setfilteredData] = useState([]);
   const [categoryName, setCategoryName] = useState([]);
   const [filteredData2, setfilteredData2] = useState([]);
   const [categoryName2, setCategoryName2] = useState([]);
+  const countLabor = useSelector((state) => state.counter1.selectedLabor);
 
   // Fetching APIs data
   React.useEffect(() => {
@@ -67,6 +73,19 @@ function LaborRate() {
     parseCSVFiles2();
   }, []);
 
+
+  
+  React.useEffect(() => {
+    if (countLabor) {
+      setCartItems(countLabor || []);
+      let totalPrice = 0;
+      countLabor.forEach((item) => {
+        totalPrice += item.totalPriceForItem;
+      });
+      setTotalPrice(totalPrice);
+    }
+  }, [countLabor]); 
+
   // Condition-1 (Target whose ID is )
 
   const laborData = categoryCSV.filter((item) => {
@@ -89,24 +108,75 @@ function LaborRate() {
   };
 
   // Modal_1
-  function modal_1(e, id) {
+  function modal_1(e, id, item) {
     setShow2(true);
     setShow(false);
 
     const laborData3 = filteredData.filter((item) => {
       if (item.id == id) {
-        return item
+        return item;
       }
     });
-    setfilteredData2(laborData3)
-
+    setBasePrice(parseFloat(laborData3[0].price));
+    setfilteredData2(laborData3);
+    setCategoryName2(id);
   }
-console.log(filteredData2)
 
   function modal_3() {
     setShow3(true);
     setShow2(false);
   }
+
+
+  //************* Increasing and Decreasing Count Value  **************//
+  const handleClickPlus = () => {
+    setCount(count + 1);
+  };
+
+  const handleClickMinus = () => {
+    if (count > 1) {
+      setCount(count - 1);
+    }
+  };
+  //************* Increasing and Decreasing Count Value  **************//
+
+  const calculateFinalPrice = () => {
+    const data = basePrice * count;
+    setBasePrice1(data);
+  };
+
+  const handleCablingData = () => {
+    setShow2(false);
+    const totalPriceForItem = basePrice * count;
+    const dataforProduct = filteredData2[0];
+    console.log(dataforProduct);
+    const newItem = {
+      id: dataforProduct.id,
+      name: dataforProduct.name,
+      quantity: count,
+      pricePerItem: basePrice,
+      totalPriceForItem: totalPriceForItem,
+    };
+    dispatch(setSelectedLabor(newItem));
+    setCartItems((prevCartItems) => [...prevCartItems, newItem]);
+    setTotalPrice((prevTotalPrice) => prevTotalPrice + totalPriceForItem);
+    setCount(1);
+    setBasePrice1(0);
+  };
+
+  //****************** Changes Saturday *******************//
+  const handleDelete = (index) => {
+    dispatch(deleteLabor(index));
+    const updatedCartItems = [...cartItems];
+    const itemToRemove = updatedCartItems[index];
+    const newTotalPrice = totalPrice - itemToRemove.totalPriceForItem;
+
+    updatedCartItems.splice(index, 1);
+
+    setCartItems(updatedCartItems);
+    setTotalPrice(newTotalPrice);
+  };
+  //****************** Changes Saturday *******************//
 
   return (
     <>
@@ -121,7 +191,8 @@ console.log(filteredData2)
             <Col className="" style={{ backgroundColor: "" }}>
               <Row>
                 <Col className="text-end">
-                  Number of Cameras : <span className="fw-bold">??</span>
+                  Number of Cameras :{" "}
+                  <span className="fw-bold">{selectedCameraNumber}</span>
                 </Col>
               </Row>
               <Row>
@@ -264,12 +335,9 @@ console.log(filteredData2)
             <Modal.Body>
               <Container>
                 <Row>
-
-                  {
-
-                    filteredData2.map((val)=>{
-                      return(
-                        <>
+                  {filteredData2.map((val) => {
+                    return (
+                      <>
                         <Col md={5} style={{ backgroundColor: "" }}>
                           <Row>
                             <Card.Img
@@ -327,19 +395,59 @@ console.log(filteredData2)
                             <span className="fw-bold">
                               Description 22:{" "}
                             </span>{" "}
-                            {
-                              val.name
-                            }
+                            {val.name}
                           </p>
-
-                       
+                          <div
+                            className="d-flex align-items-end justify-content-end my-4"
+                            style={{ backgroundColor: "" }}
+                          >
+                            <Button variant="dark" onClick={handleClickPlus}>
+                              +
+                            </Button>
+                            <h6 className="mx-3">{count}</h6>
+                            <Button variant="dark" onClick={handleClickMinus}>
+                              -
+                            </Button>
+                          </div>
                         </Col>
+                        {/* Final Price */}
+                        <Row className="mt-5 justify-content-end">
+                          <div className="w-100 d-flex justify-content-end">
+                            <Button
+                              variant="dark"
+                              onClick={calculateFinalPrice}
+                            >
+                              Final Price
+                            </Button>
+                          </div>
+                          <div className="w-100 my-1 d-flex justify-content-end">
+                            <div className="text">
+                              <Table
+                                striped
+                                bordered
+                                hover
+                                responsive
+                                style={{ width: "14rem" }}
+                              >
+                                <thead>
+                                  <tr>
+                                    <th>
+                                      {basePrice1 ? (
+                                        <b>$ {basePrice1}</b>
+                                      ) : (
+                                        <b>$ {basePrice}</b>
+                                      )}
+                                    </th>
+                                  </tr>
+                                </thead>
+                              </Table>
+                            </div>
+                          </div>
+                        </Row>
+                        {/* Final Price */}
                       </>
-                      )
-                    })
-                  }
-                      
-            
+                    );
+                  })}
                 </Row>
               </Container>
             </Modal.Body>
@@ -352,10 +460,66 @@ console.log(filteredData2)
                 >
                   Back
                 </Button>
-                <Button variant="dark">Add</Button>
+                <Button variant="dark" onClick={handleCablingData}>
+                  Add
+                </Button>
               </div>
             </Modal.Footer>
           </Modal>
+
+          {/********************** Create TableData *********************/}
+          <Row className="my-4" style={{ padding: "8px" }}>
+            <Col>
+              <h5 className="fw-bold">Add to Cart: </h5>
+
+              <div className="table-border">
+                <Table striped bordered hover responsive>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>QTY: </th>
+                      <th>SKU: </th>
+                      <th>Labor Base Price: </th>
+                      <th>Total: </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cartItems.map((item, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{item.quantity}</td>
+                        <td>{item.id}</td>
+                        <td>{item.pricePerItem}</td>
+                        <td>$ {item.totalPriceForItem.toFixed(2)}</td>
+                        <td>
+                          <Button
+                            variant="danger"
+                            onClick={() => handleDelete(index)}
+                          >
+                            Delete
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                    {/* Final Section */}
+                    <tr>
+                      <th></th>
+                      <td></td>
+                      <td></td>
+
+                      <td>
+                        <b>Total Price :</b>
+                      </td>
+                      <td>$ {totalPrice.toFixed(2)}</td>
+                      <td></td>
+                    </tr>
+                    {/* Final Section */}
+                  </tbody>
+                </Table>
+              </div>
+            </Col>
+          </Row>
+          {/********************** Create TableData *********************/}
         </Container>
       </Container>
     </>
