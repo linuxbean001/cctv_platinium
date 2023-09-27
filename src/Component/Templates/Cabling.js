@@ -53,6 +53,7 @@ function Cabling() {
 
   React.useEffect(() => {
     setCartItems(countCabling || []);
+    console.log('first',countCabling)
     let totalPrice = 0;
     countCabling.forEach((item) => {
       totalPrice += item.totalPriceForItem;
