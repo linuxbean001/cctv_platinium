@@ -1,40 +1,42 @@
-import React, { useState, useEffect } from "react";
-import Container from "react-bootstrap/Container";
-import Papa from "papaparse";
+import React, { useState, useEffect } from 'react';
 
 function Test() {
-  const [productCSV, setProductCSV] = useState([]);
+  const [data, setData] = useState([]);
+  const apiUrl = 'https://jsonplaceholder.typicode.com/posts'; // Replace with the appropriate JSONPlaceholder API endpoint
 
-  // console.log(productCSV)
+
+let newMyArray = [];
+newMyArray.push(data)
+
+console.log(newMyArray)
 
   useEffect(() => {
-    const fetchCSVData = async () => {
-      try {
-        const response = await fetch(
-          "https://platinumcctvcom.sharepoint.com/:x:/r/sites/PlatinumCCTVSecuritySolutions/_layouts/15/Doc.aspx?sourcedoc=%7B4239E008-692B-4FF0-8BB2-9C224679A7F9%7D&file=categories.csv&action=default&mobileredirect=true"
-        );
-
+    // Fetch data from the JSONPlaceholder API
+    fetch(apiUrl)
+      .then((response) => {
         if (!response.ok) {
-          throw new Error(`CSV fetch failed with status: ${response.status}`);
+          throw new Error(`Network response was not ok: ${response.status}`);
         }
+        return response.json();
+      })
+      .then((jsonData) => {
+        setData(jsonData);
 
-        const csvText = await response.text();
-        const parsedData = Papa.parse(csvText, { header: true }).data;
-        console.log('parse data', csvText)
-        setProductCSV(parsedData);
-      } catch (error) {
-        console.log('Error :', error)
-      }
-    };
-
-    fetchCSVData();
-  }, []);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, [apiUrl]);
 
   return (
-    <Container>
-      <h1>Testing Page</h1>
-
-    </Container>
+    <div>
+      <h1>JSONPlaceholder Data</h1>
+      <ul>
+        {data.map((item) => (
+          <li key={item.id}>{item.title}</li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

@@ -14,6 +14,7 @@ import Cameras from "../Templates/Cameras";
 import Cabling from "../Templates/Cabling";
 import Hardware from "../Templates/Hardware";
 import NoFound from "../Templates/NoFound";
+import Pdf from "../Templates/Pdf";
 function RoutesMiddleware() {
   return (
     <div className="Routes">
@@ -33,6 +34,8 @@ function RoutesMiddleware() {
           <Route exact path="/poe-switch" element={<PoeSwitches />} />
           <Route exact path="/test" element={<Test />} />
           <Route exact path="/add_to_cart" element={<FinalCart />} />
+          <Route exact path="/pdf" element={<Pdf />} />
+
 
           {/* Add the 404 route at the end */}
           <Route path="*" element={<NoFound/>} />
