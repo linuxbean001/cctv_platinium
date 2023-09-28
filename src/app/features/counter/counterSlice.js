@@ -51,6 +51,13 @@ export const counterSlice = createSlice({
     },
     //************** Remove Selected Camera **************//
 
+    
+    //************** Remove Selected Camera **************//
+    deleteNVR: (state, action) => {
+      state.selectedPoE.splice(action.payload, 1);
+    },
+    //************** Remove Selected Camera **************//
+
     //********************* Cabling *********************//
     setSelectedCabling: (state, action) => {
       if (!Array.isArray(state.selectedCabling)) {
@@ -123,8 +130,8 @@ export const {
   setSelectedHardWare,
   setSelectedSpecial,
   setFinalData,
-  deleteNVR,
   deleteCamera,
+  deleteNVR,
   deleteCabling,
   deleteLabor,
   deleteSpecial

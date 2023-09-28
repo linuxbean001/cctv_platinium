@@ -13,7 +13,11 @@ import { useNavigate } from "react-router-dom";
 import noImage from "../../../src/no_Image.jpg";
 import Form from "react-bootstrap/Form";
 import { useSelector, useDispatch } from "react-redux";
-import { setSelectedPoE,setFinalData } from "../../app/features/counter/counterSlice";
+import {
+  setSelectedPoE,
+  setFinalData,
+  deleteNVR,
+} from "../../app/features/counter/counterSlice";
 
 let globalState;
 
@@ -72,8 +76,6 @@ function MyVerticallyCenteredModal(props) {
     updateMergedState();
   }, [finalNewState, poeFinalPrice]);
 
-  console.log('xxx',finalNewState)
-
   //(5) Sending State to Redux after "add" button click
   function addSwitchesQuantity() {
     dispatch(setSelectedPoE(mergedState));
@@ -82,9 +84,9 @@ function MyVerticallyCenteredModal(props) {
   }
   globalState = mergedState;
 
-//(6)  Reset the Form
+  //(6)  Reset the Form
 
-const resetForm = () => {
+  const resetForm = () => {
     setFinalNewState({});
     setCount(1);
     setPoeFinalPrice(0);
@@ -248,6 +250,8 @@ function MyVerticallyCenteredModal2(props) {
 //Modal Ends
 
 function PoeSwitches() {
+  const dispatch = useDispatch();
+
   // Modal state-1
   const [modalShow, setModalShow] = React.useState(false);
   // Modal state-2
@@ -327,8 +331,16 @@ function PoeSwitches() {
 
   // Redux
   const selectedNvrDetails = useSelector((state) => state.counter1.selectedPoE); // Showing Switch Details Data
+  const countCamera = useSelector((state) => state.counter1.selectedCamera);
 
   const tableData = selectedNvrDetails;
+
+  //************************* Delete Camera ***************************//
+  const deleteFromCamera = (index) => {
+    console.log(index);
+    dispatch(deleteNVR(index));
+  };
+  //************************* Delete Camera ***************************//
 
   return (
     <>
@@ -346,9 +358,7 @@ function PoeSwitches() {
               <Row>
                 <Col className="text-end">
                   Total Number of Cameras :{" "}
-                  {/* <span className="fw-bold">{selectedCameraNumber}</span> */}
-                  <span className="fw-bold">10</span>
-
+                  <span className="fw-bold">{selectedCameraNumber}</span>
                 </Col>
               </Row>
               {/* <Row>
@@ -420,6 +430,7 @@ function PoeSwitches() {
                       <th>Price: </th>
                       <th>Total: </th>
                       <th>PoE Port (Extra Field): </th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -434,10 +445,38 @@ function PoeSwitches() {
                             <td> $ {val.Port_Base_Price} / pcs</td>
                             <td> $ {val.poeFinalPrice} </td>
                             <td> {val.Extra_Field} </td>
+                            <td>
+                              {" "}
+                              <Button
+                                variant="dark"
+                                onClick={() => deleteFromCamera(index)}
+                              >
+                                Delete
+                              </Button>
+                            </td>
                           </tr>
                         </>
                       );
                     })}
+
+                    {/* Final Section */}
+                    <tr>
+                      <th></th>
+                      <td></td>
+                      <td></td>
+                      <b>Total Price :</b>
+                      <td>
+                        <b>$ </b>
+                      </td>
+
+                      <td>
+                      <b>00</b>
+
+                      </td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    {/* Final Section */}
                   </tbody>
                 </Table>
               </div>

@@ -308,6 +308,7 @@ function Cameras(props) {
 
   //************************* Delete Camera ***************************//
   const deleteFromCamera = (index) => {
+    console.log(index)
     dispatch(deleteCamera(index));
   };
   //************************* Delete Camera ***************************//
