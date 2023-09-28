@@ -19,9 +19,6 @@ import {
 } from "../../../src/app/features/counter/counterSlice";
 import { useSelector, useDispatch } from "react-redux";
 
-const onlineImageURL =
-  "https://images.pexels.com/photos/326508/pexels-photo-326508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
-
 function Cabling() {
   const navigate = useNavigate();
   const selectedCameraNumber = useSelector(
