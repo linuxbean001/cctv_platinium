@@ -251,7 +251,7 @@ function MyVerticallyCenteredModal2(props) {
 
 function PoeSwitches() {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   // Modal state-1
   const [modalShow, setModalShow] = React.useState(false);
   // Modal state-2
@@ -271,7 +271,11 @@ function PoeSwitches() {
 
   // Modal-2 Open
   function handleButtonClick2(e) {
-    setModalShow2(true);
+    if (selectedCameraNumber >= totalPoEPortCount) {
+      setModalShow2(true);
+    } else {
+      navigate("/hardware");
+    }
   }
 
   // Fetching APIs data
@@ -342,6 +346,20 @@ function PoeSwitches() {
   };
   //************************* Delete Camera ***************************//
 
+  const calculateTotalValues = () => {
+    let totalValue = 0;
+    let totalPoEPortCount = 0;
+
+    for (const item of tableData) {
+      totalValue += item.poeFinalPrice; // Sum up the values
+      totalPoEPortCount += parseInt(item.Extra_Field, 10); // Sum up the PoE port counts (assuming Extra_Field contains the port count)
+    }
+
+    return { totalValue, totalPoEPortCount };
+  };
+
+  const { totalValue, totalPoEPortCount } = calculateTotalValues();
+
   return (
     <>
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
@@ -362,12 +380,12 @@ function PoeSwitches() {
                 </Col>
               </Row>
               {/* <Row>
-                <Col className="text-end">
-                  <h6>
-                    Toal Number of Ports : <span className="fw-bold">?</span>
-                  </h6>
-                </Col>
-              </Row> */}
+                  <Col className="text-end">
+                    <h6>
+                      Toal Number of Ports : <span className="fw-bold">?</span>
+                    </h6>
+                  </Col>
+                </Row> */}
             </Col>
           </Row>
 
@@ -464,16 +482,17 @@ function PoeSwitches() {
                       <th></th>
                       <td></td>
                       <td></td>
-                      <b>Total Price :</b>
                       <td>
-                        <b>$ </b>
+                        {" "}
+                        <b>Total Price :</b>
+                      </td>
+                      <td>
+                        <b>$ {totalValue}</b>
                       </td>
 
                       <td>
-                      <b>00</b>
-
+                        <b>{totalPoEPortCount}</b>
                       </td>
-                      <td></td>
                       <td></td>
                     </tr>
                     {/* Final Section */}

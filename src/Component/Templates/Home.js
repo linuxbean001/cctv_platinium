@@ -12,7 +12,12 @@ import Registration from "./Registration";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
-import { IncrementCamera,DecrementCamera,IncrementOptions,DecrementOptions } from "../../app/features/counter/counterSlice";
+import {
+  IncrementCamera,
+  DecrementCamera,
+  IncrementOptions,
+  DecrementOptions,
+} from "../../app/features/counter/counterSlice";
 
 function Home() {
 
@@ -105,6 +110,9 @@ const handleCameraDecre = () => {
       }
     };
     parseCSVFiles();
+
+
+
   }, []);
 
   const fetchInfo = () => { 
@@ -131,10 +139,11 @@ const handleCameraDecre = () => {
     setShow(false);
   };
 
-  const handleNext=()=>{
-  
-    navigate("/nvr")
-  }
+ const handleNext = () => {
+   navigate("/nvr");
+ };
+
+
   return (
     <>
     {/* <Registration/> */}
