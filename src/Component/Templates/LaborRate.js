@@ -437,7 +437,7 @@ function LaborRate() {
                                       {basePrice1 ? (
                                         <b>$ {basePrice1.toFixed(2)}</b>
                                       ) : (
-                                        <b>$ {basePrice.toFixed(2)}</b>
+                                        <b>$ 0</b>
                                       )}
                                     </th>
                                   </tr>
@@ -465,7 +465,7 @@ function LaborRate() {
                 <Button
                   variant="dark"
                   onClick={handleCablingData}
-                  disabled={basePrice === 0}
+                  disabled={basePrice1 === 0}
                 >
                   Add
                 </Button>
@@ -500,7 +500,7 @@ function LaborRate() {
                         <td>$ {item.totalPriceForItem.toFixed(2)}</td>
                         <td>
                           <Button
-                            variant="danger"
+                            variant="dark"
                             onClick={() => handleDelete(index)}
                           >
                             Delete
