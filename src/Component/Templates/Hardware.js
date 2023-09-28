@@ -13,9 +13,8 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import { useNavigate } from "react-router-dom";
 import noImage from "../../no_Image.jpg";
 import { useSelector, useDispatch } from "react-redux";
-import { setSelectedHardWare } from "../../app/features/counter/counterSlice";
+import { setSelectedHardWare,setFinalData } from "../../app/features/counter/counterSlice";
 import { Link } from "react-router-dom";
-
 
 
 let globalState;
@@ -44,17 +43,18 @@ function MyVerticallyCenteredModal(props) {
       HardWare_Name: props.data.id,
       HardWare_Base_Price: props.data.price,
       HardWare_Quantity: count,
+      HardWare_Final_Price : HardWare_Final_Price
     });
   }, [props.data.id, props.data.price, count]);
 
 
   // (3)
-  const [showPrice, setshowPrice] = useState([]);
+  const [HardWare_Final_Price, setHardWare_Final_Price] = useState([]);
   const calculateTotalPrice = () => {
     const basePrice = props.data.price;
     const countQuantity = count;
     const countPlusBasePrice = basePrice * count;
-    setshowPrice(countPlusBasePrice);
+    setHardWare_Final_Price(countPlusBasePrice);
   };
 
   //(4) Adding Two state (my state + finalPrice) into > mergedState
@@ -62,17 +62,19 @@ function MyVerticallyCenteredModal(props) {
   const updateMergedState = () => {
     setMergedState({
       ...finalNewState,
-      showPrice,
+      HardWare_Final_Price,
     });
   };
   React.useEffect(() => {
     updateMergedState();
-  }, [finalNewState, showPrice]);
+  }, [finalNewState, HardWare_Final_Price]);
 
   //(5) Sending State to Redux after "add" button click
   function addSwitchesQuantity() {
     dispatch(setSelectedHardWare(mergedState));
+    dispatch(setFinalData(mergedState))
     props.onHide(false); // Modal Close
+    
   }
   globalState = mergedState;
 
@@ -81,7 +83,7 @@ function MyVerticallyCenteredModal(props) {
   const resetForm = () => {
     setFinalNewState({});
     setCount(1);
-    setshowPrice(0);
+    setHardWare_Final_Price(0);
   };
 
   React.useEffect(() => {
@@ -99,8 +101,6 @@ function MyVerticallyCenteredModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-
-  
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           {props.data.id}
@@ -165,7 +165,7 @@ function MyVerticallyCenteredModal(props) {
                         <tr>
                           <th>
                             <b>$</b>
-                            {showPrice}
+                            {HardWare_Final_Price}
                           </th>
                         </tr>
                       </thead>
@@ -200,7 +200,9 @@ function MyVerticallyCenteredModal(props) {
           Back
         </Button>
         {/* <Button variant="dark" onClick={() => navigate("/cameras")} >Add</Button> */}
-        <Button variant="dark" onClick={addSwitchesQuantity}>Add</Button>
+        <Button variant="dark" onClick={addSwitchesQuantity}>
+          Add
+        </Button>
       </Modal.Footer>
     </Modal>
   );
@@ -213,7 +215,10 @@ function Hardware() {
   const selectedCameraNumber = useSelector(
     (state) => state.counter1.totalCamera
   ); // Showing Camera Number Data
-  const selectedHardware = useSelector((state) => state.counter1.selectedHardWare); // Showing Switch Details Data
+  const selectedHardware = useSelector(
+    (state) => state.counter1.selectedHardWare
+  ); // Showing Switch Details Data
+ 
 
   // Modal state-1
   const [modalShow, setModalShow] = React.useState(false);
@@ -249,16 +254,14 @@ function Hardware() {
     });
   }
 
-
-if (selectedHardware=='') {
-  console.log('true')
-} else {
-  console.log('false')
-}
+  if (selectedHardware == "") {
+    console.log("true");
+  } else {
+    console.log("false");
+  }
   return (
     <>
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
-
         <Container>
           <Row style={{ backgroundColor: "" }}>
             <Col style={{ backgroundColor: "" }}>
@@ -269,13 +272,13 @@ if (selectedHardware=='') {
             {/* Right */}
             <Col className="" style={{ backgroundColor: "" }}>
               <Row>
-              <Col className="text-end">
-                Total Number of Cameras:&nbsp;
+                <Col className="text-end">
+                  Total Number of Cameras:&nbsp;
                   <span className="fw-bold">{selectedCameraNumber}</span>
                 </Col>
               </Row>
               <Row>
-              <Col className="text-end">
+                <Col className="text-end">
                   <Link to="/">
                     <h6>
                       Edit here <span className="fw-bold"></span>
@@ -349,31 +352,23 @@ if (selectedHardware=='') {
                       {/* <td>1</td> */}
                       <td>{selectedHardware.HardWare_Quantity}</td>
                       <td>{selectedHardware.HardWare_Name}</td>
-                      <td>  {selectedHardware.HardWare_Base_Price}</td>
+                      <td> {selectedHardware.HardWare_Base_Price}</td>
                     </tr>
 
                     {/* Final Section */}
 
-                    {
-                      selectedHardware == '' ? 
-                      (
-                            null
-                      )
-                      :
-                      (
-                        <tr>
+                    {selectedHardware == "" ? null : (
+                      <tr>
                         <th></th>
                         <td>
                           <b>Total (Price) :</b>
                         </td>
                         <td>
-                          <b>${selectedHardware.showPrice}</b>
+                          <b>${selectedHardware.HardWare_Final_Price}</b>
                         </td>
-                      
                       </tr>
-                      )
-                    }
-                    
+                    )}
+
                     {/* Final Section */}
                   </tbody>
                 </Table>

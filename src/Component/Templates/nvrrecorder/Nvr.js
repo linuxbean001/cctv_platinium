@@ -11,7 +11,7 @@ import Papa from "papaparse";
 import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import { useSelector, useDispatch } from "react-redux";
-import { setSelectedNVR,deleteNVR } from "../../../app/features/counter/counterSlice";
+import { setSelectedNVR,deleteNVR,setFinalData } from "../../../app/features/counter/counterSlice";
 
 //Modal Starts Here
 function MyVerticallyCenteredModal(props) {
@@ -42,10 +42,9 @@ function MyVerticallyCenteredModal(props) {
     setFinalNewState({
       NVR_Name: props.dataforProduct.id,
       NVR_Base_Price: props.mainPrice,
-      NVR_Final_Price: "",
+      NVR_Final_Price: priceList,
       NVR_Quantity: count,
-      cart_final_price: priceList
-      
+      cart_final_price: priceList,
     });
   }, [props.dataforProduct.id, props.mainPrice, count, priceList]);
 
@@ -133,6 +132,7 @@ function MyVerticallyCenteredModal(props) {
 
   function addNvrQuantity() {
     dispatch(setSelectedNVR(props.mergedState));
+    dispatch(setFinalData(props.mergedState));
     props.onHide(false); // Modal Close
     setPriceList(0);
   }

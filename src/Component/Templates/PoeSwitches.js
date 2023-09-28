@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import noImage from "../../../src/no_Image.jpg";
 import Form from "react-bootstrap/Form";
 import { useSelector, useDispatch } from "react-redux";
-import { setSelectedPoE } from "../../app/features/counter/counterSlice";
+import { setSelectedPoE,setFinalData } from "../../app/features/counter/counterSlice";
 
 let globalState;
 
@@ -42,6 +42,7 @@ function MyVerticallyCenteredModal(props) {
       Port_Base_Price: props.dataForProduct.price,
       Port_Quantity: count,
       Extra_Field: props.dataForProduct.extra_field_3,
+      poeFinalPrice: poeFinalPrice,
     });
   }, [
     props.dataForProduct.id,
@@ -51,12 +52,12 @@ function MyVerticallyCenteredModal(props) {
   ]);
 
   // (3)
-  const [showPrice, setshowPrice] = useState([]);
+  const [poeFinalPrice, setPoeFinalPrice] = useState([]);
   const calculateTotalPrice = () => {
     const basePrice = props.dataForProduct.price;
     const countQuantity = count;
     const countPlusBasePrice = basePrice * count;
-    setshowPrice(countPlusBasePrice);
+    setPoeFinalPrice(countPlusBasePrice);
   };
 
   //(4) Adding Two state (my state + finalPrice) into > mergedState
@@ -64,18 +65,19 @@ function MyVerticallyCenteredModal(props) {
   const updateMergedState = () => {
     setMergedState({
       ...finalNewState,
-      showPrice,
+      poeFinalPrice,
     });
   };
   React.useEffect(() => {
     updateMergedState();
-  }, [finalNewState, showPrice]);
+  }, [finalNewState, poeFinalPrice]);
 
   console.log('xxx',finalNewState)
 
   //(5) Sending State to Redux after "add" button click
   function addSwitchesQuantity() {
     dispatch(setSelectedPoE(mergedState));
+    dispatch(setFinalData(mergedState));
     props.onHide(false); // Modal Close
   }
   globalState = mergedState;
@@ -85,7 +87,7 @@ function MyVerticallyCenteredModal(props) {
 const resetForm = () => {
     setFinalNewState({});
     setCount(1);
-    setshowPrice(0);
+    setPoeFinalPrice(0);
   };
 
   React.useEffect(() => {
@@ -150,14 +152,14 @@ const resetForm = () => {
               </Row>
 
               {/* Final Price */}
-              <Row  className='my-5'>
+              <Row className="my-5">
                 <div className="w-100 d-flex align-items-start">
                   <Button variant="dark" onClick={calculateTotalPrice}>
                     Final Price
                   </Button>
                 </div>
                 <div className="w-100 my-3 d-flex align-items-start">
-                  <div >
+                  <div>
                     <Table
                       striped
                       bordered
@@ -168,7 +170,7 @@ const resetForm = () => {
                       <thead>
                         <tr>
                           <th>
-                            <b className="fs-5">${showPrice}</b>
+                            <b className="fs-5">${poeFinalPrice}</b>
                           </th>
                         </tr>
                       </thead>
@@ -426,7 +428,7 @@ function PoeSwitches() {
                             <td>{val.Port_Quantity}</td>
                             <td>{val.Port_Name}</td>
                             <td> $ {val.Port_Base_Price} / pcs</td>
-                            <td> $ {val.showPrice} </td>
+                            <td> $ {val.poeFinalPrice} </td>
                             <td> {val.Extra_Field} </td>
                           </tr>
                         </>

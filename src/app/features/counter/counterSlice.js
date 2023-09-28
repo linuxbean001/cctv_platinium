@@ -9,6 +9,7 @@ const initialState = {
   selectedLabor : [],
   selectedPoE: [],
   selectedHardWare: [],
+  finalData : []
 };
 
 export const counterSlice = createSlice({
@@ -67,9 +68,9 @@ export const counterSlice = createSlice({
 
     //********************* Cabling *********************//
     setSelectedLabor: (state, action) => {
-       if (!Array.isArray(state.selectedLabor)) {
-         state.selectedLabor = [];
-       }
+      if (!Array.isArray(state.selectedLabor)) {
+        state.selectedLabor = [];
+      }
       state.selectedLabor.push(action.payload);
     },
     //********************* Cabling **********************//
@@ -81,7 +82,6 @@ export const counterSlice = createSlice({
     },
     //************** Remove Selected Cabling **************//
 
-
     // For PoE Switches
     setSelectedPoE: (state, action) => {
       state.selectedPoE.push(action.payload);
@@ -90,6 +90,10 @@ export const counterSlice = createSlice({
     // For HardWare
     setSelectedHardWare: (state, action) => {
       state.selectedHardWare = action.payload;
+    },
+    // For HardWare
+    setFinalData: (state, action) => {
+      state.finalData = action.payload;
     },
   },
 });
@@ -105,6 +109,7 @@ export const {
   setSelectedLabor,
   setSelectedPoE,
   setSelectedHardWare,
+  setFinalData,
   deleteNVR,
   deleteCamera,
   deleteCabling,

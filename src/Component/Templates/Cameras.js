@@ -7,8 +7,6 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 import Papa from "papaparse";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import noImage from "../../no_Image.jpg";
@@ -16,8 +14,8 @@ import Form from "react-bootstrap/Form";
 import {
   setSelectedCamera,
   deleteCamera,
+  setFinalData
 } from "../../../src/app/features/counter/counterSlice";
-
 import { useSelector, useDispatch } from "react-redux";
 
 function Cameras(props) {
@@ -25,48 +23,58 @@ function Cameras(props) {
   const dispatch = useDispatch();
   const selectedCameraNumber = useSelector(
     (state) => state.counter1.totalCamera
-  ); // Showing Camera Number Data
-  const [categoryCSV, setCategoryCSV] = useState([]); // for category csv
-  const [productCSV, setProductCSV] = useState([]); // for products csv
-  const [productOption, setProductOptionCSV] = useState([]); // product_options.csv data
+  );
+  const [categoryCSV, setCategoryCSV] = useState([]);
+  const [productCSV, setProductCSV] = useState([]);
+  const [productOption, setProductOptionCSV] = useState([]);
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
+  const [shows, setShows] = useState(false);
   const [count, setCount] = useState(1);
-
   const [thumbimg, setThumbimg] = useState([]);
   const [totalPriceInTable, setTotalPriceInTable] = useState(0);
-  //
   const [filteredData, setfilteredData] = useState([]);
   const [categoryName, setCategoryName] = useState([]);
   const [filteredData2, setfilteredData2] = useState([]);
   const [categoryName2, setCategoryName2] = useState([]);
-  // by sir
-  const [finalData, setFinalData] = useState([]);
-
-  console.log('apidata',categoryCSV)
-
-  // Store Data from Modal
-
+  const [finalDatas, setFinalDatas] = useState([]);
   const [dataProduct, setdataProduct] = useState({});
-
-  const [finalNewState, setFinalNewState] = useState({}); // state-1
-  const [finalNewState2, setFinalNewState2] = useState({}); // state-2
-  const [totalPrice, setTotalPrice] = useState(0); // 1+2+3+4 = 10 (child items)
+  const [finalNewState, setFinalNewState] = useState({});
+  const [finalNewState2, setFinalNewState2] = useState({});
+  const [totalPrice, setTotalPrice] = useState(0);
   const [isDisabled, setIsDisabled] = useState(false);
-  // const [priceData, setPriceData] = useState(0);
   const [priceList, setPriceList] = useState(0);
-  //Merging FinalState and FinalState2
   const [mergedState, setMergedState] = useState({});
-
-  // How many brackets you selected
   const [bracketNumber, setBracketNumber] = useState("");
-
-  // Redux
   const countCamera = useSelector((state) => state.counter1.selectedCamera);
-
   const tableData = countCamera;
 
+  //********************** Total Quantity(27sep) **********************//
+  const [totalQuantity, setTotalQuantity] = useState(0);
+  console.log("totalQuantity", totalQuantity);
+
+  React.useEffect(() => {
+    let totalQty = 0;
+    tableData.forEach((item) => {
+      totalQty += parseInt(item.Camera_Quantity, 10);
+    });
+    setTotalQuantity(totalQty);
+  }, [tableData]);
+  //********************** Total Quantity(27sep) **********************//
+
+  //********************** Warning Modal(27sep) ***********************//
+  const handleClose2 = () => setShows(false);
+  const handleShow2 = () => {
+    if (selectedCameraNumber != totalQuantity) {
+      setShows(true);
+    } else {
+      navigate("/Poe-switch");
+    }
+  };
+  //********************** Warning Modal(27sep) ***********************//
+
+  //************************ Total Price(27sep) ***********************//
   React.useEffect(() => {
     let total = 0;
     tableData.forEach((item) => {
@@ -74,6 +82,7 @@ function Cameras(props) {
     });
     setTotalPriceInTable(total);
   }, [tableData]);
+  //************************ Total Price(27sep) ***********************//
 
   const handleBracketChange = (event) => {
     setBracketNumber(event.target.value);
@@ -86,7 +95,7 @@ function Cameras(props) {
     });
   };
 
-  // Clearing Form Data
+  //************************ Clearing From Data ***********************//
   const resetState = () => {
     setBracketNumber("");
     setFinalNewState({});
@@ -102,31 +111,28 @@ function Cameras(props) {
       resetState();
     }
   }, [show2]);
-  //
+  //************************ Clearing From Data ***********************//
 
   React.useEffect(() => {
     updateMergedState();
   }, [finalNewState, finalNewState2]);
 
   function modal_3() {
-    // setShow3(true);
     dispatch(setSelectedCamera(mergedState));
+    dispatch(setFinalData(mergedState));
     setShow2(false);
   }
 
-  // Fetching APIs data
+  //************************ Fetching APIs data ***********************//
   React.useEffect(() => {
     const parseCSVFiles2 = async () => {
       try {
-        //Category CSV
         const categoryCSV = await fetch("assets/CSVs/categories.csv");
         const categoryArray1 = await categoryCSV.text();
         const products1 = Papa.parse(categoryArray1, { header: true }).data;
-        //Products CSV
         const productsCSV = await fetch("assets/CSVs/products.csv");
         const categoryArray2 = await productsCSV.text();
         const products2 = Papa.parse(categoryArray2, { header: true }).data;
-        // Product Options CSV
         const productOptionsCSV = await fetch(
           "assets/CSVs/products_options.csv"
         );
@@ -142,8 +148,9 @@ function Cameras(props) {
     };
     parseCSVFiles2();
   }, []);
+  //************************ Fetching APIs data ***********************//
 
-  // Category name coming from CAtegory.CSV
+  //************ Category name coming from CAtegory.CSV ***************//
   const handleButtonClick = (e, category_name) => {
     setCategoryName(category_name);
     setShow(true);
@@ -157,8 +164,9 @@ function Cameras(props) {
     });
     setfilteredData(cameraData2);
   };
+  //************ Category name coming from CAtegory.CSV ***************//
 
-  // Modal_1
+  //****************************** Modal_1 ****************************//
   function modal_1(e, item, id) {
     let firstIndex = -1;
     let lastIndex = -1;
@@ -195,7 +203,7 @@ function Cameras(props) {
       if (currentArray.length > 0) {
         separatedArrays.push([...currentArray]);
       }
-      setFinalData(separatedArrays);
+      setFinalDatas(separatedArrays);
     } else {
       console.log("No suitable data found in the data array with '83' cateId.");
     }
@@ -211,6 +219,7 @@ function Cameras(props) {
 
     setdataProduct(item);
   }
+  //****************************** Modal_1 ****************************//
 
   const cameraData = categoryCSV.filter((item) => {
     return item.category_parent && item.category_parent.includes("45");
@@ -229,11 +238,10 @@ function Cameras(props) {
 
   console.log(finalNewState);
 
-  // Below Code is responsible for filling finalNewState-2
-
+  //***** Below Code is responsible for filling finalNewState-2 *******//
   React.useEffect(() => {
     const initialSelectedOptions = {};
-    finalData.forEach((item) => {
+    finalDatas.forEach((item) => {
       if (item.length > 0) {
         const firstOption = item[0];
         initialSelectedOptions[firstOption.featurecaption] =
@@ -241,24 +249,24 @@ function Cameras(props) {
       }
     });
     setFinalNewState2(initialSelectedOptions);
-  }, [finalData]);
+  }, [finalDatas]);
+  //***** Below Code is responsible for filling finalNewState-2 *******//
 
-  // Handle Change
-
+  //************************** HandleChange ***************************//
   function handleSelectChange(e) {
     const { name, value } = e.target;
-    const selectedOption = finalData
+    const selectedOption = finalDatas
       .flat()
       .find((option) => option.featurename === value);
 
     //
     const prevOptionPrice =
       finalNewState2[name] &&
-      finalData
+      finalDatas
         .flat()
         .find((option) => option.featurename === finalNewState2[name])
         ? parseFloat(
-            finalData
+            finalDatas
               .flat()
               .find((option) => option.featurename === finalNewState2[name])
               .featureprice
@@ -276,9 +284,9 @@ function Cameras(props) {
       [name]: value,
     }));
   }
+  //************************** HandleChange ***************************//
 
-  // Increasing Count Value
-
+  //*************** Increasing & Decrease Count Value *****************//
   const handlePlusClick = () => {
     setCount(count + 1);
   };
@@ -288,17 +296,21 @@ function Cameras(props) {
       setCount(count - 1);
     }
   };
+  //*************** Increasing & Decrease Count Value *****************//
 
-  // calculate price
+  //************************ calculate price **************************//
   const calculateTotalPrice = () => {
     setIsDisabled(true);
     const newTotalPrice = parseInt(dataProduct.price) + parseInt(totalPrice);
     setPriceList(newTotalPrice * count);
   };
+  //************************ calculate price **************************//
 
+  //************************* Delete Camera ***************************//
   const deleteFromCamera = (index) => {
     dispatch(deleteCamera(index));
   };
+  //************************* Delete Camera ***************************//
 
   return (
     <>
@@ -381,8 +393,8 @@ function Cameras(props) {
                   <thead>
                     <tr>
                       <th>#</th> {/* Add a new column for the serial number */}
-                      <th>QTY: </th>
-                      <th>Camera Selected: </th>
+                      <th>Camera Selected:</th>
+                      <th>QTY:</th>
                       <th>Brackets: </th>
                       <th>Total: </th>
                       <th>Action</th>
@@ -394,8 +406,8 @@ function Cameras(props) {
                       return (
                         <tr key={val}>
                           <td>{index + 1}</td> {/* Display the serial number */}
-                          <td>{val.Camera_Quantity}</td>
                           <td>{val.Camera_Name}</td>
+                          <td>{val.Camera_Quantity}</td>
                           <td> {val.Bracket_Selected} pcs</td>
                           <td>$ {val.Camera_Final_Price}</td>
                           <td>
@@ -413,10 +425,10 @@ function Cameras(props) {
                     {/* Final Section */}
                     <tr>
                       <th></th>
-                      <td></td>
                       <td>
                         <b>Total Price</b>
                       </td>
+                      <td>{totalQuantity}</td>
                       <td></td>
                       <td>$ {totalPriceInTable}</td>
                       <td></td>
@@ -432,7 +444,7 @@ function Cameras(props) {
 
           <Row className="my-4" style={{ backgroundColor: "" }}>
             <Col className="d-flex justify-content-end">
-              <Button variant="dark" onClick={() => navigate("/poe-switch")}>
+              <Button variant="dark" onClick={handleShow2}>
                 Next
               </Button>
             </Col>
@@ -631,7 +643,7 @@ function Cameras(props) {
 
                           {/* Add Dropdown */}
 
-                          {finalData.map((item, index) => {
+                          {finalDatas.map((item, index) => {
                             // if (item[0].featurecaption === "Mounting Bracket") {
                             //   return null;
                             // }
@@ -753,6 +765,29 @@ function Cameras(props) {
               </div>
             </Modal.Footer>
           </Modal>
+
+          {/***************************** Warning Modal(27sep) ****************************/}
+          <Modal show={shows} onHide={handleClose2}>
+            <Modal.Header closeButton>
+              <Modal.Title>
+                <h6>
+                  {" "}
+                  <span style={{ color: "red" }}>Warning!</span>&nbsp; Number of
+                  cameras is not equal to quantity of cameras.
+                </h6>
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Are you sure want to continue</Modal.Body>
+            <Modal.Footer>
+              <Button variant="dark" onClick={handleClose2}>
+                Go Back
+              </Button>
+              <Button variant="dark" onClick={() => navigate("/Poe-switch")}>
+                Continue Anyways
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          {/***************************** Warning Modal(27sep) ****************************/}
         </Container>
       </Container>
     </>

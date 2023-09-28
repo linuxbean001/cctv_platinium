@@ -15,7 +15,8 @@ import noImage from "../../no_Image.jpg";
 import Form from "react-bootstrap/Form";
 import {
   setSelectedLabor,
-  deleteLabor
+  deleteLabor,
+  setFinalData
 } from "../../../src/app/features/counter/counterSlice";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -158,6 +159,7 @@ function LaborRate() {
       totalPriceForItem: totalPriceForItem,
     };
     dispatch(setSelectedLabor(newItem));
+    dispatch(setFinalData(newItem));
     setCartItems((prevCartItems) => [...prevCartItems, newItem]);
     setTotalPrice((prevTotalPrice) => prevTotalPrice + totalPriceForItem);
     setCount(1);

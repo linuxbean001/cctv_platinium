@@ -15,6 +15,7 @@ import noImage from "../../no_Image.jpg";
 import {
   setSelectedCabling,
   deleteCabling,
+  setFinalData
 } from "../../../src/app/features/counter/counterSlice";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -153,6 +154,7 @@ function Cabling() {
       totalPriceForItem: totalPriceForItem,
     };
     dispatch(setSelectedCabling(newItem));
+    dispatch(setFinalData(newItem));
     setCartItems((prevCartItems) => [...prevCartItems, newItem]);
     setTotalPrice((prevTotalPrice) => prevTotalPrice + totalPriceForItem);
     setCount(1);
@@ -294,22 +296,22 @@ function Cabling() {
                     </tr>
                   </thead>
                   <tbody>
-                    {cartItems.map((item, index) => (
-                      <tr key={index}>
-                        <td>{index + 1}</td>
-                        <td>{item.quantity}</td>
-                        <td>{item.pricePerItem}</td>
-                        <td>$ {item.totalPriceForItem.toFixed(2)}</td>
-                        <td>
-                          <Button
-                            variant="danger"
-                            onClick={() => handleDelete(index)}
-                          >
-                            Delete
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
+                      {cartItems.map((item, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{item.quantity}</td>
+                          <td>{item.pricePerItem}</td>
+                          <td>$ {item.totalPriceForItem.toFixed(2)}</td>
+                          <td>
+                            <Button
+                              variant="danger"
+                              onClick={() => handleDelete(index)}
+                            >
+                              Delete
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
                     {/* Final Section */}
                     <tr>
                       <th></th>
