@@ -199,8 +199,11 @@ function MyVerticallyCenteredModal(props) {
         <Button variant="dark" onClick={props.onHide}>
           Back
         </Button>
-        {/* <Button variant="dark" onClick={() => navigate("/cameras")} >Add</Button> */}
-        <Button variant="dark" onClick={addSwitchesQuantity}>
+        <Button
+          variant="dark"
+          onClick={addSwitchesQuantity}
+          disabled={HardWare_Final_Price === 0}
+        >
           Add
         </Button>
       </Modal.Footer>

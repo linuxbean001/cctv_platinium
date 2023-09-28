@@ -462,7 +462,11 @@ function LaborRate() {
                 >
                   Back
                 </Button>
-                <Button variant="dark" onClick={handleCablingData}>
+                <Button
+                  variant="dark"
+                  onClick={handleCablingData}
+                  disabled={basePrice === 0}
+                >
                   Add
                 </Button>
               </div>

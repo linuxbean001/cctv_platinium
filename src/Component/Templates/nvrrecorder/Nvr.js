@@ -13,6 +13,7 @@ import Form from "react-bootstrap/Form";
 import { useSelector, useDispatch } from "react-redux";
 import { setSelectedNVR,deleteNVR,setFinalData } from "../../../app/features/counter/counterSlice";
 
+//Modal Starts Here
 function MyVerticallyCenteredModal(props) {
   const [finalNewState, setFinalNewState] = useState({}); // state-1
   const [finalNewState2, setFinalNewState2] = useState({}); // state-2
@@ -21,9 +22,12 @@ function MyVerticallyCenteredModal(props) {
   const [totalPrice, setTotalPrice] = useState(0); // 1+2+3+4 = 10 (child items)
   const [finalPrice, setFinalPrice] = useState(0);
 
+  //------------- ChangesFinat Total Card Price -----------------//
+  // const [priceData, setPriceData] = useState(0);
   const [priceList, setPriceList] = useState(0);
   const [isDisabled, setIsDisabled] = useState(false);
-  
+  //------------- ChnagesFinat Total Card Price -----------------//
+
   // Passing State-1
   React.useEffect(() => {
     props.onTestChange1(finalNewState);
@@ -140,8 +144,6 @@ function MyVerticallyCenteredModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-
-
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           {props.dataforProduct.id}
@@ -290,7 +292,11 @@ function MyVerticallyCenteredModal(props) {
           >
             Back
           </Button>
-          <Button variant="dark" onClick={addNvrQuantity}>
+          <Button
+            variant="dark"
+            onClick={addNvrQuantity}
+            disabled={priceList === 0}
+          >
             Add
           </Button>
         </div>
@@ -323,6 +329,7 @@ function Nvr(props) {
   const [idforOptions, setIdforOptions] = useState([]);
   const [extra, setExtra] = useState([]);
   const [finalData, setFinalData] = useState([]);
+  // Warning Modals state
   const [show2, setShow2] = useState(false);
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => {
@@ -332,6 +339,8 @@ function Nvr(props) {
       navigate("/cameras");
     }
   };
+
+  // Table Added by Prashant
   const calculateTotalPrice = () => {
     let totalPrice = 0;
     tableData.forEach((val) => {
@@ -339,6 +348,9 @@ function Nvr(props) {
     });
     return totalPrice.toFixed(2);
   };
+
+  // const [aaa, setAAA] = useState([]);
+
   const calculateTotalLicenses = () => {
     let totalLicenses = 0;
     tableData.forEach((val) => {
@@ -348,6 +360,9 @@ function Nvr(props) {
     return totalLicenses;
   };
 
+  // Table Added by Prashant Ends
+
+  // Merging Start
   const updateMergedState = () => {
     setMergedState({
       ...formData1,
@@ -355,9 +370,13 @@ function Nvr(props) {
     });
   };
 
+  // Everytime Product added, it'll console the value (Just for console)
+
   useEffect(() => {
     // console.log(selectedNvrDetails);
   }, [selectedNvrDetails]);
+
+  // Ends
 
   const tableData = selectedNvrDetails;
 
@@ -473,10 +492,14 @@ function Nvr(props) {
     }
   });
 
+  // Delete By Ravi
+
   function deleteFromTable(index)
   {
     dispatch(deleteNVR(index))
   }
+
+
   return (
     <>
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
@@ -502,6 +525,21 @@ function Nvr(props) {
                   <span className="fw-bold">{calculateTotalLicenses()}</span>
                 </Col>
               </Row>
+
+              {/* <Row>
+                <Col className="text-end">
+                  Number of Options: &nbsp;
+                  <span className="fw-bold">{selectedCameraNumber}</span>
+                </Col>
+              </Row> */}
+              {/* <Row>
+                <Col className="text-end">
+                  <h6>
+                    Number of Licenses :
+                    <span className="fw-bold">{selectedCameraNumber.totalCamera}</span>
+                  </h6>
+                </Col>
+              </Row> */}
             </Col>
           </Row>
 

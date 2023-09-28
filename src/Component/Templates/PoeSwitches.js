@@ -170,7 +170,7 @@ const resetForm = () => {
                       <thead>
                         <tr>
                           <th>
-                            <b className="fs-5">${poeFinalPrice}</b>
+                            <b className="fs-5">$ {poeFinalPrice}</b>
                           </th>
                         </tr>
                       </thead>
@@ -209,7 +209,11 @@ const resetForm = () => {
         <Button variant="dark" onClick={props.onHide}>
           Back
         </Button>
-        <Button variant="dark" onClick={addSwitchesQuantity}>
+        <Button
+          variant="dark"
+          onClick={addSwitchesQuantity}
+          disabled={poeFinalPrice === 0}
+        >
           Add
         </Button>
       </Modal.Footer>

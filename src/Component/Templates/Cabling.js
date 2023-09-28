@@ -19,8 +19,10 @@ import {
 } from "../../../src/app/features/counter/counterSlice";
 import { useSelector, useDispatch } from "react-redux";
 
+const onlineImageURL =
+  "https://images.pexels.com/photos/326508/pexels-photo-326508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+
 function Cabling() {
-  const navigate = useNavigate();
   const selectedCameraNumber = useSelector(
     (state) => state.counter1.totalCamera
   );
@@ -31,9 +33,9 @@ function Cabling() {
   const [productOption, setProductOptionCSV] = useState([]); // product_options.csv data
   const [count, setCount] = useState(1);
   // Filtered Data
+  const navigate = useNavigate();
   const [filteredData, setfilteredData] = useState([]);
   const [filteredData2, setfilteredData2] = useState([]);
-  //modal state
   const [show, setShow] = useState(false);
   // Warning Modals state
   const [show2, setShow2] = useState(false);
@@ -45,7 +47,7 @@ function Cabling() {
   // Data sent in Modal
   const [dataforProduct, setdataForProduct] = useState([]);
   const [priceCab, setPriceCab] = useState(0);
-  const [initialPrice, setInitialPrice] = useState(0);
+  const [basePrice, setBasePrice] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const dispatch = useDispatch();
 
@@ -127,14 +129,14 @@ function Cabling() {
         iamge4: image4,
         price: selectedProduct.price,
       });
-      setInitialPrice(parseFloat(selectedProduct.price));
+      setBasePrice(parseFloat(selectedProduct.price));
     }
   }
   //****************** Changes Saturday *******************//
 
   //****************** Changes Saturday *******************//
   const calculatePrice = () => {
-    const priceCabling = initialPrice * count;
+    const priceCabling = basePrice * count;
     setPriceCab(priceCabling);
   };
   //****************** Changes Saturday *******************//
@@ -142,12 +144,12 @@ function Cabling() {
   //****************** Changes Saturday *******************//
   const handleCablingData = () => {
     setShow(false);
-    const totalPriceForItem = initialPrice * count;
+    const totalPriceForItem = basePrice * count;
     const newItem = {
       id: dataforProduct.id,
       name: dataforProduct.name,
       quantity: count,
-      pricePerItem: initialPrice,
+      pricePerItem: basePrice,
       totalPriceForItem: totalPriceForItem,
     };
     dispatch(setSelectedCabling(newItem));
@@ -293,22 +295,22 @@ function Cabling() {
                     </tr>
                   </thead>
                   <tbody>
-                      {cartItems.map((item, index) => (
-                        <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>{item.quantity}</td>
-                          <td>{item.pricePerItem}</td>
-                          <td>$ {item.totalPriceForItem.toFixed(2)}</td>
-                          <td>
-                            <Button
-                              variant="danger"
-                              onClick={() => handleDelete(index)}
-                            >
-                              Delete
-                            </Button>
-                          </td>
-                        </tr>
-                      ))}
+                    {cartItems.map((item, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{item.quantity}</td>
+                        <td>{item.pricePerItem}</td>
+                        <td>$ {item.totalPriceForItem.toFixed(2)}</td>
+                        <td>
+                          <Button
+                            variant="danger"
+                            onClick={() => handleDelete(index)}
+                          >
+                            Delete
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
                     {/* Final Section */}
                     <tr>
                       <th></th>
@@ -456,7 +458,11 @@ function Cabling() {
           <Button variant="dark" onClick={() => setShow(false)}>
             Back
           </Button>
-          <Button variant="dark" onClick={handleCablingData}>
+          <Button
+            variant="dark"
+            onClick={handleCablingData}
+            disabled={priceCab === 0}
+          >
             Add
           </Button>
         </Modal.Footer>

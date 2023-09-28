@@ -6,25 +6,34 @@ import { Container, Row, Col, Table, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 
 function Pdf() {
+  //**************************** Data Section *****************************//
   const Nvr = useSelector((state) => state.counter1.selectedNVR);
   const camera = useSelector((state) => state.counter1.selectedCamera);
   const cabling = useSelector((state) => state.counter1.selectedCabling);
   const labor = useSelector((state) => state.counter1.selectedLabor);
   const poe = useSelector((state) => state.counter1.selectedPoE);
   const hard = useSelector((state) => state.counter1.selectedHardWare);
+  const special = useSelector((state) => state.counter1.selectedSpecial);
+  console.log("special", hard.length);
+  //**************************** Data Section *****************************//
+
   const downloadPDF = () => {
     const input = document.getElementById("tableToConvert");
-
     const downloadButton = document.getElementById("downloadButton");
     downloadButton.style.display = "none";
 
+    const pdfWidth = 210; // Width of the PDF page
+    const pdfHeight = 297; // Height of the PDF page
+
     html2canvas(input).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF();
-      const imgWidth = 210;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const pdf = new jsPDF("p", "mm", "a4"); // Create PDF using A4 dimensions
 
-      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+      // Calculate the aspect ratio to maintain the content's original aspect ratio
+      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      // Add the image to the PDF and position it to cover the entire page
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, imgHeight);
       pdf.save("converted.pdf");
 
       downloadButton.style.display = "block";
@@ -33,6 +42,7 @@ function Pdf() {
 
   return (
     <div className="p-3">
+      {/* pdf data section */}
       <div id="tableToConvert">
         <div className="border border-indigo-600 mt-5">
           <Container fluid style={{ backgroundColor: "#21252938" }}>
@@ -119,22 +129,55 @@ function Pdf() {
                             <td>$ {item.poeFinalPrice}</td>
                           </tr>
                         ))}
-                        <tr>
-                          <td>
-                            {" "}
-                            {Nvr.length +
-                              camera.length +
-                              cabling.length +
-                              labor.length +
-                              poe.length +
-                              +1}
-                          </td>
-                          <td>Hardware</td>
-                          <td>{hard.HardWare_Name}</td>
-                          <td>{hard.HardWare_Quantity}</td>
-                          <td>$ {hard.HardWare_Base_Price}</td>
-                          <td>$ {hard.HardWare_Final_Price}</td>
-                        </tr>
+                        {special.map((item, index) => (
+                          <tr key={index}>
+                            <td>
+                              {Nvr.length +
+                                camera.length +
+                                cabling.length +
+                                labor.length +
+                                poe.length +
+                                index +
+                                1}
+                            </td>
+                            <td>Special</td>
+                            <td>{item.id}</td>
+                            <td>{item.quantity}</td>
+                            <td>$ {item.pricePerItem}</td>
+                            <td>$ {item.totalPriceForItem}</td>
+                          </tr>
+                        ))}
+                        {hard.HardWare_Final_Price && (
+                          <tr>
+                            <td>
+                              {" "}
+                              {Nvr.length +
+                                camera.length +
+                                cabling.length +
+                                labor.length +
+                                poe.length +
+                                special.length +
+                                +1}
+                            </td>
+                            <td>Hardware</td>
+                            <td>{hard.HardWare_Name}</td>
+                            <td>{hard.HardWare_Quantity}</td>
+                            <td>$ {hard.HardWare_Base_Price}</td>
+                            <td>$ {hard.HardWare_Final_Price}</td>
+                          </tr>
+                        )}
+                        {/* <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                              <b>Total Price</b>
+                            </td>
+                            <td>
+                              <b>$</b>{" "}
+                            </td>
+                          </tr> */}
                       </tbody>
                     </Table>
                   </div>
@@ -149,6 +192,7 @@ function Pdf() {
           </Container>
         </div>
       </div>
+      {/* pdf data section */}
     </div>
   );
 }
