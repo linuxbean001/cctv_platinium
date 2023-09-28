@@ -535,7 +535,7 @@ function Special() {
                         <td>$ {item.totalPriceForItem.toFixed(2)}</td>
                         <td>
                           <Button
-                            variant="danger"
+                            variant="dark"
                             onClick={() => handleDelete(index)}
                           >
                             Delete
