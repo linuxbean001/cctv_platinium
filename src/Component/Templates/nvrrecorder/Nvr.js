@@ -632,7 +632,7 @@ function Nvr(props) {
                           <td>{val["Number of IP Licenses"]}</td>
                           <td>
                             {" "}
-                            <Button variant="danger" onClick={()=>deleteFromTable(index)}>Delete</Button>
+                            <Button variant="dark" onClick={()=>deleteFromTable(index)}>Delete</Button>
                           </td>
                         </tr>
                       );

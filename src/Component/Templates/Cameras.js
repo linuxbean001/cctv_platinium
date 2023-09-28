@@ -413,7 +413,7 @@ function Cameras(props) {
                           <td>
                             {" "}
                             <Button
-                              variant="danger"
+                              variant="dark"
                               onClick={() => deleteFromCamera(index)}
                             >
                               Delete
