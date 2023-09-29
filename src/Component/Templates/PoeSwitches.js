@@ -487,7 +487,7 @@ function PoeSwitches() {
                         <b>Total Price :</b>
                       </td>
                       <td>
-                        <b>$ {totalValue}</b>
+                        <b>$ {totalValue.toFixed(2)}</b>
                       </td>
 
                       <td>

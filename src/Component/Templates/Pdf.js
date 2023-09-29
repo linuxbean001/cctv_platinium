@@ -23,7 +23,11 @@ function Pdf() {
   const downloadPDF = () => {
     const input = document.getElementById("tableToConvert");
     const downloadButton = document.getElementById("downloadButton");
+    const downloadButtons = document.getElementById("downloadButtons");
+
     downloadButton.style.display = "none";
+    downloadButtons.style.display = "none";
+
 
     const pdfWidth = 210; // Width of the PDF page
     const pdfHeight = 297; // Height of the PDF page
@@ -40,6 +44,8 @@ function Pdf() {
       pdf.save("converted.pdf");
 
       downloadButton.style.display = "block";
+      downloadButtons.style.display = "block";
+
     });
   };
 
@@ -200,7 +206,7 @@ function Pdf() {
           <Row className="my-4" style={{ backgroundColor: "", marginRight:"15px" }}>
             <Col className="d-flex justify-content-end">
               {/* <Button variant="dark">Previous</Button> */}
-              <Button variant="dark" onClick={handleNext}>
+              <Button variant="dark" onClick={handleNext} id="downloadButtons">
                 Next
               </Button>
             </Col>

@@ -146,7 +146,7 @@ const handleCameraDecre = () => {
 
   return (
     <>
-    {/* <Registration/> */}
+    <Registration/>
 
       <Container className="my-4" fluid style={{ backgroundColor: "" }}>
         <Row className="p-1">

@@ -48,8 +48,23 @@ function Cameras(props) {
   const [mergedState, setMergedState] = useState({});
   const [bracketNumber, setBracketNumber] = useState("");
   const [totalBracket, setTotalBracket] = useState(0);
+  const [totalQty, setTotalQty] = useState(0);
   const countCamera = useSelector((state) => state.counter1.selectedCamera);
   const tableData = countCamera;
+
+  //********************** Total Bracket(27sep) **********************//
+  console.log("totalBracket", totalBracket);
+
+  React.useEffect(() => {
+    let totalCty = 0;
+    tableData.forEach((item) => {
+      console.log(item);
+      totalCty += parseInt(item.Camera_Quantity, 10);
+    });
+    setTotalQty(totalCty);
+  }, [tableData]);
+
+  //********************** Total Bracket(27sep) **********************//
 
   //********************** Total Bracket(27sep) **********************//
   console.log("totalBracket", totalBracket);
@@ -77,7 +92,7 @@ function Cameras(props) {
   //********************** Warning Modal(27sep) ***********************//
   const handleClose2 = () => setShows(false);
   const handleShow2 = () => {
-    if (selectedCameraNumber > totalBracket) {
+    if (selectedCameraNumber > totalQty) {
       setShows(true);
     } else {
       navigate("/Poe-switch");
@@ -441,10 +456,11 @@ function Cameras(props) {
                     {/* Final Section */}
                     <tr>
                       <th></th>
-                      <td></td>
                       <td>
-                        <b>Total Price</b>
+                        {" "}
+                        <b>Total Price</b>{" "}
                       </td>
+                      <td>{totalQty}</td>
                       <td>{totalBracket}</td>
                       <td>$ {totalPriceInTable}</td>
                       <td></td>
