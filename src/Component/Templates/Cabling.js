@@ -6,10 +6,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
-// import "./index.css";
 import Papa from "papaparse";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
 import { Navigate, useNavigate } from "react-router-dom";
 import noImage from "../../no_Image.jpg";
 import {
@@ -19,8 +16,6 @@ import {
 } from "../../../src/app/features/counter/counterSlice";
 import { useSelector, useDispatch } from "react-redux";
 
-const onlineImageURL =
-  "https://images.pexels.com/photos/326508/pexels-photo-326508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
 
 function Cabling() {
   const selectedCameraNumber = useSelector(
@@ -159,17 +154,13 @@ function Cabling() {
     setCount(1);
     setPriceCab(0);
   };
-  //****************** Changes Saturday *******************//
 
-  //****************** Changes Saturday *******************//
   const handleClose = () => {
     setShow(false);
     setCount(1);
     setPriceCab(0);
   };
-  //****************** Changes Saturday *******************//
-
-  //****************** Changes Saturday *******************//
+  
   const handleDelete = (index) => {
     dispatch(deleteCabling(index));
     const updatedCartItems = [...cartItems];
@@ -181,7 +172,6 @@ function Cabling() {
     setCartItems(updatedCartItems);
     setTotalPrice(newTotalPrice);
   };
-  //****************** Changes Saturday *******************//
 
   return (
     <>
@@ -201,28 +191,6 @@ function Cabling() {
                   <span className="fw-bold">{selectedCameraNumber}</span>
                 </Col>
               </Row>
-              {/* <Row className="mb-2">
-                <Col className="text-end">
-                  <h6>
-                    Total Number of Drops : <span className="fw-bold">10</span>
-                  </h6>
-                </Col>
-              </Row>
-
-              <Row className="mb-2">
-                <Col className="text-end">
-                  <h6>
-                    Total Needed Cables : <span className="fw-bold">??</span>
-                  </h6>
-                </Col>
-              </Row>
-              <Row className="mb-2">
-                <Col className="text-end">
-                  <h6>
-                    Total Cables : <span className="fw-bold">??</span>
-                  </h6>
-                </Col>
-              </Row> */}
             </Col>
           </Row>
 
@@ -278,7 +246,6 @@ function Cabling() {
             })}
           </Row>
 
-          {/********************** Create TableData *********************/}
           <Row className="my-4" style={{ padding: "8px" }}>
             <Col>
               <h5 className="fw-bold">Add to Cart: </h5>
@@ -303,7 +270,7 @@ function Cabling() {
                         <td>$ {item.totalPriceForItem.toFixed(2)}</td>
                         <td>
                           <Button
-                            variant="danger"
+                            variant="dark"
                             onClick={() => handleDelete(index)}
                           >
                             Delete
@@ -311,7 +278,6 @@ function Cabling() {
                         </td>
                       </tr>
                     ))}
-                    {/* Final Section */}
                     <tr>
                       <th></th>
                       <td></td>
@@ -321,15 +287,11 @@ function Cabling() {
                       <td>$ {totalPrice.toFixed(2)}</td>
                       <td></td>
                     </tr>
-                    {/* Final Section */}
                   </tbody>
                 </Table>
               </div>
             </Col>
           </Row>
-          {/********************** Create TableData *********************/}
-
-          {/* Button */}
           <Row className="my-4" style={{ backgroundColor: "" }}>
             <Col className="d-flex justify-content-between">
               <Button variant="dark">Previous</Button>
@@ -467,26 +429,6 @@ function Cabling() {
           </Button>
         </Modal.Footer>
       </Modal>
-
-      {/* Warning Modal */}
-
-      {/* <Modal show={show2} onHide={handleClose2}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            {" "}
-            <h6> Warning ! There are less cameras and drops than cables</h6>{" "}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Are you sure want to continue</Modal.Body>
-        <Modal.Footer>
-          <Button variant="dark" onClick={handleClose2}>
-            Go Back
-          </Button>
-          <Button variant="dark" onClick={()=>navigate('/labor_rate')} >
-            Continue Anyways
-          </Button>
-        </Modal.Footer>
-      </Modal> */}
     </>
   );
 }

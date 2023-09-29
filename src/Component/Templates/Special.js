@@ -18,8 +18,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 
 
-const onlineImage =
-  "https://images.pexels.com/photos/3205735/pexels-photo-3205735.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
 
 function Special() {
   const [categoryCSV, setCategoriesCSV] = useState([]);
