@@ -7,12 +7,10 @@ import Col from "react-bootstrap/Col";
 import Modal from "react-bootstrap/Modal";
 
 function Registration() {
-  // Modal State
   const [show, setShow] = React.useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  //Modal Ends
 
   React.useEffect(() => {
     handleShow();
@@ -20,7 +18,6 @@ function Registration() {
 
   return (
     <>
-      {/* Modal Content */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Enter Customer Details :</Modal.Title>
@@ -30,7 +27,6 @@ function Registration() {
             <Row>
               <Col>
                 <Form>
-                  {/* Name */}
                   <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label> Customer Name</Form.Label>
                     <Form.Control
@@ -38,8 +34,6 @@ function Registration() {
                       placeholder="Enter Customer Name"
                     />
                   </Form.Group>
-
-                  {/* Business Name */}
 
                   <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label> Business Name</Form.Label>
@@ -49,14 +43,10 @@ function Registration() {
                     />
                   </Form.Group>
 
-                  {/* Email  */}
-
                   <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label> Email</Form.Label>
                     <Form.Control type="email" placeholder="Enter Email" />
                   </Form.Group>
-
-                  {/* Phone Number  */}
 
                   <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label> Phone Number</Form.Label>
@@ -65,8 +55,6 @@ function Registration() {
                       placeholder="Enter Phone Number"
                     />
                   </Form.Group>
-
-                  {/* Address  */}
 
                   <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label> Address</Form.Label>

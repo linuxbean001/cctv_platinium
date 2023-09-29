@@ -30,9 +30,8 @@ function RoutesMiddleware() {
           <Route exact path="/pdf" element={<Pdf />} />
           <Route exact path="/special" element={<Special />} />
 
-
           {/* Add the 404 route at the end */}
-          <Route path="*" element={<NoFound/>} />
+          <Route path="*" element={<NoFound />} />
         </Routes>
       </BrowserRouter>
     </div>

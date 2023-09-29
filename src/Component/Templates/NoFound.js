@@ -10,22 +10,22 @@ import { Link } from "react-router-dom";
 function NoFound() {
   const navigate = useNavigate();
 
-   const paths = [
-     ["/", "Home"],
-     ["/nvr", "NVR"],
-     ["/cameras", "Cameras"],
-     ["/poe-switch", "Poe Switch"],
-     ["/hardware", "Hardware"],
-     ["/special", "Special"],
-     ["/cabling", "Cabling"],
-     ["/labor_rate", "Labor Rate"],
-     ["/pdf", "PDF"],
-   ];
+  const paths = [
+    ["/", "Home"],
+    ["/nvr", "NVR"],
+    ["/cameras", "Cameras"],
+    ["/poe-switch", "Poe Switch"],
+    ["/hardware", "Hardware"],
+    ["/special", "Special"],
+    ["/cabling", "Cabling"],
+    ["/labor_rate", "Labor Rate"],
+    ["/pdf", "PDF"],
+  ];
 
-    const groupedPaths = [];
-    for (let i = 0; i < paths.length; i += 3) {
-      groupedPaths.push(paths.slice(i, i + 3));
-    }
+  const groupedPaths = [];
+  for (let i = 0; i < paths.length; i += 3) {
+    groupedPaths.push(paths.slice(i, i + 3));
+  }
 
   return (
     <>
@@ -48,7 +48,7 @@ function NoFound() {
                           <td
                             key={pathIndex}
                             onClick={() => navigate(path[0])}
-                            style={{cursor:"pointer"}}
+                            style={{ cursor: "pointer" }}
                           >
                             {path[1]}
                           </td>

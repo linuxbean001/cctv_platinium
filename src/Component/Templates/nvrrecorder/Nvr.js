@@ -11,29 +11,27 @@ import Papa from "papaparse";
 import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import { useSelector, useDispatch } from "react-redux";
-import { setSelectedNVR,deleteNVR,setFinalData } from "../../../app/features/counter/counterSlice";
+import {
+  setSelectedNVR,
+  deleteNVR,
+  setFinalData,
+} from "../../../app/features/counter/counterSlice";
 
-//Modal Starts Here
 function MyVerticallyCenteredModal(props) {
-  const [finalNewState, setFinalNewState] = useState({}); // state-1
-  const [finalNewState2, setFinalNewState2] = useState({}); // state-2
+  const [finalNewState, setFinalNewState] = useState({});
+  const [finalNewState2, setFinalNewState2] = useState({});
   const dispatch = useDispatch();
   const [count, setCount] = useState(1);
-  const [totalPrice, setTotalPrice] = useState(0); // 1+2+3+4 = 10 (child items)
+  const [totalPrice, setTotalPrice] = useState(0);
   const [finalPrice, setFinalPrice] = useState(0);
 
-  //------------- ChangesFinat Total Card Price -----------------//
-  // const [priceData, setPriceData] = useState(0);
   const [priceList, setPriceList] = useState(0);
   const [isDisabled, setIsDisabled] = useState(false);
-  //------------- ChnagesFinat Total Card Price -----------------//
 
-  // Passing State-1
   React.useEffect(() => {
     props.onTestChange1(finalNewState);
   }, [finalNewState]);
 
-  // Passing State-2
   React.useEffect(() => {
     props.onTestChange(finalNewState2);
   }, [finalNewState2]);
@@ -58,7 +56,6 @@ function MyVerticallyCenteredModal(props) {
 
   useEffect(() => {
     if (!props.show) {
-      // Modal is closed, reset the form
       resetForm();
     }
   }, [props.show]);
@@ -82,7 +79,6 @@ function MyVerticallyCenteredModal(props) {
       .flat()
       .find((option) => option.featurename === value);
 
-    // Get the previous option's price
     const prevOptionPrice =
       finalNewState2[name] &&
       props.finalData
@@ -96,7 +92,6 @@ function MyVerticallyCenteredModal(props) {
           )
         : 0;
 
-    // Calculate the price difference between the new and old option
     const optionPrice = selectedOption
       ? parseFloat(selectedOption.featureprice)
       : 0;
@@ -109,7 +104,6 @@ function MyVerticallyCenteredModal(props) {
     }));
   }
 
-  // --------- Changes Code ---------//
   const handlePlusClick = () => {
     setCount(count + 1);
   };
@@ -128,12 +122,10 @@ function MyVerticallyCenteredModal(props) {
     setPriceList(newTotalPrice * count);
   };
 
-  // Adding in Redux Store
-
   function addNvrQuantity() {
     dispatch(setSelectedNVR(props.mergedState));
     dispatch(setFinalData(props.mergedState));
-    props.onHide(false); // Modal Close
+    props.onHide(false);
     setPriceList(0);
   }
 
@@ -186,9 +178,7 @@ function MyVerticallyCenteredModal(props) {
                   />
                 </Col>
               </Row>
-              {/*------------------- Chnages Today ------------------*/}
 
-              {/* Final Price */}
               <Row className="tops">
                 <div className="w-100 d-flex align-items-start">
                   <Button variant="dark" onClick={calculateTotalPrice}>
@@ -215,9 +205,6 @@ function MyVerticallyCenteredModal(props) {
                   </div>
                 </div>
               </Row>
-              {/* Final Price */}
-
-              {/*------------------- Chnages Today ------------------*/}
             </Col>
 
             <Col md={8}>
@@ -228,9 +215,7 @@ function MyVerticallyCenteredModal(props) {
                   : "No Description found"}
               </p>
               <p className="fw-bold">Choose Options :</p>
-              {/* Options */}
 
-              {/* Form Section */}
               {props.finalData.map((item, index) => {
                 return (
                   <>
@@ -240,11 +225,9 @@ function MyVerticallyCenteredModal(props) {
                       aria-label="Default select example"
                       className="mb-3"
                       name={item[0].featurecaption}
-                      // value={props.formDataState[item[0].featurecaption] || ""}
                       value={finalNewState2[item[0].featurecaption] || ""}
                       onChange={(e) => handleSelectChange(e)}
                     >
-                      {/* <option>Select a option</option> */}
                       {item.map((option, optionIndex) => {
                         return (
                           <>
@@ -266,7 +249,6 @@ function MyVerticallyCenteredModal(props) {
                   </>
                 );
               })}
-              {/* Form Section */}
               <div
                 className="d-flex align-items-end justify-content-end my-4"
                 style={{ backgroundColor: "" }}
@@ -304,32 +286,30 @@ function MyVerticallyCenteredModal(props) {
     </Modal>
   );
 }
-//Modal Ends Here
 
 function Nvr(props) {
-  const [formData1, setFormData1] = useState({}); // Receivng value from Modal State
-  const [formData2, setFormData2] = React.useState({}); // Receiving value from Modal State
+  const [formData1, setFormData1] = useState({});
+  const [formData2, setFormData2] = React.useState({});
   const [mergedState, setMergedState] = useState({});
 
   const dispatch = useDispatch();
-  const selectedNvrDetails = useSelector((state) => state.counter1.selectedNVR); // Showing NVR Details Data
+  const selectedNvrDetails = useSelector((state) => state.counter1.selectedNVR);
   const selectedCameraNumber = useSelector(
     (state) => state.counter1.totalCamera
-  ); // Showing Camera Number Data
+  );
 
   const navigate = useNavigate();
   const [mainPrice, setMainPrice] = useState(0);
   const [modalShow, setModalShow] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState([]);
-  const [productCSV, setProductCSV] = useState([]); // product csv data
-  const [produtOption, setProductOptionCSV] = useState([]); // product_option csv data
+  const [productCSV, setProductCSV] = useState([]);
+  const [produtOption, setProductOptionCSV] = useState([]);
   const [addCart, setAddCart] = useState([]);
   const [recorderFilter, setRecorderFilter] = useState([]);
   const [dataforProduct, setdataForProduct] = useState([]);
   const [idforOptions, setIdforOptions] = useState([]);
   const [extra, setExtra] = useState([]);
   const [finalData, setFinalData] = useState([]);
-  // Warning Modals state
   const [show2, setShow2] = useState(false);
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => {
@@ -340,7 +320,6 @@ function Nvr(props) {
     }
   };
 
-  // Table Added by Prashant
   const calculateTotalPrice = () => {
     let totalPrice = 0;
     tableData.forEach((val) => {
@@ -348,8 +327,6 @@ function Nvr(props) {
     });
     return totalPrice.toFixed(2);
   };
-
-  // const [aaa, setAAA] = useState([]);
 
   const calculateTotalLicenses = () => {
     let totalLicenses = 0;
@@ -360,9 +337,6 @@ function Nvr(props) {
     return totalLicenses;
   };
 
-  // Table Added by Prashant Ends
-
-  // Merging Start
   const updateMergedState = () => {
     setMergedState({
       ...formData1,
@@ -370,21 +344,13 @@ function Nvr(props) {
     });
   };
 
-  // Everytime Product added, it'll console the value (Just for console)
-
-  useEffect(() => {
-    // console.log(selectedNvrDetails);
-  }, [selectedNvrDetails]);
-
-  // Ends
+  useEffect(() => {}, [selectedNvrDetails]);
 
   const tableData = selectedNvrDetails;
 
   useEffect(() => {
     updateMergedState();
   }, [formData1, formData2]);
-
-  // Merging Done
 
   React.useEffect(() => {
     const parseCSVFiles = async () => {
@@ -397,8 +363,8 @@ function Nvr(props) {
         const productArray2 = await productOptionData.text();
         const products = Papa.parse(productArray, { header: true }).data;
         const products2 = Papa.parse(productArray2, { header: true }).data;
-        setProductCSV(products); // product csv data
-        setProductOptionCSV(products2); // product_options data
+        setProductCSV(products);
+        setProductOptionCSV(products2);
       } catch (error) {
         console.error("Error parsing CSV files:", error);
       }
@@ -418,22 +384,17 @@ function Nvr(props) {
   //   dispatch(setSelectedNVR(mergedState));
   // }, [dispatch, mergedState]);
 
-  // It'll search for NVR from ProductCSV (only from column "id") and Sending Filter Data in a state
   const recorderData = productCSV.filter((item) => {
     return item.id && item.id.includes("NVR");
   });
-
-  // Data coming from Product_Option csv below and apply a filter condition
 
   const recorderData2 = produtOption.filter((item) => {
     return item.productid && item.productid.includes("NVR");
   });
 
-  // Box Button Click
   const handleButtonClick = (e, val, id) => {
     let firstIndex = -1;
     let lastIndex = -1;
-    // Find the index of the first '83' value and the index of the last '83' value
     for (let i = 0; i < produtOption.length; i++) {
       if (produtOption[i].productid === id && firstIndex === -1) {
         firstIndex = i;
@@ -492,12 +453,9 @@ function Nvr(props) {
     }
   });
 
-  // Delete By Ravi
-  function deleteFromTable(index)
-  {
-    dispatch(deleteNVR(index))
+  function deleteFromTable(index) {
+    dispatch(deleteNVR(index));
   }
-
 
   return (
     <>
@@ -510,7 +468,6 @@ function Nvr(props) {
                 <span className="fst-italic fs-6">(Category)</span>
               </h2>
             </Col>
-            {/* Right */}
             <Col className="" style={{ backgroundColor: "" }}>
               <Row>
                 <Col className="text-end">
@@ -542,7 +499,6 @@ function Nvr(props) {
             </Col>
           </Row>
 
-          {/* Box Row */}
           <Row className="my-4">
             {recorderData.map((val) => {
               return (
@@ -600,7 +556,6 @@ function Nvr(props) {
               mergedState={mergedState}
             />
           </Row>
-          {/* Table */}
 
           <Row className="my-4" style={{ padding: "8px" }}>
             <Col>
@@ -610,7 +565,7 @@ function Nvr(props) {
                 <Table striped bordered hover responsive>
                   <thead>
                     <tr>
-                      <th>#</th> {/* Add a new column for the serial number */}
+                      <th>#</th>
                       <th>QTY: </th>
                       <th>SKU: </th>
                       <th>Total: </th>
@@ -621,7 +576,7 @@ function Nvr(props) {
                     {tableData.map((val, index) => {
                       return (
                         <tr key={val}>
-                          <td>{index + 1}</td> {/* Display the serial number */}
+                          <td>{index + 1}</td>
                           <td>{val.NVR_Quantity}</td>
                           <td>
                             {val.NVR_Name} ( +
@@ -631,12 +586,16 @@ function Nvr(props) {
                           <td>{val["Number of IP Licenses"]}</td>
                           <td>
                             {" "}
-                            <Button variant="dark" onClick={()=>deleteFromTable(index)}>Delete</Button>
+                            <Button
+                              variant="dark"
+                              onClick={() => deleteFromTable(index)}
+                            >
+                              Delete
+                            </Button>
                           </td>
                         </tr>
                       );
                     })}
-                    {/* Final Section */}
                     <tr>
                       <th></th>
                       <td></td>
@@ -650,14 +609,12 @@ function Nvr(props) {
                         <b>{calculateTotalLicenses()} Licenses</b>
                       </td>
                     </tr>
-                    {/* Final Section */}
                   </tbody>
                 </Table>
               </div>
             </Col>
           </Row>
 
-          {/* Button */}
           <Row className="my-4" style={{ backgroundColor: "" }}>
             <Col className="d-flex justify-content-between">
               <Button variant="dark">Previous</Button>
@@ -668,8 +625,6 @@ function Nvr(props) {
           </Row>
         </Container>
       </Container>
-
-      {/* Warnign Model */}
 
       <Modal show={show2} onHide={handleClose2}>
         <Modal.Header closeButton>

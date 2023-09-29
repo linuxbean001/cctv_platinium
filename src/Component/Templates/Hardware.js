@@ -6,25 +6,24 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
-// import "./index.css";
 import Papa from "papaparse";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { useNavigate } from "react-router-dom";
 import noImage from "../../no_Image.jpg";
 import { useSelector, useDispatch } from "react-redux";
-import { setSelectedHardWare,setFinalData } from "../../app/features/counter/counterSlice";
+import {
+  setSelectedHardWare,
+  setFinalData,
+} from "../../app/features/counter/counterSlice";
 import { Link } from "react-router-dom";
-
 
 let globalState;
 
-// Modal-1 Starts
 function MyVerticallyCenteredModal(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // 1  (Add Product Quantity)
   const [count, setCount] = useState(1);
   const handlePlusClick = () => {
     setCount(count + 1);
@@ -36,19 +35,16 @@ function MyVerticallyCenteredModal(props) {
     }
   };
 
-  // (2) When User Click on Any Box, its values get stored in State
-  const [finalNewState, setFinalNewState] = useState({}); // state-1
+  const [finalNewState, setFinalNewState] = useState({});
   React.useEffect(() => {
     setFinalNewState({
       HardWare_Name: props.data.id,
       HardWare_Base_Price: props.data.price,
       HardWare_Quantity: count,
-      HardWare_Final_Price : HardWare_Final_Price
+      HardWare_Final_Price: HardWare_Final_Price,
     });
   }, [props.data.id, props.data.price, count]);
 
-
-  // (3)
   const [HardWare_Final_Price, setHardWare_Final_Price] = useState([]);
   const calculateTotalPrice = () => {
     const basePrice = props.data.price;
@@ -57,7 +53,6 @@ function MyVerticallyCenteredModal(props) {
     setHardWare_Final_Price(countPlusBasePrice);
   };
 
-  //(4) Adding Two state (my state + finalPrice) into > mergedState
   const [mergedState, setMergedState] = useState({});
   const updateMergedState = () => {
     setMergedState({
@@ -69,16 +64,12 @@ function MyVerticallyCenteredModal(props) {
     updateMergedState();
   }, [finalNewState, HardWare_Final_Price]);
 
-  //(5) Sending State to Redux after "add" button click
   function addSwitchesQuantity() {
     dispatch(setSelectedHardWare(mergedState));
-    dispatch(setFinalData(mergedState))
-    props.onHide(false); // Modal Close
-    
+    dispatch(setFinalData(mergedState));
+    props.onHide(false);
   }
   globalState = mergedState;
-
-  //(6)  Reset the Form
 
   const resetForm = () => {
     setFinalNewState({});
@@ -88,11 +79,9 @@ function MyVerticallyCenteredModal(props) {
 
   React.useEffect(() => {
     if (!props.show) {
-      // Modal is closed, reset the form
       resetForm();
     }
   }, [props.show]);
-
 
   return (
     <Modal
@@ -145,7 +134,6 @@ function MyVerticallyCenteredModal(props) {
                 </Col>
               </Row>
 
-              {/* Final Price */}
               <Row>
                 <div className="w-100 d-flex align-items-start">
                   <Button variant="dark" onClick={calculateTotalPrice}>
@@ -173,12 +161,10 @@ function MyVerticallyCenteredModal(props) {
                   </div>
                 </div>
               </Row>
-              {/* Final Price */}
             </Col>
             <Col md={8}>
               <p> {props.data.name} </p>
 
-              {/* Add Quantity */}
               <div
                 className="d-flex align-items-end justify-content-end my-4"
                 style={{ backgroundColor: "" }}
@@ -211,27 +197,22 @@ function MyVerticallyCenteredModal(props) {
   );
 }
 
-//Modal Ends
-
 function Hardware() {
   const navigate = useNavigate();
   const selectedCameraNumber = useSelector(
     (state) => state.counter1.totalCamera
-  ); // Showing Camera Number Data
+  );
   const selectedHardware = useSelector(
     (state) => state.counter1.selectedHardWare
-  ); // Showing Switch Details Data
- 
+  );
 
-  // Modal state-1
   const [modalShow, setModalShow] = React.useState(false);
-  const [productCSV, setProductCSV] = useState([]); // ProductCSV Data
+  const [productCSV, setProductCSV] = useState([]);
 
   const [data, setData] = useState([]);
   React.useEffect(() => {
     const parseCSVFiles2 = async () => {
       try {
-        //Products CSV
         const productsCSV = await fetch("assets/CSVs/products.csv");
         const categoryArray2 = await productsCSV.text();
         const products2 = Papa.parse(categoryArray2, { header: true }).data;
@@ -243,7 +224,6 @@ function Hardware() {
     parseCSVFiles2();
   }, []);
 
-  // Modal-1 Open
   function handleButtonClick(e, hardware) {
     setModalShow(true);
     setData({
@@ -272,7 +252,6 @@ function Hardware() {
                 Hardware <span className="fst-italic fs-6">(Category)</span>
               </h2>
             </Col>
-            {/* Right */}
             <Col className="" style={{ backgroundColor: "" }}>
               <Row>
                 <Col className="text-end">
@@ -292,7 +271,6 @@ function Hardware() {
             </Col>
           </Row>
 
-          {/* Box Row */}
           <Row className="my-4">
             {productCSV.map((hardware) => {
               if (hardware.categories === "Hardware") {
@@ -334,8 +312,6 @@ function Hardware() {
             })}
           </Row>
 
-          {/* Table */}
-
           <Row className="my-4" style={{ padding: "8px" }}>
             <Col>
               <h5 className="fw-bold">Add to Cart: </h5>
@@ -358,8 +334,6 @@ function Hardware() {
                       <td> {selectedHardware.HardWare_Base_Price}</td>
                     </tr>
 
-                    {/* Final Section */}
-
                     {selectedHardware == "" ? null : (
                       <tr>
                         <th></th>
@@ -371,8 +345,6 @@ function Hardware() {
                         </td>
                       </tr>
                     )}
-
-                    {/* Final Section */}
                   </tbody>
                 </Table>
               </div>

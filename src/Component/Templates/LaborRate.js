@@ -9,23 +9,22 @@ import Modal from "react-bootstrap/Modal";
 import Papa from "papaparse";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import noImage from "../../no_Image.jpg";
 import Form from "react-bootstrap/Form";
 import {
   setSelectedLabor,
   deleteLabor,
-  setFinalData
+  setFinalData,
 } from "../../../src/app/features/counter/counterSlice";
 
 import { useSelector, useDispatch } from "react-redux";
 
-
 function LaborRate() {
   const navigate = useNavigate();
-  const [categoryCSV, setCategoryCSV] = useState([]); // for category csv
-  const [productCSV, setProductCSV] = useState([]); // for products csv
-  const [productOption, setProductOptionCSV] = useState([]); // product_options.csv data
+  const [categoryCSV, setCategoryCSV] = useState([]);
+  const [productCSV, setProductCSV] = useState([]);
+  const [productOption, setProductOptionCSV] = useState([]);
   const selectedCameraNumber = useSelector(
     (state) => state.counter1.totalCamera
   );
@@ -44,26 +43,21 @@ function LaborRate() {
   const [categoryName2, setCategoryName2] = useState([]);
   const countLabor = useSelector((state) => state.counter1.selectedLabor);
 
-  // Fetching APIs data
   React.useEffect(() => {
     const parseCSVFiles2 = async () => {
       try {
-        //Category CSV
         const categoryCSV = await fetch("assets/CSVs/categories.csv");
         const categoryArray1 = await categoryCSV.text();
         const products1 = Papa.parse(categoryArray1, { header: true }).data;
-        //Products CSV
         const productsCSV = await fetch("assets/CSVs/products.csv");
         const categoryArray2 = await productsCSV.text();
         const products2 = Papa.parse(categoryArray2, { header: true }).data;
-        // Product Options CSV
         const productOptionsCSV = await fetch(
           "assets/CSVs/products_options.csv"
         );
         const categoryArray3 = await productOptionsCSV.text();
         const products3 = Papa.parse(categoryArray3, { header: true }).data;
 
-        // Storing CSV data in separate state
         setCategoryCSV(products1);
         setProductCSV(products2);
         setProductOptionCSV(products3);
@@ -74,8 +68,6 @@ function LaborRate() {
     parseCSVFiles2();
   }, []);
 
-
-  
   React.useEffect(() => {
     if (countLabor) {
       setCartItems(countLabor || []);
@@ -85,15 +77,12 @@ function LaborRate() {
       });
       setTotalPrice(totalPrice);
     }
-  }, [countLabor]); 
-
-  // Condition-1 (Target whose ID is )
+  }, [countLabor]);
 
   const laborData = categoryCSV.filter((item) => {
     return item.category_parent && item.category_parent.includes("105");
   });
 
-  // Condition-2  (Inside Available)
   const handleButtonClick = (e, category_name) => {
     setCategoryName(category_name);
     setShow(true);
@@ -108,7 +97,6 @@ function LaborRate() {
     setfilteredData(laborData2);
   };
 
-  // Modal_1
   function modal_1(e, id, item) {
     setShow2(true);
     setShow(false);
@@ -128,8 +116,6 @@ function LaborRate() {
     setShow2(false);
   }
 
-
-  //************* Increasing and Decreasing Count Value  **************//
   const handleClickPlus = () => {
     setCount(count + 1);
   };
@@ -139,7 +125,6 @@ function LaborRate() {
       setCount(count - 1);
     }
   };
-  //************* Increasing and Decreasing Count Value  **************//
 
   const calculateFinalPrice = () => {
     const data = basePrice * count;
@@ -166,7 +151,6 @@ function LaborRate() {
     setBasePrice1(0);
   };
 
-  //****************** Changes Saturday *******************//
   const handleDelete = (index) => {
     dispatch(deleteLabor(index));
     const updatedCartItems = [...cartItems];
@@ -178,12 +162,10 @@ function LaborRate() {
     setCartItems(updatedCartItems);
     setTotalPrice(newTotalPrice);
   };
-  //****************** Changes Saturday *******************//
 
-
-  const handleNext = () =>{
-    navigate("/pdf")
-  }
+  const handleNext = () => {
+    navigate("/pdf");
+  };
 
   return (
     <>
@@ -213,8 +195,6 @@ function LaborRate() {
               </Row>
             </Col>
           </Row>
-
-          {/* Box */}
 
           <Row className="my-4" style={{ backgroundColor: "" }}>
             {laborData.map((item) => {
@@ -258,7 +238,6 @@ function LaborRate() {
             })}
           </Row>
 
-          {/* Modal Code - 1 */}
           <Modal
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
@@ -328,7 +307,6 @@ function LaborRate() {
             </Modal.Footer>
           </Modal>
 
-          {/* Modal-2 */}
           <Modal
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
@@ -417,7 +395,6 @@ function LaborRate() {
                             </Button>
                           </div>
                         </Col>
-                        {/* Final Price */}
                         <Row className="mt-5 justify-content-start">
                           <div className="w-100 d-flex justify-content-start">
                             <Button
@@ -451,7 +428,6 @@ function LaborRate() {
                             </div>
                           </div>
                         </Row>
-                        {/* Final Price */}
                       </>
                     );
                   })}
@@ -478,7 +454,6 @@ function LaborRate() {
             </Modal.Footer>
           </Modal>
 
-          {/********************** Create TableData *********************/}
           <Row className="my-4" style={{ padding: "8px" }}>
             <Col>
               <h5 className="fw-bold">Add to Cart: </h5>
@@ -513,7 +488,6 @@ function LaborRate() {
                         </td>
                       </tr>
                     ))}
-                    {/* Final Section */}
                     <tr>
                       <th></th>
                       <td></td>
@@ -525,16 +499,13 @@ function LaborRate() {
                       <td>$ {totalPrice.toFixed(2)}</td>
                       <td></td>
                     </tr>
-                    {/* Final Section */}
                   </tbody>
                 </Table>
               </div>
             </Col>
           </Row>
-          {/********************** Create TableData *********************/}
           <Row className="my-4" style={{ backgroundColor: "" }}>
             <Col className="d-flex justify-content-end">
-              {/* <Button variant="dark">Previous</Button> */}
               <Button variant="dark" onClick={handleNext}>
                 Next
               </Button>

@@ -6,7 +6,6 @@ function Test() {
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLfB-3Bov_7YurkzIQ4N9AyRWDJ8ImKcyWMEReQGcS5q_r-Vb9gb9G0SUE04Z920kPAaHVat_OyLlG/pubhtml?gid=0&single=true"; // Replace with the appropriate JSONPlaceholder API endpoint
 
   useEffect(() => {
-    // Fetch data from the JSONPlaceholder API
     fetch(apiUrl)
       .then((response) => {
         if (!response.ok) {

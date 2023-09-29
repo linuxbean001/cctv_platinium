@@ -6,7 +6,6 @@ function AddCart(props) {
 
   const [nvrDetails, setNvrDetail] = React.useState([]);
   React.useEffect(() => {
-    // window.localStorage.setItem("myData", JSON.stringify(props));
     if (
       !localStorage.getItem("initData") ||
       JSON.parse(localStorage.getItem("initData")).length === 0
@@ -67,8 +66,7 @@ function AddCart(props) {
             <th>Nvr Type</th>
             <th>Total Camera</th>
           </tr>
-          <tr>
-          </tr>
+          <tr></tr>
         </tbody>
       </table>
       <h3>NVR DETAILS</h3>
@@ -89,8 +87,7 @@ function AddCart(props) {
             <th>CPU</th>
             <th>Licenses</th>
           </tr>
-          <tr>
-          </tr>
+          <tr></tr>
         </tbody>
       </table>
     </div>

@@ -17,8 +17,6 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 
-
-
 function Special() {
   const [categoryCSV, setCategoriesCSV] = useState([]);
   const [productCSV, setProductCSV] = useState([]);
@@ -52,7 +50,6 @@ function Special() {
     });
     setTotalPrice(totalPrice);
   }, []);
-
 
   const handlePlusClick = () => {
     setCount(count + 1);
@@ -111,10 +108,8 @@ function Special() {
 
   function modal_1(e, id) {
     setFinalData([]);
-    // Inner Code
     let firstIndex = -1;
     let lastIndex = -1;
-    // Find the index of the first '83' value and the index of the last '83' value
     for (let i = 0; i < productOption.length; i++) {
       if (productOption[i].productid === id && firstIndex === -1) {
         firstIndex = i;
@@ -152,7 +147,6 @@ function Special() {
       console.log("No suitable data found in the data array with '83' cateId.");
     }
 
-    // Inner Code
     setShow2(true);
     setShow(false);
     setCategoryName2(id);
@@ -164,54 +158,48 @@ function Special() {
     setfilteredData2(specialData3);
   }
 
-
   const calculateTotalPrice = () => {
     let basePrices = filteredData2.map((item) => item.price);
-    setBasePrice(basePrices)
-    const priceCabling = parseFloat(basePrices) * count
+    setBasePrice(basePrices);
+    const priceCabling = parseFloat(basePrices) * count;
     setPriceCab(priceCabling);
   };
 
   const handleCablingData = () => {
-     setShow2(false);
-     const totalPriceForItem = basePrice * count;
-     const newItem = {
-       id: categoryName2,
-       name: filteredData2[0]?.name || "Unknown",
-       quantity: count,
-       pricePerItem: basePrice,
-       totalPriceForItem: totalPriceForItem,
-     };
-     dispatch(setSelectedSpecial(newItem));
-     setCartItems((prevCartItems) => [...prevCartItems, newItem]);
-     setTotalPrice((prevTotalPrice) => prevTotalPrice + totalPriceForItem);
-     setCount(1);
-     setPriceCab(0);
-  }
-
-
-  const handleDelete = (index) => {
-     dispatch(deleteSpecial(index));
-     const updatedCartItems = [...cartItems];
-     const itemToRemove = updatedCartItems[index];
-     const newTotalPrice = totalPrice - itemToRemove.totalPriceForItem;
-
-     updatedCartItems.splice(index, 1);
-
-     setCartItems(updatedCartItems);
-     setTotalPrice(newTotalPrice);
+    setShow2(false);
+    const totalPriceForItem = basePrice * count;
+    const newItem = {
+      id: categoryName2,
+      name: filteredData2[0]?.name || "Unknown",
+      quantity: count,
+      pricePerItem: basePrice,
+      totalPriceForItem: totalPriceForItem,
+    };
+    dispatch(setSelectedSpecial(newItem));
+    setCartItems((prevCartItems) => [...prevCartItems, newItem]);
+    setTotalPrice((prevTotalPrice) => prevTotalPrice + totalPriceForItem);
+    setCount(1);
+    setPriceCab(0);
   };
 
-  const handleNext = () =>{
-    navigate("/cabling")
-  }
+  const handleDelete = (index) => {
+    dispatch(deleteSpecial(index));
+    const updatedCartItems = [...cartItems];
+    const itemToRemove = updatedCartItems[index];
+    const newTotalPrice = totalPrice - itemToRemove.totalPriceForItem;
+    updatedCartItems.splice(index, 1);
+    setCartItems(updatedCartItems);
+    setTotalPrice(newTotalPrice);
+  };
 
+  const handleNext = () => {
+    navigate("/cabling");
+  };
 
   return (
     <>
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
         <Container>
-          {/* Heading */}
           <Row style={{ backgroundColor: "" }}>
             <Col style={{ backgroundColor: "" }}>
               <h2>
@@ -220,8 +208,6 @@ function Special() {
               </h2>
             </Col>
           </Row>
-
-          {/* Box*/}
 
           <Row className="my-4" style={{ backgroundColor: "" }}>
             {specialData.map((val) => {
@@ -265,7 +251,6 @@ function Special() {
             })}
           </Row>
 
-          {/* Modal Code - 1 */}
           <Modal
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
@@ -335,7 +320,6 @@ function Special() {
             </Modal.Footer>
           </Modal>
 
-          {/* Modal-2 */}
           <Modal
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
@@ -436,7 +420,6 @@ function Special() {
                               </div>
                             </div>
                           </Row>
-                          {/* Final Price */}
                         </Col>
                         <Col md={7}>
                           <p className="fst-italic">
@@ -447,7 +430,6 @@ function Special() {
                             {val.name}
                           </p>
 
-                          {/* Add Dropdown */}
                           {finalData.map((item, index) => {
                             return (
                               <>
@@ -510,7 +492,6 @@ function Special() {
             </Modal.Footer>
           </Modal>
 
-          {/********************** Create TableData *********************/}
           <Row className="my-4" style={{ padding: "8px" }}>
             <Col>
               <h5 className="fw-bold">Add to Cart: </h5>
@@ -560,13 +541,12 @@ function Special() {
               </div>
             </Col>
           </Row>
-          {/********************** Create TableData *********************/}
 
-          {/* Button */}
           <Row className="my-4" style={{ backgroundColor: "" }}>
             <Col className="d-flex justify-content-end">
-              {/* <Button variant="dark">Previous</Button> */}
-              <Button variant="dark" onClick={handleNext}>Next</Button>
+              <Button variant="dark" onClick={handleNext}>
+                Next
+              </Button>
             </Col>
           </Row>
         </Container>

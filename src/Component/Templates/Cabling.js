@@ -12,10 +12,9 @@ import noImage from "../../no_Image.jpg";
 import {
   setSelectedCabling,
   deleteCabling,
-  setFinalData
+  setFinalData,
 } from "../../../src/app/features/counter/counterSlice";
 import { useSelector, useDispatch } from "react-redux";
-
 
 function Cabling() {
   const selectedCameraNumber = useSelector(
@@ -23,27 +22,22 @@ function Cabling() {
   );
   const countCabling = useSelector((state) => state.counter1.selectedCabling);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [categoryCSV, setCategoriesCSV] = useState([]); // categoryCsv data
-  const [productCSV, setProductCSV] = useState([]); // productCSV data
-  const [productOption, setProductOptionCSV] = useState([]); // product_options.csv data
+  const [categoryCSV, setCategoriesCSV] = useState([]);
+  const [productCSV, setProductCSV] = useState([]);
+  const [productOption, setProductOptionCSV] = useState([]);
   const [count, setCount] = useState(1);
-  // Filtered Data
   const navigate = useNavigate();
   const [filteredData, setfilteredData] = useState([]);
   const [filteredData2, setfilteredData2] = useState([]);
   const [show, setShow] = useState(false);
-  // Warning Modals state
   const [show2, setShow2] = useState(false);
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => {
     setShow2(true);
     navigate("/labor_rate");
-    
-  }
-  //category name in modal
+  };
   const [categoryName, setCategoryName] = useState([]);
 
-  // Data sent in Modal
   const [dataforProduct, setdataForProduct] = useState([]);
   const [priceCab, setPriceCab] = useState(0);
   const [basePrice, setBasePrice] = useState(0);
@@ -52,7 +46,7 @@ function Cabling() {
 
   React.useEffect(() => {
     setCartItems(countCabling || []);
-    console.log('first',countCabling)
+    console.log("first", countCabling);
     let totalPrice = 0;
     countCabling.forEach((item) => {
       totalPrice += item.totalPriceForItem;
@@ -70,19 +64,15 @@ function Cabling() {
     }
   };
 
-  // Fetching APIs data
   React.useEffect(() => {
     const parseCSVFiles2 = async () => {
       try {
-        //Category CSV
         const categoryCSV = await fetch("assets/CSVs/categories.csv");
         const categoryArray1 = await categoryCSV.text();
         const products1 = Papa.parse(categoryArray1, { header: true }).data;
-        //Products CSV
         const productsCSV = await fetch("assets/CSVs/products.csv");
         const categoryArray2 = await productsCSV.text();
         const products2 = Papa.parse(categoryArray2, { header: true }).data;
-        // Product Options CSV
         const productOptionsCSV = await fetch(
           "assets/CSVs/products_options.csv"
         );
@@ -99,12 +89,10 @@ function Cabling() {
     parseCSVFiles2();
   }, []);
 
-  // It'll search for NVR from ProductCSV (only from column "id") and Sending Filter Data in a state
   const cablingData = productCSV.filter((item) => {
     return item.categories && item.categories.includes("Hardware/Cabling");
   });
 
-  //****************** Changes Saturday *******************//
   function handleButtonClick(
     e,
     id,
@@ -131,16 +119,12 @@ function Cabling() {
       setBasePrice(parseFloat(selectedProduct.price));
     }
   }
-  //****************** Changes Saturday *******************//
 
-  //****************** Changes Saturday *******************//
   const calculatePrice = () => {
     const priceCabling = basePrice * count;
     setPriceCab(priceCabling);
   };
-  //****************** Changes Saturday *******************//
 
-  //****************** Changes Saturday *******************//
   const handleCablingData = () => {
     setShow(false);
     const totalPriceForItem = basePrice * count;
@@ -164,7 +148,7 @@ function Cabling() {
     setCount(1);
     setPriceCab(0);
   };
-  
+
   const handleDelete = (index) => {
     dispatch(deleteCabling(index));
     const updatedCartItems = [...cartItems];
@@ -301,7 +285,6 @@ function Cabling() {
           </Row>
           <Row className="my-4" style={{ backgroundColor: "" }}>
             <Col className="d-flex justify-content-end">
-              {/* <Button variant="dark">Previous</Button> */}
               <Button variant="dark" onClick={handleShow2}>
                 Next
               </Button>
@@ -387,20 +370,16 @@ function Cabling() {
                 </div>
               </Col>
             </Row>
-            {/* Final Price */}
             <Row className="mt-5 justify-content-start">
               {" "}
-              {/* Aligning to the right */}
               <div className="w-100 d-flex justify-content-start">
                 {" "}
-                {/* Aligning to the right */}
                 <Button variant="dark" onClick={calculatePrice}>
                   Final Price
                 </Button>
               </div>
               <div className="w-100 my-1 d-flex justify-content-start">
                 {" "}
-                {/* Aligning to the right */}
                 <div className="text">
                   <Table
                     striped
@@ -420,7 +399,6 @@ function Cabling() {
                 </div>
               </div>
             </Row>
-            {/* Final Price */}
           </Container>
         </Modal.Body>
         <Modal.Footer className="d-flex justify-content-between">
