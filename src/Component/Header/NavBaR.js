@@ -18,12 +18,10 @@ function NavBar(props) {
           <Navbar.Brand href="/">Platinum CCTV</Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="#features">About Us</Nav.Link>
           </Nav>
           <Nav className="mr-auto">
             <Nav.Link onClick={handleClearState}>Clear Cart</Nav.Link>
-            <Nav.Link href="/add_to_cart">CheckCart</Nav.Link>
-            <Nav.Link href="#features">CSV Export</Nav.Link>
+            <Nav.Link href="/pdf">CheckCart</Nav.Link>
           </Nav>
         </Container>
       </Navbar>

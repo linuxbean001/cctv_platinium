@@ -1,46 +1,43 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Modal from "react-bootstrap/Modal";
-import {
-  setCustomerData,
-} from "../../../src/app/features/counter/counterSlice";
+import { setCustomerData } from "../../../src/app/features/counter/counterSlice";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 function Registration() {
   const [show, setShow] = React.useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-   const [formData, setFormData] = useState({
-     customerName: "",
-     businessName: "",
-     email: "",
-     phoneNumber: "",
-     address: "",
-   });
-    const dispatch = useDispatch();
+  const [formData, setFormData] = useState({
+    customerName: "",
+    businessName: "",
+    email: "",
+    phoneNumber: "",
+    address: "",
+  });
+  const dispatch = useDispatch();
 
-    const handleInputChange = (e) => {
-      const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
-    };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-    const handleFormSubmit = () => {
-      console.log(formData)
-      dispatch(setCustomerData(formData));
-      setFormData({
-        customerName: "",
-        businessName: "",
-        email: "",
-        phoneNumber: "",
-        address: "",
-      });
-      handleClose();
-    };
+  const handleFormSubmit = () => {
+    dispatch(setCustomerData(formData));
+    setFormData({
+      customerName: "",
+      businessName: "",
+      email: "",
+      phoneNumber: "",
+      address: "",
+    });
+    handleClose();
+  };
 
   React.useEffect(() => {
     handleShow();
@@ -109,7 +106,7 @@ function Registration() {
                       placeholder="Enter Address"
                       value={formData.address}
                       onChange={handleInputChange}
-                     />
+                    />
                     <Form.Text className="text-muted text-center fst-italic">
                       We'll never share your info with anyone else.
                     </Form.Text>

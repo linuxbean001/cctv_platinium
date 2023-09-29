@@ -20,46 +20,41 @@ import {
 } from "../../app/features/counter/counterSlice";
 
 function Home() {
-
   // Redux
   const countCamera = useSelector((state) => state.counter1);
   const dispatch = useDispatch();
 
-const navigate = useNavigate();
-const [options, setOptions] = useState([]);
-const [data, setData] = useState([]);
-const [show, setShow] = useState(false);
-const [showTemp, setShowTemp] = useState(false);
-const [showCam_num, setShowCam_num] = useState(false)
-let categoriesData = [];
-let productOptionsDetails = []
+  const navigate = useNavigate();
+  const [options, setOptions] = useState([]);
+  const [data, setData] = useState([]);
+  const [show, setShow] = useState(false);
+  const [showTemp, setShowTemp] = useState(false);
+  const [showCam_num, setShowCam_num] = useState(false);
+  let categoriesData = [];
+  let productOptionsDetails = [];
 
-// Storing value of + and - button in state (No. of Options)
+  // Storing value of + and - button in state (No. of Options)
 
-const handleOptionsIncre = () => {
-  dispatch(IncrementOptions());
+  const handleOptionsIncre = () => {
+    dispatch(IncrementOptions());
+  };
 
-};
+  const handleOptionsDecre = () => {
+    if (countCamera.totalOptions > 0) {
+      dispatch(DecrementOptions());
+    }
+  };
+  // Storing value of + and - button in state (No. of Camera)
 
-const handleOptionsDecre = () => {
-  if (countCamera.totalOptions > 0) {
-    dispatch(DecrementOptions());
-  }
+  const handleCameraIncre = () => {
+    dispatch(IncrementCamera());
+  };
 
-};
-// Storing value of + and - button in state (No. of Camera)
-
-const handleCameraIncre = () => {
-  dispatch(IncrementCamera());
-};
-
-const handleCameraDecre = () => {
-  if (countCamera.totalCamera > 0) {
-  dispatch(DecrementCamera());
-  }
-};
-
- 
+  const handleCameraDecre = () => {
+    if (countCamera.totalCamera > 0) {
+      dispatch(DecrementCamera());
+    }
+  };
 
   const cameraOptions = [
     { location_name: "Home" },
@@ -71,17 +66,19 @@ const handleCameraDecre = () => {
   ];
 
   React.useEffect(() => {
-      const parseCSVFiles = async () => {
+    const parseCSVFiles = async () => {
       try {
-        const categoryData = await fetch('assets/CSVs/categories.csv');
-        const productData = await fetch('assets/CSVs/products.csv');
-        const productOptionData = await fetch('assets/CSVs/products_options.csv');
+        const categoryData = await fetch("assets/CSVs/categories.csv");
+        const productData = await fetch("assets/CSVs/products.csv");
+        const productOptionData = await fetch(
+          "assets/CSVs/products_options.csv"
+        );
         const categoryArray = await categoryData.text();
         const productArray = await productData.text();
         const productOptionArray = await productOptionData.text();
         const categories = Papa.parse(categoryArray, { header: true }).data;
-        categories.map(({ id, category_name, category_description, category_parent, iconimage, filename, sorting }) => {
-          categoriesData.push({
+        categories.map(
+          ({
             id,
             category_name,
             category_description,
@@ -89,39 +86,70 @@ const handleCameraDecre = () => {
             iconimage,
             filename,
             sorting,
-          });
-        });
+          }) => {
+            categoriesData.push({
+              id,
+              category_name,
+              category_description,
+              category_parent,
+              iconimage,
+              filename,
+              sorting,
+            });
+          }
+        );
         const products = Papa.parse(productArray, { header: true }).data;
-        const productOptions = Papa.parse(productOptionArray, { header: true }).data;
-        productOptions.map(({ optionid, productid, featurecaption, featuretype, featureprice, partnumber, selected,sorting ,thumbpath,featurerequired}) => {
-          
-          productOptionsDetails.push({
-            optionid, productid, featurecaption, featuretype, featureprice, partnumber, selected,sorting ,thumbpath,featurerequired
-          });
-        });
-       
-        setData((data)=>({
+        const productOptions = Papa.parse(productOptionArray, {
+          header: true,
+        }).data;
+        productOptions.map(
+          ({
+            optionid,
+            productid,
+            featurecaption,
+            featuretype,
+            featureprice,
+            partnumber,
+            selected,
+            sorting,
+            thumbpath,
+            featurerequired,
+          }) => {
+            productOptionsDetails.push({
+              optionid,
+              productid,
+              featurecaption,
+              featuretype,
+              featureprice,
+              partnumber,
+              selected,
+              sorting,
+              thumbpath,
+              featurerequired,
+            });
+          }
+        );
+
+        setData((data) => ({
           categories: categoriesData,
           products,
-          productOptions:productOptionsDetails ,
+          productOptions: productOptionsDetails,
         }));
       } catch (error) {
-        console.error('Error parsing CSV files:', error);
+        console.error("Error parsing CSV files:", error);
       }
     };
     parseCSVFiles();
-
-
-
   }, []);
 
-  const fetchInfo = () => { 
-    return axios.get('assets/CSVs/products.csv') 
-             .then((response) => setData(response.data));
-  }
-  React.useEffect(() => { 
-        fetchInfo(); 
-  }, [])
+  const fetchInfo = () => {
+    return axios
+      .get("assets/CSVs/products.csv")
+      .then((response) => setData(response.data));
+  };
+  React.useEffect(() => {
+    fetchInfo();
+  }, []);
 
   const handleOptions = (e) => {
     const { name, value } = e.target;
@@ -139,25 +167,30 @@ const handleCameraDecre = () => {
     setShow(false);
   };
 
- const handleNext = () => {
-   navigate("/nvr");
- };
-
+  const handleNext = () => {
+    navigate("/nvr");
+  };
 
   return (
     <>
-    <Registration/>
+      <Registration />
 
       <Container className="my-4" fluid style={{ backgroundColor: "" }}>
         <Row className="p-1">
           {/* Left */}
-          <Col >
+          <Col>
             <Row className="my-4">
               {cameraOptions.map((details) => {
                 return (
                   <Col md={4} className="my-4" style={{ backgroundColor: "" }}>
                     <Card style={{ width: "18rem" }}>
-                      <Card.Img variant="top" height={200} src={'assets/images/Categories/Restaurant-Security-Cameras-1.jpg'} />
+                      <Card.Img
+                        variant="top"
+                        height={200}
+                        src={
+                          "assets/images/Categories/Restaurant-Security-Cameras-1.jpg"
+                        }
+                      />
                       <Card.Body>
                         <Card.Title>{details.location_name}</Card.Title>
                         <Card.Text>
@@ -183,8 +216,7 @@ const handleCameraDecre = () => {
         {/*Options Modal*/}
         <Modal show={show} onHide={() => setShow(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>Options
-            </Modal.Title>
+            <Modal.Title>Options</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Row className="my-2">
@@ -192,16 +224,18 @@ const handleCameraDecre = () => {
                 Number of Options
               </Col>
               <Col md={4} style={{ backgroundColor: "" }}>
-                  
-              <div className="d-flex align-items-end justify-content-end" style={{ backgroundColor: '' }}>
-                <Button variant="dark" onClick={handleOptionsIncre}>
-                  +
-                </Button>
-                <h6 className="mx-3">{countCamera.totalOptions}</h6>
-                <Button variant="dark" onClick={handleOptionsDecre}>
-                  -
-                </Button>
-              </div>
+                <div
+                  className="d-flex align-items-end justify-content-end"
+                  style={{ backgroundColor: "" }}
+                >
+                  <Button variant="dark" onClick={handleOptionsIncre}>
+                    +
+                  </Button>
+                  <h6 className="mx-3">{countCamera.totalOptions}</h6>
+                  <Button variant="dark" onClick={handleOptionsDecre}>
+                    -
+                  </Button>
+                </div>
               </Col>
             </Row>
           </Modal.Body>
@@ -219,7 +253,9 @@ const handleCameraDecre = () => {
           <Modal.Body>Use Templates?</Modal.Body>
           <Modal.Footer>
             <Button variant="dark">Yes</Button>
-            <Button variant="dark" onClick={() => setShowCam_num(true)}>No</Button>
+            <Button variant="dark" onClick={() => setShowCam_num(true)}>
+              No
+            </Button>
           </Modal.Footer>
         </Modal>
 
@@ -235,15 +271,18 @@ const handleCameraDecre = () => {
                 Total Number Of Cameras
               </Col>
               <Col md={4} style={{ backgroundColor: "" }}>
-              <div className="d-flex align-items-end justify-content-end" style={{ backgroundColor: '' }}>
-                <Button variant="dark" onClick={handleCameraIncre}>
-                  +
-                </Button>
-                <h6 className="mx-3"> {countCamera.totalCamera}</h6>
-                <Button variant="dark" onClick={handleCameraDecre}>
-                  -
-                </Button>
-              </div>
+                <div
+                  className="d-flex align-items-end justify-content-end"
+                  style={{ backgroundColor: "" }}
+                >
+                  <Button variant="dark" onClick={handleCameraIncre}>
+                    +
+                  </Button>
+                  <h6 className="mx-3"> {countCamera.totalCamera}</h6>
+                  <Button variant="dark" onClick={handleCameraDecre}>
+                    -
+                  </Button>
+                </div>
               </Col>
             </Row>
           </Modal.Body>

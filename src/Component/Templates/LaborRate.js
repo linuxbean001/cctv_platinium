@@ -135,7 +135,6 @@ function LaborRate() {
     setShow2(false);
     const totalPriceForItem = basePrice * count;
     const dataforProduct = filteredData2[0];
-    console.log(dataforProduct);
     const newItem = {
       id: dataforProduct.id,
       name: dataforProduct.name,

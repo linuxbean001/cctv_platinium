@@ -43,7 +43,6 @@ function Special() {
 
   React.useEffect(() => {
     setCartItems(countSpecial || []);
-    console.log("first", countSpecial);
     let totalPrice = 0;
     countSpecial.forEach((item) => {
       totalPrice += item.totalPriceForItem;

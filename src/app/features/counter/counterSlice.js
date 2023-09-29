@@ -93,10 +93,11 @@ export const counterSlice = createSlice({
     setSelectedHardWare: (state, action) => {
       state.selectedHardWare = action.payload;
     },
-    setCustomerData: (state, action) => {
-      state.customerData = action.payload;
-    },
+
     setFinalData: (state, action) => {
+      state.finalData = action.payload;
+    },
+    setCustomerData: (state, action) => {
       state.customerData = action.payload;
     },
   },

@@ -52,22 +52,13 @@ function Cameras(props) {
   const countCamera = useSelector((state) => state.counter1.selectedCamera);
   const tableData = countCamera;
 
-  //********************** Total Bracket(27sep) **********************//
-  console.log("totalBracket", totalBracket);
-
   React.useEffect(() => {
     let totalCty = 0;
     tableData.forEach((item) => {
-      console.log(item);
       totalCty += parseInt(item.Camera_Quantity, 10);
     });
     setTotalQty(totalCty);
   }, [tableData]);
-
-  //********************** Total Bracket(27sep) **********************//
-
-  //********************** Total Bracket(27sep) **********************//
-  console.log("totalBracket", totalBracket);
 
   // React.useEffect(() => {
   //   let totalBkt = 0;
@@ -87,9 +78,7 @@ function Cameras(props) {
     });
     setTotalBracket(totalBkt);
   }, [tableData]);
-  //********************** Total Bracket(27sep) **********************//
 
-  //********************** Warning Modal(27sep) ***********************//
   const handleClose2 = () => setShows(false);
   const handleShow2 = () => {
     if (selectedCameraNumber > totalQty) {
@@ -98,9 +87,7 @@ function Cameras(props) {
       navigate("/Poe-switch");
     }
   };
-  //********************** Warning Modal(27sep) ***********************//
 
-  //************************ Total Price(27sep) ***********************//
   React.useEffect(() => {
     let total = 0;
     tableData.forEach((item) => {
@@ -108,7 +95,6 @@ function Cameras(props) {
     });
     setTotalPriceInTable(total);
   }, [tableData]);
-  //************************ Total Price(27sep) ***********************//
 
   const handleBracketChange = (event) => {
     setBracketNumber(event.target.value);
@@ -121,7 +107,6 @@ function Cameras(props) {
     });
   };
 
-  //************************ Clearing From Data ***********************//
   const resetState = () => {
     setBracketNumber("");
     setFinalNewState({});
@@ -138,7 +123,6 @@ function Cameras(props) {
       resetState();
     }
   }, [show2]);
-  //************************ Clearing From Data ***********************//
 
   React.useEffect(() => {
     updateMergedState();
@@ -150,7 +134,6 @@ function Cameras(props) {
     setShow2(false);
   }
 
-  //************************ Fetching APIs data ***********************//
   React.useEffect(() => {
     const parseCSVFiles2 = async () => {
       try {
@@ -175,9 +158,7 @@ function Cameras(props) {
     };
     parseCSVFiles2();
   }, []);
-  //************************ Fetching APIs data ***********************//
 
-  //************ Category name coming from CAtegory.CSV ***************//
   const handleButtonClick = (e, category_name) => {
     setCategoryName(category_name);
     setShow(true);
@@ -191,9 +172,7 @@ function Cameras(props) {
     });
     setfilteredData(cameraData2);
   };
-  //************ Category name coming from CAtegory.CSV ***************//
 
-  //****************************** Modal_1 ****************************//
   function modal_1(e, item, id) {
     let firstIndex = -1;
     let lastIndex = -1;
@@ -262,8 +241,6 @@ function Cameras(props) {
       Bracket_Selected: bracketNumber,
     });
   }, [dataProduct.id, dataProduct.price, count, priceList, bracketNumber]);
-
-  // console.log(finalNewState);
 
   //***** Below Code is responsible for filling finalNewState-2 *******//
   React.useEffect(() => {
@@ -335,7 +312,6 @@ function Cameras(props) {
 
   //************************* Delete Camera ***************************//
   const deleteFromCamera = (index) => {
-    // console.log(index);
     dispatch(deleteCamera(index));
   };
   //************************* Delete Camera ***************************//
@@ -430,7 +406,6 @@ function Cameras(props) {
                   </thead>
                   <tbody>
                     {tableData.map((val, index) => {
-                      // console.log("val is", val);
                       return (
                         <tr key={val}>
                           <td>{index + 1}</td> {/* Display the serial number */}

@@ -3,14 +3,15 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col, Table, Button } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function Pdf() {
   const navigate = useNavigate();
-  // const customerData = useSelector((state) => state.counter.customerData) || {};
-  // console.log(customerData);
 
+  // Redux State
+  const customerUserData = useSelector((state) => state.counter1.customerData);
+  console.log(customerUserData)
   const Nvr = useSelector((state) => state.counter1.selectedNVR);
   const camera = useSelector((state) => state.counter1.selectedCamera);
   const cabling = useSelector((state) => state.counter1.selectedCabling);
@@ -18,7 +19,6 @@ function Pdf() {
   const poe = useSelector((state) => state.counter1.selectedPoE);
   const hard = useSelector((state) => state.counter1.selectedHardWare);
   const special = useSelector((state) => state.counter1.selectedSpecial);
-  console.log("special", hard.length);
 
   const downloadPDF = () => {
     const input = document.getElementById("tableToConvert");
@@ -29,36 +29,75 @@ function Pdf() {
     downloadButtons.style.display = "none";
 
     const pdfWidth = 210;
-    const pdfHeight = 297; 
+    const pdfHeight = 297;
 
     html2canvas(input).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4"); 
+      const pdf = new jsPDF("p", "mm", "a4");
       const imgHeight = (canvas.height * pdfWidth) / canvas.width;
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, imgHeight);
       pdf.save("converted.pdf");
       downloadButton.style.display = "block";
       downloadButtons.style.display = "block";
-
     });
   };
 
-  const handleNext = () =>{
-     navigate("/")
-  }
+  const handleNext = () => {
+    navigate("/");
+  };
 
   return (
     <div className="p-3">
       <div id="tableToConvert">
         <div className="border border-indigo-600 mt-5">
-          <Container fluid style={{ backgroundColor: "#21252938" }}>
-            <h2>Platinum CCTV</h2>
+          <Container fluid style={{ backgroundColor: "#212529" }}>
+            <h2 className="text-white py-3"> Platinum CCTV</h2>
           </Container>
           <div>
             <Container fluid>
+              <Row>
+                <Col>
+                  <h5>Customer Details :</h5>
+                </Col>
+              </Row>
+
+              <Row>
+
+              <Table striped bordered hover variant="">
+      <thead>
+        <tr>
+          <th> Name</th>
+          <th>Business Details</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Address</th>
+
+
+        
+        </tr>
+      </thead>
+      <tbody>
+       
+        <tr>
+          <td>{customerUserData.customerName}</td>
+          <td>{customerUserData.businessName}</td>
+          <td>{customerUserData.email}</td>
+          <td>{customerUserData.phoneNumber}</td>
+          <td>{customerUserData.address}</td>
+
+
+
+
+
+        </tr>
+     
+      </tbody>
+    </Table>
+              </Row>
+
               <Row className="my-4">
                 <Col>
-                  <h5 className="fw-bold">Items</h5>
+                  <h5 className="fw-bold">Selected Items :</h5>
                   <div>
                     <Table striped bordered hover responsive>
                       <thead>
@@ -99,7 +138,7 @@ function Pdf() {
                             <td>{item.id}</td>
                             <td>{item.quantity}</td>
                             <td>$ {item.pricePerItem}</td>
-                            <td>$ {item.totalPriceForItem}</td>
+                            <td>$ {item.totalPriceForItem.toFixed(2)}</td>
                           </tr>
                         ))}
                         {labor.map((item, index) => (
@@ -132,7 +171,7 @@ function Pdf() {
                             <td>{item.Port_Name}</td>
                             <td>{item.Port_Quantity}</td>
                             <td>$ {item.Port_Base_Price}</td>
-                            <td>$ {item.poeFinalPrice}</td>
+                            <td>$ {item.poeFinalPrice.toFixed(2)}</td>
                           </tr>
                         ))}
                         {special.map((item, index) => (
@@ -193,10 +232,13 @@ function Pdf() {
           </div>
           <Container className="d-flex justify-content-center mb-5">
             <Button id="downloadButton" variant="dark" onClick={downloadPDF}>
-              Download
+              Download in PDF
             </Button>
           </Container>
-          <Row className="my-4" style={{ backgroundColor: "", marginRight:"15px" }}>
+          <Row
+            className="my-4"
+            style={{ backgroundColor: "", marginRight: "15px" }}
+          >
             <Col className="d-flex justify-content-end">
               <Button variant="dark" onClick={handleNext} id="downloadButtons">
                 Next

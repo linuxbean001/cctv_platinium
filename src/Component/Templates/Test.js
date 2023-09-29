@@ -1,34 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Toast from 'react-bootstrap/Toast';
 
 function Test() {
-  const [data, setData] = useState([]);
-  const apiUrl =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLfB-3Bov_7YurkzIQ4N9AyRWDJ8ImKcyWMEReQGcS5q_r-Vb9gb9G0SUE04Z920kPAaHVat_OyLlG/pubhtml?gid=0&single=true"; // Replace with the appropriate JSONPlaceholder API endpoint
+  const [show, setShow] = useState(false);
 
-  useEffect(() => {
-    fetch(apiUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.status}`);
-        }
-        return response.text();
-      })
-      .then((jsonData) => {
-        console.log("json", jsonData);
+  const handleButtonHover = () => {
+    setShow(true);
+  };
 
-        setData(jsonData);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
-
-  console.log(data);
+  const handleButtonLeave = () => {
+    setShow(false);
+  };
 
   return (
-    <>
-      <h1> Testing Page</h1>
-    </>
+    <Row>
+      <Col xs={6}>
+        <Toast onClose={() => setShow(false)} show={show} delay={3000} autohide>
+          <Toast.Header>
+            <strong className="me-auto">Bootstrap</strong>
+          </Toast.Header>
+        </Toast>
+      </Col>
+      <Col xs={6}>
+        <Button onMouseEnter={handleButtonHover} onMouseLeave={handleButtonLeave}>
+          Show Toast
+        </Button>
+      </Col>
+    </Row>
   );
 }
 

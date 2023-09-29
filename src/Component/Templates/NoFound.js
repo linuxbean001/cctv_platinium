@@ -59,8 +59,8 @@ function NoFound() {
                 </Table>
               </Col>
             </Row>
-            <Button variant="dark" onClick={() => navigate("/")}>
-              Go Back to Home Page
+            <Button variant="dark" onClick={() => navigate(-1)}>
+              Go Back to Previous Page
             </Button>
           </Col>
         </Row>

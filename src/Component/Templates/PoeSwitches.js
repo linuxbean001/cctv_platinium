@@ -7,11 +7,8 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 import Papa from "papaparse";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
 import { useNavigate } from "react-router-dom";
 import noImage from "../../../src/no_Image.jpg";
-import Form from "react-bootstrap/Form";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setSelectedPoE,
@@ -341,7 +338,6 @@ function PoeSwitches() {
 
   //************************* Delete Camera ***************************//
   const deleteFromCamera = (index) => {
-    console.log(index);
     dispatch(deletePoe(index));
   };
   //************************* Delete Camera ***************************//
@@ -461,7 +457,7 @@ function PoeSwitches() {
                             <td>{val.Port_Quantity}</td>
                             <td>{val.Port_Name}</td>
                             <td> $ {val.Port_Base_Price} / pcs</td>
-                            <td> $ {val.poeFinalPrice} </td>
+                            <td> $ {val.poeFinalPrice.toFixed(2)} </td>
                             <td> {val.Extra_Field} </td>
                             <td>
                               {" "}

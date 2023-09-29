@@ -7,13 +7,10 @@ const persistConfig = {
   key: "root",
   storage,
 };
-
 const persistedReducer = persistReducer(persistConfig, firstReducer);
-
 export const store = configureStore({
   reducer: {
     counter1: persistedReducer,
   },
 });
-
 export const persistor = persistStore(store);

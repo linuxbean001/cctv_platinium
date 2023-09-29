@@ -237,11 +237,6 @@ function Hardware() {
     });
   }
 
-  if (selectedHardware == "") {
-    console.log("true");
-  } else {
-    console.log("false");
-  }
   return (
     <>
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
