@@ -11,11 +11,7 @@ import Papa from "papaparse";
 import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setSelectedNVR,
-  deleteNVR,
-  setFinalData,
-} from "../../../app/features/counter/counterSlice";
+import { setSelectedNVR,deleteNVR,setFinalData } from "../../../app/features/counter/counterSlice";
 
 function MyVerticallyCenteredModal(props) {
   const [finalNewState, setFinalNewState] = useState({});
@@ -122,10 +118,11 @@ function MyVerticallyCenteredModal(props) {
     setPriceList(newTotalPrice * count);
   };
 
+
   function addNvrQuantity() {
     dispatch(setSelectedNVR(props.mergedState));
     dispatch(setFinalData(props.mergedState));
-    props.onHide(false);
+    props.onHide(false); 
     setPriceList(0);
   }
 
@@ -205,6 +202,7 @@ function MyVerticallyCenteredModal(props) {
                   </div>
                 </div>
               </Row>
+
             </Col>
 
             <Col md={8}>
@@ -288,21 +286,21 @@ function MyVerticallyCenteredModal(props) {
 }
 
 function Nvr(props) {
-  const [formData1, setFormData1] = useState({});
-  const [formData2, setFormData2] = React.useState({});
+  const [formData1, setFormData1] = useState({}); 
+  const [formData2, setFormData2] = React.useState({}); 
   const [mergedState, setMergedState] = useState({});
 
   const dispatch = useDispatch();
-  const selectedNvrDetails = useSelector((state) => state.counter1.selectedNVR);
+  const selectedNvrDetails = useSelector((state) => state.counter1.selectedNVR); 
   const selectedCameraNumber = useSelector(
     (state) => state.counter1.totalCamera
-  );
+  ); 
 
   const navigate = useNavigate();
   const [mainPrice, setMainPrice] = useState(0);
   const [modalShow, setModalShow] = React.useState(false);
   const [modalTitle, setModalTitle] = React.useState([]);
-  const [productCSV, setProductCSV] = useState([]);
+  const [productCSV, setProductCSV] = useState([]); 
   const [produtOption, setProductOptionCSV] = useState([]);
   const [addCart, setAddCart] = useState([]);
   const [recorderFilter, setRecorderFilter] = useState([]);
@@ -328,6 +326,7 @@ function Nvr(props) {
     return totalPrice.toFixed(2);
   };
 
+
   const calculateTotalLicenses = () => {
     let totalLicenses = 0;
     tableData.forEach((val) => {
@@ -337,6 +336,7 @@ function Nvr(props) {
     return totalLicenses;
   };
 
+
   const updateMergedState = () => {
     setMergedState({
       ...formData1,
@@ -344,13 +344,17 @@ function Nvr(props) {
     });
   };
 
-  useEffect(() => {}, [selectedNvrDetails]);
+
+  useEffect(() => {
+  }, [selectedNvrDetails]);
+
 
   const tableData = selectedNvrDetails;
 
   useEffect(() => {
     updateMergedState();
   }, [formData1, formData2]);
+
 
   React.useEffect(() => {
     const parseCSVFiles = async () => {
@@ -363,8 +367,8 @@ function Nvr(props) {
         const productArray2 = await productOptionData.text();
         const products = Papa.parse(productArray, { header: true }).data;
         const products2 = Papa.parse(productArray2, { header: true }).data;
-        setProductCSV(products);
-        setProductOptionCSV(products2);
+        setProductCSV(products); 
+        setProductOptionCSV(products2); 
       } catch (error) {
         console.error("Error parsing CSV files:", error);
       }
@@ -384,9 +388,12 @@ function Nvr(props) {
   //   dispatch(setSelectedNVR(mergedState));
   // }, [dispatch, mergedState]);
 
+  
   const recorderData = productCSV.filter((item) => {
     return item.id && item.id.includes("NVR");
   });
+
+ 
 
   const recorderData2 = produtOption.filter((item) => {
     return item.productid && item.productid.includes("NVR");
@@ -453,9 +460,11 @@ function Nvr(props) {
     }
   });
 
-  function deleteFromTable(index) {
-    dispatch(deleteNVR(index));
+  function deleteFromTable(index)
+  {
+    dispatch(deleteNVR(index))
   }
+
 
   return (
     <>
@@ -586,12 +595,7 @@ function Nvr(props) {
                           <td>{val["Number of IP Licenses"]}</td>
                           <td>
                             {" "}
-                            <Button
-                              variant="dark"
-                              onClick={() => deleteFromTable(index)}
-                            >
-                              Delete
-                            </Button>
+                            <Button variant="dark" onClick={()=>deleteFromTable(index)}>Delete</Button>
                           </td>
                         </tr>
                       );
@@ -609,6 +613,7 @@ function Nvr(props) {
                         <b>{calculateTotalLicenses()} Licenses</b>
                       </td>
                     </tr>
+                
                   </tbody>
                 </Table>
               </div>
@@ -625,6 +630,7 @@ function Nvr(props) {
           </Row>
         </Container>
       </Container>
+
 
       <Modal show={show2} onHide={handleClose2}>
         <Modal.Header closeButton>

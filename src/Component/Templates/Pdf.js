@@ -8,8 +8,9 @@ import { useNavigate } from "react-router-dom";
 
 function Pdf() {
   const navigate = useNavigate();
+  // const customerData = useSelector((state) => state.counter.customerData) || {};
+  // console.log(customerData);
 
-  //**************************** Data Section *****************************//
   const Nvr = useSelector((state) => state.counter1.selectedNVR);
   const camera = useSelector((state) => state.counter1.selectedCamera);
   const cabling = useSelector((state) => state.counter1.selectedCabling);
@@ -18,7 +19,6 @@ function Pdf() {
   const hard = useSelector((state) => state.counter1.selectedHardWare);
   const special = useSelector((state) => state.counter1.selectedSpecial);
   console.log("special", hard.length);
-  //**************************** Data Section *****************************//
 
   const downloadPDF = () => {
     const input = document.getElementById("tableToConvert");
@@ -28,21 +28,15 @@ function Pdf() {
     downloadButton.style.display = "none";
     downloadButtons.style.display = "none";
 
-
-    const pdfWidth = 210; // Width of the PDF page
-    const pdfHeight = 297; // Height of the PDF page
+    const pdfWidth = 210;
+    const pdfHeight = 297; 
 
     html2canvas(input).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4"); // Create PDF using A4 dimensions
-
-      // Calculate the aspect ratio to maintain the content's original aspect ratio
+      const pdf = new jsPDF("p", "mm", "a4"); 
       const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      // Add the image to the PDF and position it to cover the entire page
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, imgHeight);
       pdf.save("converted.pdf");
-
       downloadButton.style.display = "block";
       downloadButtons.style.display = "block";
 
@@ -55,7 +49,6 @@ function Pdf() {
 
   return (
     <div className="p-3">
-      {/* pdf data section */}
       <div id="tableToConvert">
         <div className="border border-indigo-600 mt-5">
           <Container fluid style={{ backgroundColor: "#21252938" }}>
@@ -205,7 +198,6 @@ function Pdf() {
           </Container>
           <Row className="my-4" style={{ backgroundColor: "", marginRight:"15px" }}>
             <Col className="d-flex justify-content-end">
-              {/* <Button variant="dark">Previous</Button> */}
               <Button variant="dark" onClick={handleNext} id="downloadButtons">
                 Next
               </Button>
@@ -213,7 +205,6 @@ function Pdf() {
           </Row>
         </div>
       </div>
-      {/* pdf data section */}
     </div>
   );
 }
