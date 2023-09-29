@@ -16,7 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setSelectedPoE,
   setFinalData,
-  deleteNVR,
+  deletePoe,
 } from "../../app/features/counter/counterSlice";
 
 let globalState;
@@ -271,7 +271,7 @@ function PoeSwitches() {
 
   // Modal-2 Open
   function handleButtonClick2(e) {
-    if (selectedCameraNumber >= totalPoEPortCount) {
+    if (selectedCameraNumber > totalPoEPortCount) {
       setModalShow2(true);
     } else {
       navigate("/hardware");
@@ -342,7 +342,7 @@ function PoeSwitches() {
   //************************* Delete Camera ***************************//
   const deleteFromCamera = (index) => {
     console.log(index);
-    dispatch(deleteNVR(index));
+    dispatch(deletePoe(index));
   };
   //************************* Delete Camera ***************************//
 

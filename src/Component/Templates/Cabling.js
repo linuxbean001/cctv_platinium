@@ -35,7 +35,11 @@ function Cabling() {
   // Warning Modals state
   const [show2, setShow2] = useState(false);
   const handleClose2 = () => setShow2(false);
-  const handleShow2 = () => setShow2(true);
+  const handleShow2 = () => {
+    setShow2(true);
+    navigate("/labor_rate");
+    
+  }
   //category name in modal
   const [categoryName, setCategoryName] = useState([]);
 
@@ -255,6 +259,7 @@ function Cabling() {
                   <thead>
                     <tr>
                       <th>#</th>
+                      <th>SKU: </th>
                       <th>QTY: </th>
                       <th>CableCard Price: </th>
                       <th>Total: </th>
@@ -265,6 +270,7 @@ function Cabling() {
                     {cartItems.map((item, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
+                        <td>{item.id}</td>
                         <td>{item.quantity}</td>
                         <td>{item.pricePerItem}</td>
                         <td>$ {item.totalPriceForItem.toFixed(2)}</td>
@@ -281,6 +287,7 @@ function Cabling() {
                     <tr>
                       <th></th>
                       <td></td>
+                      <td></td>
                       <td>
                         <b>Total Price :</b>
                       </td>
@@ -293,8 +300,8 @@ function Cabling() {
             </Col>
           </Row>
           <Row className="my-4" style={{ backgroundColor: "" }}>
-            <Col className="d-flex justify-content-between">
-              <Button variant="dark">Previous</Button>
+            <Col className="d-flex justify-content-end">
+              {/* <Button variant="dark">Previous</Button> */}
               <Button variant="dark" onClick={handleShow2}>
                 Next
               </Button>

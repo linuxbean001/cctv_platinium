@@ -4,8 +4,11 @@ import html2canvas from "html2canvas";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col, Table, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function Pdf() {
+  const navigate = useNavigate();
+
   //**************************** Data Section *****************************//
   const Nvr = useSelector((state) => state.counter1.selectedNVR);
   const camera = useSelector((state) => state.counter1.selectedCamera);
@@ -39,6 +42,10 @@ function Pdf() {
       downloadButton.style.display = "block";
     });
   };
+
+  const handleNext = () =>{
+     navigate("/")
+  }
 
   return (
     <div className="p-3">
@@ -190,6 +197,14 @@ function Pdf() {
               Download
             </Button>
           </Container>
+          <Row className="my-4" style={{ backgroundColor: "", marginRight:"15px" }}>
+            <Col className="d-flex justify-content-end">
+              {/* <Button variant="dark">Previous</Button> */}
+              <Button variant="dark" onClick={handleNext}>
+                Next
+              </Button>
+            </Col>
+          </Row>
         </div>
       </div>
       {/* pdf data section */}

@@ -14,7 +14,7 @@ import Form from "react-bootstrap/Form";
 import {
   setSelectedCamera,
   deleteCamera,
-  setFinalData
+  setFinalData,
 } from "../../../src/app/features/counter/counterSlice";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -47,26 +47,37 @@ function Cameras(props) {
   const [priceList, setPriceList] = useState(0);
   const [mergedState, setMergedState] = useState({});
   const [bracketNumber, setBracketNumber] = useState("");
+  const [totalBracket, setTotalBracket] = useState(0);
   const countCamera = useSelector((state) => state.counter1.selectedCamera);
   const tableData = countCamera;
 
-  //********************** Total Quantity(27sep) **********************//
-  const [totalQuantity, setTotalQuantity] = useState(0);
-  console.log("totalQuantity", totalQuantity);
+  //********************** Total Bracket(27sep) **********************//
+  console.log("totalBracket", totalBracket);
+
+  // React.useEffect(() => {
+  //   let totalBkt = 0;
+  //   tableData.forEach((item) => {
+  //     totalBkt += parseInt(item.Bracket_Selected, 10);
+  //   });
+  //   setTotalBracket(totalBkt);
+  // }, [tableData]);
 
   React.useEffect(() => {
-    let totalQty = 0;
+    let totalBkt = 0;
     tableData.forEach((item) => {
-      totalQty += parseInt(item.Camera_Quantity, 10);
+      const bracketSelected = parseInt(item.Bracket_Selected, 10);
+      if (!isNaN(bracketSelected)) {
+        totalBkt += bracketSelected;
+      }
     });
-    setTotalQuantity(totalQty);
+    setTotalBracket(totalBkt);
   }, [tableData]);
-  //********************** Total Quantity(27sep) **********************//
+  //********************** Total Bracket(27sep) **********************//
 
   //********************** Warning Modal(27sep) ***********************//
   const handleClose2 = () => setShows(false);
   const handleShow2 = () => {
-    if (selectedCameraNumber != totalQuantity) {
+    if (selectedCameraNumber > totalBracket) {
       setShows(true);
     } else {
       navigate("/Poe-switch");
@@ -103,6 +114,7 @@ function Cameras(props) {
     setTotalPrice(0);
     setIsDisabled(false);
     setPriceList(0);
+    setCount(1);
   };
 
   React.useEffect(() => {
@@ -236,7 +248,7 @@ function Cameras(props) {
     });
   }, [dataProduct.id, dataProduct.price, count, priceList, bracketNumber]);
 
-  console.log(finalNewState);
+  // console.log(finalNewState);
 
   //***** Below Code is responsible for filling finalNewState-2 *******//
   React.useEffect(() => {
@@ -308,7 +320,7 @@ function Cameras(props) {
 
   //************************* Delete Camera ***************************//
   const deleteFromCamera = (index) => {
-    console.log(index)
+    // console.log(index);
     dispatch(deleteCamera(index));
   };
   //************************* Delete Camera ***************************//
@@ -403,13 +415,16 @@ function Cameras(props) {
                   </thead>
                   <tbody>
                     {tableData.map((val, index) => {
-                      console.log("val is", val);
+                      // console.log("val is", val);
                       return (
                         <tr key={val}>
                           <td>{index + 1}</td> {/* Display the serial number */}
                           <td>{val.Camera_Name}</td>
                           <td>{val.Camera_Quantity}</td>
-                          <td> {val.Bracket_Selected} pcs</td>
+                          <td>
+                            {" "}
+                            {val.Bracket_Selected ? val.Bracket_Selected : 0}
+                          </td>
                           <td>$ {val.Camera_Final_Price}</td>
                           <td>
                             {" "}
@@ -426,11 +441,11 @@ function Cameras(props) {
                     {/* Final Section */}
                     <tr>
                       <th></th>
+                      <td></td>
                       <td>
                         <b>Total Price</b>
                       </td>
-                      <td>{totalQuantity}</td>
-                      <td></td>
+                      <td>{totalBracket}</td>
                       <td>$ {totalPriceInTable}</td>
                       <td></td>
                     </tr>

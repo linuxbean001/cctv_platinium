@@ -202,6 +202,10 @@ function Special() {
      setTotalPrice(newTotalPrice);
   };
 
+  const handleNext = () =>{
+    navigate("/cabling")
+  }
+
 
   return (
     <>
@@ -560,9 +564,9 @@ function Special() {
 
           {/* Button */}
           <Row className="my-4" style={{ backgroundColor: "" }}>
-            <Col className="d-flex justify-content-between">
-              <Button variant="dark">Previous</Button>
-              <Button variant="dark">Next</Button>
+            <Col className="d-flex justify-content-end">
+              {/* <Button variant="dark">Previous</Button> */}
+              <Button variant="dark" onClick={handleNext}>Next</Button>
             </Col>
           </Row>
         </Container>

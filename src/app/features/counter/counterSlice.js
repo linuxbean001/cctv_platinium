@@ -53,7 +53,7 @@ export const counterSlice = createSlice({
 
     
     //************** Remove Selected Camera **************//
-    deleteNVR: (state, action) => {
+    deletePoe: (state, action) => {
       state.selectedPoE.splice(action.payload, 1);
     },
     //************** Remove Selected Camera **************//
@@ -99,7 +99,6 @@ export const counterSlice = createSlice({
     deleteSpecial: (state, action) => {
       state.selectedSpecial.splice(action.payload, 1);
     },
-    //************** Remove Selected Camera **************//
 
     // For PoE Switches
     setSelectedPoE: (state, action) => {
@@ -134,6 +133,7 @@ export const {
   deleteNVR,
   deleteCabling,
   deleteLabor,
-  deleteSpecial
+  deleteSpecial,
+  deletePoe
 } = counterSlice.actions;
 export default counterSlice.reducer;

@@ -9,8 +9,7 @@ import Modal from "react-bootstrap/Modal";
 import Papa from "papaparse";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import noImage from "../../no_Image.jpg";
 import Form from "react-bootstrap/Form";
 import {
@@ -23,6 +22,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 
 function LaborRate() {
+  const navigate = useNavigate();
   const [categoryCSV, setCategoryCSV] = useState([]); // for category csv
   const [productCSV, setProductCSV] = useState([]); // for products csv
   const [productOption, setProductOptionCSV] = useState([]); // product_options.csv data
@@ -179,6 +179,11 @@ function LaborRate() {
     setTotalPrice(newTotalPrice);
   };
   //****************** Changes Saturday *******************//
+
+
+  const handleNext = () =>{
+    navigate("/pdf")
+  }
 
   return (
     <>
@@ -527,6 +532,14 @@ function LaborRate() {
             </Col>
           </Row>
           {/********************** Create TableData *********************/}
+          <Row className="my-4" style={{ backgroundColor: "" }}>
+            <Col className="d-flex justify-content-end">
+              {/* <Button variant="dark">Previous</Button> */}
+              <Button variant="dark" onClick={handleNext}>
+                Next
+              </Button>
+            </Col>
+          </Row>
         </Container>
       </Container>
     </>

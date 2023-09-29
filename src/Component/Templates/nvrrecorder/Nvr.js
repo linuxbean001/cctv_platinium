@@ -333,7 +333,7 @@ function Nvr(props) {
   const [show2, setShow2] = useState(false);
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => {
-    if (selectedCameraNumber >= calculateTotalLicenses()) {
+    if (selectedCameraNumber > calculateTotalLicenses()) {
       setShow2(true);
     } else {
       navigate("/cameras");
@@ -493,7 +493,6 @@ function Nvr(props) {
   });
 
   // Delete By Ravi
-
   function deleteFromTable(index)
   {
     dispatch(deleteNVR(index))
