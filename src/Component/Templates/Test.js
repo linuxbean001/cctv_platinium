@@ -1,14 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 function Test() {
   const [data, setData] = useState([]);
-  const apiUrl = 'https://jsonplaceholder.typicode.com/posts'; // Replace with the appropriate JSONPlaceholder API endpoint
-
-
-let newMyArray = [];
-newMyArray.push(data)
-
-console.log(newMyArray)
+  const apiUrl =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLfB-3Bov_7YurkzIQ4N9AyRWDJ8ImKcyWMEReQGcS5q_r-Vb9gb9G0SUE04Z920kPAaHVat_OyLlG/pubhtml?gid=0&single=true"; // Replace with the appropriate JSONPlaceholder API endpoint
 
   useEffect(() => {
     // Fetch data from the JSONPlaceholder API
@@ -17,26 +12,24 @@ console.log(newMyArray)
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);
         }
-        return response.json();
+        return response.text();
       })
       .then((jsonData) => {
-        setData(jsonData);
+        console.log("json", jsonData);
 
+        setData(jsonData);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       });
-  }, [apiUrl]);
+  }, []);
+
+  console.log(data);
 
   return (
-    <div>
-      <h1>JSONPlaceholder Data</h1>
-      <ul>
-        {data.map((item) => (
-          <li key={item.id}>{item.title}</li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <h1> Testing Page</h1>
+    </>
   );
 }
 
