@@ -500,9 +500,9 @@ function Special() {
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>CableCardName: </th>
+                      <th>Product Name: </th>
                       <th>QTY: </th>
-                      <th>CableCard Price: </th>
+                      <th>Product Price: </th>
                       <th>Total: </th>
                       <th>Action:</th>
                     </tr>
