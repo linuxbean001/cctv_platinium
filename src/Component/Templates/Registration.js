@@ -57,6 +57,8 @@ function Registration() {
                   <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label> Customer Name</Form.Label>
                     <Form.Control
+                    required
+
                       type="text"
                       name="customerName"
                       placeholder="Enter Customer Name"
@@ -68,6 +70,7 @@ function Registration() {
                   <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label> Business Name</Form.Label>
                     <Form.Control
+                    required
                       type="text"
                       name="businessName"
                       placeholder="Enter Business Name"
@@ -79,6 +82,7 @@ function Registration() {
                   <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label> Email</Form.Label>
                     <Form.Control
+                    required
                       type="email"
                       name="email"
                       placeholder="Enter Email"
@@ -90,6 +94,7 @@ function Registration() {
                   <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label> Phone Number</Form.Label>
                     <Form.Control
+                    required
                       type="number"
                       name="phoneNumber"
                       placeholder="Enter Phone Number"
@@ -101,6 +106,7 @@ function Registration() {
                   <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label> Address</Form.Label>
                     <Form.Control
+                    required
                       type="text"
                       name="address"
                       placeholder="Enter Address"
