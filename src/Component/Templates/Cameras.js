@@ -782,7 +782,7 @@ function Cameras(props) {
               <Modal.Title>
                 <h6>
                   {" "}
-                  <span style={{ color: "red" }}>Warning!</span>&nbsp; Number of
+                  <span>Warning!</span>&nbsp; Number of
                   cameras is not equal to quantity of cameras.
                 </h6>
               </Modal.Title>
