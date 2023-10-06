@@ -11,14 +11,18 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import noImage from "../../no_Image.jpg";
 import Form from "react-bootstrap/Form";
+
 import {
   setSelectedCamera,
   deleteCamera,
   setFinalData,
 } from "../../../src/app/features/counter/counterSlice";
 import { useSelector, useDispatch } from "react-redux";
+import Loader from "./Loader";
 
 function Cameras(props) {
+  const [isLoading, setIsLoading] = useState(true);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const selectedCameraNumber = useSelector(
@@ -152,6 +156,7 @@ function Cameras(props) {
         setCategoryCSV(products1);
         setProductCSV(products2);
         setProductOptionCSV(products3);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error parsing CSV files:", error);
       }
@@ -174,45 +179,49 @@ function Cameras(props) {
   };
 
   function modal_1(e, item, id) {
-    let firstIndex = -1;
-    let lastIndex = -1;
-    // Find the index of the first '83' value and the index of the last '83' value
+    // Code Starts
+    let result = [];
+    let currentArray = [];
     for (let i = 0; i < productOption.length; i++) {
-      if (productOption[i].productid === id && firstIndex === -1) {
-        firstIndex = i;
-      }
-      if (productOption[i].productid === id) {
-        lastIndex = i;
-      }
-    }
-    if (firstIndex !== -1 && lastIndex !== -1) {
-      const valuesBetween = [];
-      for (let i = firstIndex; i <= lastIndex; i++) {
-        if (
-          productOption[i].productid === id ||
-          productOption[i].productid === ""
-        ) {
-          valuesBetween.push(productOption[i]);
-        }
-      }
-      const separatedArrays = [];
-      let currentArray = [];
-      valuesBetween.forEach((item) => {
-        if (item.optionid !== "") {
-          if (currentArray.length > 0) {
-            separatedArrays.push([...currentArray]);
-            currentArray = [];
-          }
-        }
+      const item = productOption[i];
+
+      if (
+        item.productid === id ||
+        (currentArray.length > 0 && item.productid === "")
+      ) {
         currentArray.push(item);
-      });
-      if (currentArray.length > 0) {
-        separatedArrays.push([...currentArray]);
+      } else if (currentArray.length > 0) {
+        result = currentArray;
+        currentArray = [];
       }
-      setFinalDatas(separatedArrays);
-    } else {
-      console.log("No suitable data found in the data array with '83' cateId.");
     }
+    if (currentArray.length > 0) {
+      result = [...currentArray];
+    }
+
+    const result1 = [];
+    let currentArray1 = [];
+
+    for (let i = 0; i < result.length; i++) {
+      const item = result[i];
+
+      if (item.productid === id) {
+        if (currentArray1.length > 0) {
+          result1.push([...currentArray1]);
+          currentArray1 = [];
+        }
+        currentArray1.push(item);
+      } else if (currentArray1.length > 0 || i === result.length - 1) {
+        currentArray1.push(item);
+      }
+    }
+
+    if (currentArray1.length > 0) {
+      result1.push([...currentArray1]);
+    }
+    setFinalDatas(result1)
+    // Code Ends
+
     setShow2(true);
     setShow(false);
     setCategoryName2(id);
@@ -222,7 +231,6 @@ function Cameras(props) {
       }
     });
     setfilteredData2(cameraData3);
-
     setdataProduct(item);
   }
   //****************************** Modal_1 ****************************//
@@ -318,345 +326,353 @@ function Cameras(props) {
 
   return (
     <>
-      <Container fluid className="my-4" style={{ backgroundColor: "" }}>
-        <Container>
-          <Row style={{ backgroundColor: "" }}>
-            <Col style={{ backgroundColor: "" }}>
-              <h2>
-                Camera <span className="fst-italic fs-6">(Category)</span>
-              </h2>
-            </Col>
-            <Col className="" style={{ backgroundColor: "" }}>
-              <Row>
-                <Col className="text-end">
-                  Number of Cameras:&nbsp;
-                  <span className="fw-bold">{selectedCameraNumber}</span>
-                </Col>
-              </Row>
-              <Row>
-                <Col className="text-end">
-                  <Link to="/">
-                    <h6>
-                      Edit here <span className="fw-bold"></span>
-                    </h6>
-                  </Link>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-
-          {/* Box */}
-          <Row className="my-4" style={{ backgroundColor: "" }}>
-            {cameraData.map((item) => {
-              return (
-                <>
-                  <Col
-                    md={4}
-                    className="mb-4"
-                    onClick={(e) => handleButtonClick(e, item.category_name)}
-                  >
-                    <Card style={{ width: "", margin: "" }}>
-                      <Card.Body>
-                        <Row>
-                          <Col xs={7}>
-                            <Card.Img
-                              variant="top"
-                              height={150}
-                              src={item.iconimage ? item.iconimage : noImage}
-                            />
-                          </Col>
-                          <Col
-                            xs={5}
-                            className=" align-items-center justify-content-center fw-bold"
-                          >
-                            <Card.Text className="fs-6">
-                              {item.category_name}
-                            </Card.Text>
-                            <p className="camera_category_title">
-                              {" "}
-                              {item.category_title
-                                ? item.category_title
-                                : "No Title Found"}
-                            </p>
-                          </Col>
-                        </Row>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                </>
-              );
-            })}
-          </Row>
-
-          <Row className="my-4" style={{ padding: "8px" }}>
-            <Col>
-              <h5 className="fw-bold">Add to Cart: </h5>
-
-              <div className="table-border">
-                <Table striped bordered hover responsive>
-                  <thead>
-                    <tr>
-                      <th>#</th> {/* Add a new column for the serial number */}
-                      <th>Camera Selected:</th>
-                      <th>QTY:</th>
-                      <th>Brackets: </th>
-                      <th>Total: </th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {tableData.map((val, index) => {
-                      return (
-                        <tr key={val}>
-                          <td>{index + 1}</td> {/* Display the serial number */}
-                          <td>{val.Camera_Name}</td>
-                          <td>{val.Camera_Quantity}</td>
-                          <td>
-                            {" "}
-                            {val.Bracket_Selected ? val.Bracket_Selected : 0}
-                          </td>
-                          <td>$ {val.Camera_Final_Price}</td>
-                          <td>
-                            {" "}
-                            <Button
-                              variant="dark"
-                              onClick={() => deleteFromCamera(index)}
-                            >
-                              Delete
-                            </Button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                    {/* Final Section */}
-                    <tr>
-                      <th></th>
-                      <td>
-                        {" "}
-                        <b>Total Price</b>{" "}
-                      </td>
-                      <td>{totalQty}</td>
-                      <td>{totalBracket}</td>
-                      <td>$ {totalPriceInTable}</td>
-                      <td></td>
-                    </tr>
-                    {/* Final Section */}
-                  </tbody>
-                </Table>
-              </div>
-            </Col>
-          </Row>
-
-          {/* Next Page Code */}
-          <Row className="my-4" style={{ backgroundColor: "" }}>
-            <Col className="d-flex justify-content-end">
-              <Button variant="dark" onClick={handleShow2}>
-                Next
-              </Button>
-            </Col>
-          </Row>
-
-          {/* Modal Code - 1 */}
-          <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            show={show}
-            onHide={() => setShow(false)}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>{categoryName}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Row className="my-4">
-                {filteredData.map((item) => {
-                  return (
-                    <>
-                      <Col
-                        md={4}
-                        className="nvr_col my-2"
-                        onClick={(e) => modal_1(e, item, item.id)}
-                        key={item.id}
-                      >
-                        <Card
-                          style={{
-                            width: "",
-                            backgroundColor: "",
-                            height: "300px",
-                          }}
-                        >
-                          <Card.Body>
-                            <Card.Title className="fw-bold">
-                              SKU : {item.id}
-                            </Card.Title>
-                            <Card.Text>
-                              Description :{" "}
-                              {item.description
-                                .split(" ")
-                                .slice(0, 10)
-                                .join(" ")}
-                              ...
-                            </Card.Text>
-
-                            <Row>
-                              <Col xs={8}>
-                                <Card.Img
-                                  variant="top"
-                                  height={100}
-                                  src={
-                                    item.thumbnail ? item.thumbnail : noImage
-                                  }
-                                />
-                              </Col>
-                              <Col
-                                xs={4}
-                                className="d-flex align-items-center justify-content-center fw-bold"
-                              >
-                                $ {item.price}
-                              </Col>
-                            </Row>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    </>
-                  );
-                })}
-              </Row>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="dark" onClick={() => setShow(false)}>
-                Close
-              </Button>
-            </Modal.Footer>
-          </Modal>
-
-          {/* Modal-2 */}
-          <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            show={show2}
-            onHide={() => setShow2(false)}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>{categoryName2}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Container>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Container fluid className="my-4" style={{ backgroundColor: "" }}>
+          {/* <Loader/> */}
+          <Container>
+            <Row style={{ backgroundColor: "" }}>
+              <Col style={{ backgroundColor: "" }}>
+                <h2>
+                  Camera <span className="fst-italic fs-6">(Category)</span>
+                </h2>
+              </Col>
+              <Col className="" style={{ backgroundColor: "" }}>
                 <Row>
-                  {filteredData2.map((val) => {
-                    return (
-                      <>
-                        <Col md={5} style={{ backgroundColor: "" }}>
-                          <Row>
-                            <Card.Img
-                              variant="top"
-                              height={150}
-                              src={thumbimg.img1}
-                            />
-                          </Row>
-                          <Row className="my-2">
-                            <Col>
-                              {" "}
-                              <Card.Img
-                                variant="top"
-                                height={40}
-                                className="camera_thumbnail_img"
-                                src={val.image1}
-                                onClick={() => {
-                                  setThumbimg({ img1: val.image1 });
-                                }}
-                              />
-                            </Col>
-                            <Col>
-                              {" "}
-                              <Card.Img
-                                variant="top"
-                                height={40}
-                                className="camera_thumbnail_img"
-                                src={val.image2}
-                                onClick={() => {
-                                  setThumbimg({ img1: val.image2 });
-                                }}
-                              />
-                            </Col>
-                            <Col>
-                              {" "}
-                              <Card.Img
-                                variant="top"
-                                height={40}
-                                className="camera_thumbnail_img"
-                                src={val.image3}
-                                onClick={() => {
-                                  setThumbimg({ img1: val.image3 });
-                                }}
-                              />
-                            </Col>
-                            <Col>
-                              {" "}
-                              <Card.Img
-                                variant="top"
-                                height={40}
-                                className="camera_thumbnail_img"
-                                src={val.image4}
-                                onClick={() => {
-                                  setThumbimg({ img1: val.image4 });
-                                }}
-                              />
-                            </Col>
-                          </Row>
+                  <Col className="text-end">
+                    Number of Cameras:&nbsp;
+                    <span className="fw-bold">{selectedCameraNumber}</span>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className="text-end">
+                    <Link to="/">
+                      <h6>
+                        Edit here <span className="fw-bold"></span>
+                      </h6>
+                    </Link>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
 
-                          {/* Final Price */}
-                          <Row className="tops">
-                            <div className="w-100 d-flex align-items-start">
+            {/* Box */}
+            <Row className="my-4" style={{ backgroundColor: "" }}>
+              {cameraData.map((item) => {
+                return (
+                  <>
+                    <Col
+                      md={4}
+                      className="mb-4"
+                      onClick={(e) => handleButtonClick(e, item.category_name)}
+                    >
+                      <Card style={{ width: "", margin: "" }}>
+                        <Card.Body>
+                          <Row>
+                            <Col xs={7}>
+                              <Card.Img
+                                variant="top"
+                                height={150}
+                                src={item.iconimage ? item.iconimage : noImage}
+                              />
+                            </Col>
+                            <Col
+                              xs={5}
+                              className=" align-items-center justify-content-center fw-bold"
+                            >
+                              <Card.Text className="fs-6">
+                                {item.category_name}
+                              </Card.Text>
+                              <p className="camera_category_title">
+                                {" "}
+                                {item.category_title
+                                  ? item.category_title
+                                  : "No Title Found"}
+                              </p>
+                            </Col>
+                          </Row>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  </>
+                );
+              })}
+            </Row>
+
+            <Row className="my-4" style={{ padding: "8px" }}>
+              <Col>
+                <h5 className="fw-bold">Add to Cart: </h5>
+
+                <div className="table-border">
+                  <Table striped bordered hover responsive>
+                    <thead>
+                      <tr>
+                        <th>#</th>{" "}
+                        {/* Add a new column for the serial number */}
+                        <th>Camera Selected:</th>
+                        <th>QTY:</th>
+                        <th>Brackets: </th>
+                        <th>Total: </th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tableData.map((val, index) => {
+                        return (
+                          <tr key={val}>
+                            <td>{index + 1}</td>{" "}
+                            {/* Display the serial number */}
+                            <td>{val.Camera_Name}</td>
+                            <td>{val.Camera_Quantity}</td>
+                            <td>
+                              {" "}
+                              {val.Bracket_Selected ? val.Bracket_Selected : 0}
+                            </td>
+                            <td>$ {val.Camera_Final_Price}</td>
+                            <td>
+                              {" "}
                               <Button
                                 variant="dark"
-                                onClick={calculateTotalPrice}
+                                onClick={() => deleteFromCamera(index)}
                               >
-                                Final Price
+                                Delete
                               </Button>
-                            </div>
-                            <div className="w-100 my-1 d-flex align-items-start">
-                              <div className="text">
-                                <Table
-                                  striped
-                                  bordered
-                                  hover
-                                  responsive
-                                  style={{ width: "14rem" }}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                      {/* Final Section */}
+                      <tr>
+                        <th></th>
+                        <td>
+                          {" "}
+                          <b>Total Price</b>{" "}
+                        </td>
+                        <td>{totalQty}</td>
+                        <td>{totalBracket}</td>
+                        <td>$ {totalPriceInTable}</td>
+                        <td></td>
+                      </tr>
+                      {/* Final Section */}
+                    </tbody>
+                  </Table>
+                </div>
+              </Col>
+            </Row>
+
+            {/* Next Page Code */}
+            <Row className="my-4" style={{ backgroundColor: "" }}>
+              <Col className="d-flex justify-content-end">
+                <Button variant="dark" onClick={handleShow2}>
+                  Next
+                </Button>
+              </Col>
+            </Row>
+
+            {/* Modal Code - 1 */}
+            <Modal
+              {...props}
+              size="lg"
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+              show={show}
+              onHide={() => setShow(false)}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>{categoryName}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Row className="my-4">
+                  {filteredData.map((item) => {
+                    return (
+                      <>
+                        <Col
+                          md={4}
+                          className="nvr_col my-2"
+                          onClick={(e) => modal_1(e, item, item.id)}
+                          key={item.id}
+                        >
+                          <Card
+                            style={{
+                              width: "",
+                              backgroundColor: "",
+                              height: "300px",
+                            }}
+                          >
+                            <Card.Body>
+                              <Card.Title className="fw-bold">
+                                SKU : {item.id}
+                              </Card.Title>
+                              <Card.Text>
+                                Description :{" "}
+                                {item.description
+                                  .split(" ")
+                                  .slice(0, 10)
+                                  .join(" ")}
+                                ...
+                              </Card.Text>
+
+                              <Row>
+                                <Col xs={8}>
+                                  <Card.Img
+                                    variant="top"
+                                    height={100}
+                                    src={
+                                      item.thumbnail ? item.thumbnail : noImage
+                                    }
+                                  />
+                                </Col>
+                                <Col
+                                  xs={4}
+                                  className="d-flex align-items-center justify-content-center fw-bold"
                                 >
-                                  <thead>
-                                    <tr>
-                                      <th>
-                                        <b>$</b> {priceList}
-                                      </th>
-                                    </tr>
-                                  </thead>
-                                </Table>
-                              </div>
-                            </div>
-                          </Row>
-                          {/* Final Price */}
+                                  $ {item.price}
+                                </Col>
+                              </Row>
+                            </Card.Body>
+                          </Card>
                         </Col>
-                        <Col md={7}>
-                          <p className="fst-italic">
-                            {" "}
-                            <span className="fw-bold">Description : </span>{" "}
-                            {val.name}
-                          </p>
+                      </>
+                    );
+                  })}
+                </Row>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="dark" onClick={() => setShow(false)}>
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
 
-                          {/* Add Dropdown */}
+            {/* Modal-2 */}
+            <Modal
+              {...props}
+              size="lg"
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+              show={show2}
+              onHide={() => setShow2(false)}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>{categoryName2}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Container>
+                  <Row>
+                    {filteredData2.map((val) => {
+                      return (
+                        <>
+                          <Col md={5} style={{ backgroundColor: "" }}>
+                            <Row>
+                              <Card.Img
+                                variant="top"
+                                height={150}
+                                src={thumbimg.img1}
+                              />
+                            </Row>
+                            <Row className="my-2">
+                              <Col>
+                                {" "}
+                                <Card.Img
+                                  variant="top"
+                                  height={40}
+                                  className="camera_thumbnail_img"
+                                  src={val.image1}
+                                  onClick={() => {
+                                    setThumbimg({ img1: val.image1 });
+                                  }}
+                                />
+                              </Col>
+                              <Col>
+                                {" "}
+                                <Card.Img
+                                  variant="top"
+                                  height={40}
+                                  className="camera_thumbnail_img"
+                                  src={val.image2}
+                                  onClick={() => {
+                                    setThumbimg({ img1: val.image2 });
+                                  }}
+                                />
+                              </Col>
+                              <Col>
+                                {" "}
+                                <Card.Img
+                                  variant="top"
+                                  height={40}
+                                  className="camera_thumbnail_img"
+                                  src={val.image3}
+                                  onClick={() => {
+                                    setThumbimg({ img1: val.image3 });
+                                  }}
+                                />
+                              </Col>
+                              <Col>
+                                {" "}
+                                <Card.Img
+                                  variant="top"
+                                  height={40}
+                                  className="camera_thumbnail_img"
+                                  src={val.image4}
+                                  onClick={() => {
+                                    setThumbimg({ img1: val.image4 });
+                                  }}
+                                />
+                              </Col>
+                            </Row>
 
-                          {finalDatas.map((item, index) => {
-                            // if (item[0].featurecaption === "Mounting Bracket") {
-                            //   return null;
-                            // }
+                            {/* Final Price */}
+                            <Row className="tops">
+                              <div className="w-100 d-flex align-items-start">
+                                <Button
+                                  variant="dark"
+                                  onClick={calculateTotalPrice}
+                                >
+                                  Final Price
+                                </Button>
+                              </div>
+                              <div className="w-100 my-1 d-flex align-items-start">
+                                <div className="text">
+                                  <Table
+                                    striped
+                                    bordered
+                                    hover
+                                    responsive
+                                    style={{ width: "14rem" }}
+                                  >
+                                    <thead>
+                                      <tr>
+                                        <th>
+                                          <b>$</b> {priceList}
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                  </Table>
+                                </div>
+                              </div>
+                            </Row>
+                            {/* Final Price */}
+                          </Col>
+                          <Col md={7}>
+                            <p className="fst-italic">
+                              {" "}
+                              <span className="fw-bold">
+                                Description :{" "}
+                              </span>{" "}
+                              {val.name}
+                            </p>
 
-                            return (
-                              <>
-                                {/* <Form.Select key={index} aria-label="Default select example" className="mb-3">
+                            {/* Add Dropdown */}
+
+                            {finalDatas.map((item, index) => {
+                              // if (item[0].featurecaption === "Mounting Bracket") {
+                              //   return null;
+                              // }
+
+                              return (
+                                <>
+                                  {/* <Form.Select key={index} aria-label="Default select example" className="mb-3">
                         <option value={2}>{item[0].featurecaption}</option>
                         {item.map((option, optionIndex) => (
                           <option key={optionIndex} value={option.value}>
@@ -665,141 +681,144 @@ function Cameras(props) {
                         ))}
                       </Form.Select> */}
 
-                                <Form.Label>
-                                  {item[0].featurecaption}
-                                </Form.Label>
-                                <Form.Select
-                                  key={index}
-                                  aria-label="Default select example"
-                                  className="mb-3"
-                                  name={item[0].featurecaption}
-                                  value={
-                                    finalNewState2[item[0].featurecaption] || ""
-                                  }
-                                  onChange={(e) => handleSelectChange(e)}
-                                >
-                                  {/* <option>Select a option</option> */}
-                                  {item.map((option, optionIndex) => {
-                                    return (
-                                      <>
-                                        <option
-                                          name={option.featurecaption}
-                                          key={optionIndex}
-                                          value={option.featurename}
-                                        >
-                                          {option.featurename +
-                                            " " +
-                                            "  " +
-                                            "$ " +
-                                            option.featureprice}
-                                        </option>
-                                      </>
-                                    );
-                                  })}
-                                </Form.Select>
-                              </>
-                            );
-                          })}
-                          <Form.Label>Mounting Bracket</Form.Label>
-                          <Form.Control
-                            type="number"
-                            placeholder="Enter a value"
-                            value={bracketNumber}
-                            onChange={handleBracketChange}
-                          />
-                          <div
-                            className="d-flex align-items-end justify-content-end my-4"
-                            style={{ backgroundColor: "" }}
-                          >
-                            <Button variant="dark" onClick={handlePlusClick}>
-                              +
-                            </Button>
-                            <h6 className="mx-3">{count}</h6>
-                            <Button variant="dark" onClick={handleMinusClick}>
-                              -
-                            </Button>
-                          </div>
-                        </Col>
-                      </>
-                    );
-                  })}
-                </Row>
-              </Container>
-            </Modal.Body>
-            <Modal.Footer>
-              <div className="w-100 my-4 d-flex align-items-end justify-content-between">
-                <Button
-                  className="mx-3"
-                  variant="dark"
-                  onClick={() => setShow2(false)}
-                >
-                  Back
-                </Button>
-                <Button
-                  variant="dark"
-                  onClick={modal_3}
-                  disabled={priceList === 0}
-                >
-                  Add
-                </Button>
-              </div>
-            </Modal.Footer>
-          </Modal>
-          {/* Modal-3 */}
-          <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            show={show3}
-            onHide={() => setShow3(false)}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Warning ! </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Container>Less Brackets Than Camera !</Container>
-            </Modal.Body>
-            <Modal.Footer>
-              <div className="w-100 my-4 d-flex align-items-end justify-content-between">
-                <Button
-                  className="mx-3"
-                  variant="dark"
-                  onClick={() => setShow3(false)}
-                >
+                                  <Form.Label>
+                                    {item[0].featurecaption}
+                                  </Form.Label>
+                                  <Form.Select
+                                    key={index}
+                                    aria-label="Default select example"
+                                    className="mb-3"
+                                    name={item[0].featurecaption}
+                                    value={
+                                      finalNewState2[item[0].featurecaption] ||
+                                      ""
+                                    }
+                                    onChange={(e) => handleSelectChange(e)}
+                                  >
+                                    {/* <option>Select a option</option> */}
+                                    {item.map((option, optionIndex) => {
+                                      return (
+                                        <>
+                                          <option
+                                            name={option.featurecaption}
+                                            key={optionIndex}
+                                            value={option.featurename}
+                                          >
+                                            {option.featurename +
+                                              " " +
+                                              "  " +
+                                              "$ " +
+                                              option.featureprice}
+                                          </option>
+                                        </>
+                                      );
+                                    })}
+                                  </Form.Select>
+                                </>
+                              );
+                            })}
+                            <Form.Label>Mounting Bracket Numbers</Form.Label>
+                            <Form.Control
+                              type="number"
+                              placeholder="Enter a value"
+                              value={bracketNumber}
+                              onChange={handleBracketChange}
+                              disabled
+                            />
+                            <div
+                              className="d-flex align-items-end justify-content-end my-4"
+                              style={{ backgroundColor: "" }}
+                            >
+                              <Button variant="dark" onClick={handlePlusClick}>
+                                +
+                              </Button>
+                              <h6 className="mx-3">{count}</h6>
+                              <Button variant="dark" onClick={handleMinusClick}>
+                                -
+                              </Button>
+                            </div>
+                          </Col>
+                        </>
+                      );
+                    })}
+                  </Row>
+                </Container>
+              </Modal.Body>
+              <Modal.Footer>
+                <div className="w-100 my-4 d-flex align-items-end justify-content-between">
+                  <Button
+                    className="mx-3"
+                    variant="dark"
+                    onClick={() => setShow2(false)}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    variant="dark"
+                    onClick={modal_3}
+                    disabled={priceList === 0}
+                  >
+                    Add
+                  </Button>
+                </div>
+              </Modal.Footer>
+            </Modal>
+            {/* Modal-3 */}
+            <Modal
+              {...props}
+              size="lg"
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+              show={show3}
+              onHide={() => setShow3(false)}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Warning ! </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Container>Less Brackets Than Camera !</Container>
+              </Modal.Body>
+              <Modal.Footer>
+                <div className="w-100 my-4 d-flex align-items-end justify-content-between">
+                  <Button
+                    className="mx-3"
+                    variant="dark"
+                    onClick={() => setShow3(false)}
+                  >
+                    Go Back
+                  </Button>
+                  <Button variant="dark" onClick={() => setShow3(false)}>
+                    Continue Anyways
+                  </Button>
+                </div>
+              </Modal.Footer>
+            </Modal>
+
+            {/***************************** Warning Modal(27sep) ****************************/}
+            <Modal show={shows} onHide={handleClose2}>
+              <Modal.Header closeButton>
+                <Modal.Title>
+                  <h6>
+                    {" "}
+                    <span>Warning!</span>&nbsp; Number of cameras is not equal
+                    to quantity of cameras.
+                  </h6>
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>Are you sure want to continue</Modal.Body>
+              <Modal.Footer>
+                <Button variant="dark" onClick={handleClose2}>
                   Go Back
                 </Button>
-                <Button variant="dark" onClick={() => setShow3(false)}>
+                <Button variant="dark" onClick={() => navigate("/Poe-switch")}>
                   Continue Anyways
                 </Button>
-              </div>
-            </Modal.Footer>
-          </Modal>
-
-          {/***************************** Warning Modal(27sep) ****************************/}
-          <Modal show={shows} onHide={handleClose2}>
-            <Modal.Header closeButton>
-              <Modal.Title>
-                <h6>
-                  {" "}
-                  <span>Warning!</span>&nbsp; Number of
-                  cameras is not equal to quantity of cameras.
-                </h6>
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Are you sure want to continue</Modal.Body>
-            <Modal.Footer>
-              <Button variant="dark" onClick={handleClose2}>
-                Go Back
-              </Button>
-              <Button variant="dark" onClick={() => navigate("/Poe-switch")}>
-                Continue Anyways
-              </Button>
-            </Modal.Footer>
-          </Modal>
-          {/***************************** Warning Modal(27sep) ****************************/}
+              </Modal.Footer>
+            </Modal>
+            {/***************************** Warning Modal(27sep) ****************************/}
+          </Container>
         </Container>
-      </Container>
+      )}
     </>
   );
 }

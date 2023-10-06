@@ -9,6 +9,8 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/esm/Table";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import {
   setSelectedSpecial,
   deleteSpecial,
@@ -195,6 +197,34 @@ function Special() {
     navigate("/cabling");
   };
 
+  // Custom Model
+
+  const [showCustom, setShowCustom] = useState(false);
+  const handleCloseCustom = () => setShowCustom(false);
+  const handleShowCustom = () => setShowCustom(true);
+
+  const validationSchema = Yup.object().shape({
+    customQuantity: Yup.number().required("Please Enter Quantity"),
+    customSKU: Yup.string().required("Please Enter SKU"),
+    customDescription: Yup.string().required("Please Enter Some Description"),
+    customCost: Yup.number().required("Enter Your Cost"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      customQuantity: "",
+      customSKU: "",
+      customDescription: "",
+      customCost: "",
+    },
+    validationSchema,
+    onSubmit: (values,{ resetForm }) => {
+      console.log("Form submitted:", values);
+      resetForm();
+      handleCloseCustom();
+    },
+  });
+
   return (
     <>
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
@@ -205,6 +235,20 @@ function Special() {
                 Special Items{" "}
                 <span className="fst-italic fs-6">(Category)</span>
               </h2>
+            </Col>
+            <Col className="" style={{ backgroundColor: "" }}>
+              <Row>
+                <Col className="text-end">
+                  Number of Cameras:&nbsp;
+                  <span className="fw-bold">{selectedCameraNumber}</span>
+                </Col>
+              </Row>
+              <Row>
+                <Col className="text-end">
+                  Number of Drops:&nbsp;
+                  <span className="fw-bold">{selectedCameraNumber}</span>
+                </Col>
+              </Row>
             </Col>
           </Row>
 
@@ -491,6 +535,92 @@ function Special() {
             </Modal.Footer>
           </Modal>
 
+          {/* Custom Model */}
+          <Modal show={showCustom} onHide={handleCloseCustom}>
+            <Modal.Header closeButton>
+              <Modal.Title>Custom Product</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <Form onSubmit={formik.handleSubmit}>
+      {/* Quantity */}
+      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+        <Form.Label>Quantity :</Form.Label>
+        <Form.Control
+          type="number"
+          placeholder="SKU"
+          name="customQuantity"
+          value={formik.values.customQuantity}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+        {formik.touched.customQuantity && formik.errors.customQuantity && (
+              <div className="text-danger">{formik.errors.customQuantity}</div>
+              )}
+      </Form.Group>
+
+      {/* SKU */}
+      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+        <Form.Label>SKU :</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="SKU"
+          name="customSKU"
+          value={formik.values.customSKU}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+           {formik.touched.customSKU && formik.errors.customSKU && (
+              <div className="text-danger">{formik.errors.customSKU}</div>
+              )}
+      </Form.Group>
+
+      {/* Description */}
+      <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Label>Description :</Form.Label>
+        <Form.Control
+          as="textarea"
+          rows={3}
+          placeholder="SKU"
+          name="customDescription"
+          value={formik.values.customDescription}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+         {formik.touched.customDescription && formik.errors.customDescription && (
+              <div className="text-danger">{formik.errors.customDescription}</div>
+              )}
+      </Form.Group>
+
+      {/* Cost */}
+      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+        <Form.Label>Cost :</Form.Label>
+        <Form.Control
+          type="number"
+          placeholder="$"
+          name="customCost"
+          value={formik.values.customCost}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+           {formik.touched.customCost && formik.errors.customCost && (
+              <div className="text-danger">{formik.errors.customCost}</div>
+              )}
+      </Form.Group>
+      <Button variant="dark" type="submit">
+        Add
+      </Button>
+    </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="dark" onClick={handleCloseCustom}>
+                Back
+              </Button>
+            
+            </Modal.Footer>
+          </Modal>
+
+          {/* Custom Model */}
+
           <Row className="my-4" style={{ padding: "8px" }}>
             <Col>
               <h5 className="fw-bold">Add to Cart: </h5>
@@ -541,7 +671,15 @@ function Special() {
             </Col>
           </Row>
 
-          <Row className="my-4" style={{ backgroundColor: "" }}>
+          <Row
+            className="my-4 d-flex justify-content-between"
+            style={{ backgroundColor: "" }}
+          >
+            <Col className="">
+              <Button variant="dark" onClick={handleShowCustom}>
+                Custom
+              </Button>
+            </Col>
             <Col className="d-flex justify-content-end">
               <Button variant="dark" onClick={handleNext}>
                 Next

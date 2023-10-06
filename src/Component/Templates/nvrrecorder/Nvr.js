@@ -18,6 +18,8 @@ import {
 } from "../../../app/features/counter/counterSlice";
 
 function MyVerticallyCenteredModal(props) {
+  console.log('final data', props)
+
   const [finalNewState, setFinalNewState] = useState({});
   const [finalNewState2, setFinalNewState2] = useState({});
   const dispatch = useDispatch();
@@ -74,7 +76,6 @@ function MyVerticallyCenteredModal(props) {
 
   function handleSelectChange(e) {
     const { name, value } = e.target;
-
     const selectedOption = props.finalData
       .flat()
       .find((option) => option.featurename === value);
@@ -219,7 +220,7 @@ function MyVerticallyCenteredModal(props) {
               {props.finalData.map((item, index) => {
                 return (
                   <>
-                    <Form.Label>{item[0].featurecaption}</Form.Label>
+                    <Form.Label> {item[0].featurecaption}</Form.Label>
                     <Form.Select
                       key={index}
                       aria-label="Default select example"
@@ -320,6 +321,8 @@ function Nvr(props) {
     }
   };
 
+
+  // console.log('options', produtOption)  // Complete data from OptionsCSV
   const calculateTotalPrice = () => {
     let totalPrice = 0;
     tableData.forEach((val) => {
@@ -393,44 +396,51 @@ function Nvr(props) {
   });
 
   const handleButtonClick = (e, val, id) => {
-    let firstIndex = -1;
-    let lastIndex = -1;
-    for (let i = 0; i < produtOption.length; i++) {
-      if (produtOption[i].productid === id && firstIndex === -1) {
-        firstIndex = i;
-      }
-      if (produtOption[i].productid === id) {
-        lastIndex = i;
-      }
-    }
-    if (firstIndex !== -1 && lastIndex !== -1) {
-      const valuesBetween = [];
-      for (let i = firstIndex; i <= lastIndex; i++) {
-        if (
-          produtOption[i].productid === id ||
-          produtOption[i].productid === ""
-        ) {
-          valuesBetween.push(produtOption[i]);
-        }
-      }
-      const separatedArrays = [];
-      let currentArray = [];
-      valuesBetween.forEach((item) => {
-        if (item.optionid !== "") {
-          if (currentArray.length > 0) {
-            separatedArrays.push([...currentArray]);
-            currentArray = [];
-          }
-        }
-        currentArray.push(item);
-      });
-      if (currentArray.length > 0) {
-        separatedArrays.push([...currentArray]);
-      }
-      setFinalData(separatedArrays);
-    } else {
-      console.log("No suitable data found in the data array with '83' cateId.");
-    }
+   
+     // Code Starts
+     let result = [];
+     let currentArray = [];
+     for (let i = 0; i < produtOption.length; i++) {
+       const item = produtOption[i];
+ 
+       if (
+         item.productid === id ||
+         (currentArray.length > 0 && item.productid === "")
+       ) {
+         currentArray.push(item);
+       } else if (currentArray.length > 0) {
+         result = currentArray;
+         currentArray = [];
+       }
+     }
+     if (currentArray.length > 0) {
+       result = [...currentArray];
+     }
+ 
+     const result1 = [];
+     let currentArray1 = [];
+ 
+     for (let i = 0; i < result.length; i++) {
+       const item = result[i];
+ 
+       if (item.productid === id) {
+         if (currentArray1.length > 0) {
+           result1.push([...currentArray1]);
+           currentArray1 = [];
+         }
+         currentArray1.push(item);
+       } else if (currentArray1.length > 0 || i === result.length - 1) {
+         currentArray1.push(item);
+       }
+     }
+ 
+     if (currentArray1.length > 0) {
+       result1.push([...currentArray1]);
+     }
+     setFinalData(result1)
+     // Code Ends
+
+  
 
     setIdforOptions(id);
     setModalShow(true);
