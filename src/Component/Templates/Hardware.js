@@ -17,6 +17,7 @@ import {
   setFinalData,
 } from "../../app/features/counter/counterSlice";
 import { Link } from "react-router-dom";
+import Loader from "./Loader.js";
 
 let globalState;
 
@@ -198,6 +199,8 @@ function MyVerticallyCenteredModal(props) {
 }
 
 function Hardware() {
+  const [isLoading, setIsLoading] = useState(true); // Loader State
+
   const navigate = useNavigate();
   const selectedCameraNumber = useSelector(
     (state) => state.counter1.totalCamera
@@ -217,6 +220,7 @@ function Hardware() {
         const categoryArray2 = await productsCSV.text();
         const products2 = Papa.parse(categoryArray2, { header: true }).data;
         setProductCSV(products2);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error parsing CSV files:", error);
       }
@@ -239,127 +243,132 @@ function Hardware() {
 
   return (
     <>
-      <Container fluid className="my-4" style={{ backgroundColor: "" }}>
-        <Container>
-          <Row style={{ backgroundColor: "" }}>
-            <Col style={{ backgroundColor: "" }}>
-              <h2>
-                Hardware <span className="fst-italic fs-6">(Category)</span>
-              </h2>
-            </Col>
-            <Col className="" style={{ backgroundColor: "" }}>
-              <Row>
-                <Col className="text-end">
-                  Total Number of Cameras:&nbsp;
-                  <span className="fw-bold">{selectedCameraNumber}</span>
-                </Col>
-              </Row>
-              <Row>
-                <Col className="text-end">
-                  <Link to="/">
-                    <h6>
-                      Edit here <span className="fw-bold"></span>
-                    </h6>
-                  </Link>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Container fluid className="my-4" style={{ backgroundColor: "" }}>
+          <Container>
+            <Row style={{ backgroundColor: "" }}>
+              <Col style={{ backgroundColor: "" }}>
+                <h2>
+                  Hardware <span className="fst-italic fs-6">(Category)</span>
+                </h2>
+              </Col>
+              <Col className="" style={{ backgroundColor: "" }}>
+                <Row>
+                  <Col className="text-end">
+                    Total Number of Cameras:&nbsp;
+                    <span className="fw-bold">{selectedCameraNumber}</span>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className="text-end">
+                    <Link to="/">
+                      <h6>
+                        Edit here <span className="fw-bold"></span>
+                      </h6>
+                    </Link>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
 
-          <Row className="my-4">
-            {productCSV.map((hardware) => {
-              if (hardware.categories === "Hardware") {
-                return (
-                  <>
-                    <Col
-                      style={{ backgroundColor: "" }}
-                      md={4}
-                      className="nvr_col my-3"
-                      onClick={(e) => handleButtonClick(e, hardware)}
-                    >
-                      <Card style={{ width: "", margin: "" }}>
-                        <Card.Body>
-                          <Card.Title className="fw-bold">
-                            SKU :{hardware.id}
-                          </Card.Title>
-                          <Card.Text> {hardware.name}</Card.Text>
-                          <Row>
-                            <Col xs={8}>
-                              <Card.Img
-                                variant="top"
-                                height={150}
-                                src={hardware.thumbnail === "" ? noImage : ""}
-                              />
-                            </Col>
-                            <Col
-                              xs={4}
-                              className="d-flex align-items-center justify-content-center fw-bold"
-                            >
-                              ${hardware.price}
-                            </Col>
-                          </Row>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </>
-                );
-              }
-            })}
-          </Row>
+            <Row className="my-4">
+              {productCSV.map((hardware) => {
+                if (hardware.categories === "Hardware") {
+                  return (
+                    <>
+                      <Col
+                        style={{ backgroundColor: "" }}
+                        md={4}
+                        className="nvr_col my-3"
+                        onClick={(e) => handleButtonClick(e, hardware)}
+                      >
+                        <Card style={{ width: "", margin: "" }}>
+                          <Card.Body>
+                            <Card.Title className="fw-bold">
+                              SKU :{hardware.id}
+                            </Card.Title>
+                            <Card.Text> {hardware.name}</Card.Text>
+                            <Row>
+                              <Col xs={8}>
+                                <Card.Img
+                                  variant="top"
+                                  height={150}
+                                  src={hardware.thumbnail === "" ? noImage : ""}
+                                />
+                              </Col>
+                              <Col
+                                xs={4}
+                                className="d-flex align-items-center justify-content-center fw-bold"
+                              >
+                                ${hardware.price}
+                              </Col>
+                            </Row>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    </>
+                  );
+                }
+              })}
+            </Row>
 
-          <Row className="my-4" style={{ padding: "8px" }}>
-            <Col>
-              <h5 className="fw-bold">Add to Cart: </h5>
+            <Row className="my-4" style={{ padding: "8px" }}>
+              <Col>
+                <h5 className="fw-bold">Add to Cart: </h5>
 
-              <div className="table-border">
-                <Table striped bordered hover responsive>
-                  <thead>
-                    <tr>
-                      {/* <th>#</th>   */}
-                      <th>QTY: </th>
-                      <th>SKU: </th>
-                      <th>Price: </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      {/* <td>1</td> */}
-                      <td>{selectedHardware.HardWare_Quantity}</td>
-                      <td>{selectedHardware.HardWare_Name}</td>
-                      <td> {selectedHardware.HardWare_Base_Price}</td>
-                    </tr>
-
-                    {selectedHardware == "" ? null : (
+                <div className="table-border">
+                  <Table striped bordered hover responsive>
+                    <thead>
                       <tr>
-                        <th></th>
-                        <td>
-                          <b>Total (Price) :</b>
-                        </td>
-                        <td>
-                          <b>${selectedHardware.HardWare_Final_Price}</b>
-                        </td>
+                        {/* <th>#</th>   */}
+                        <th>QTY: </th>
+                        <th>SKU: </th>
+                        <th>Price: </th>
                       </tr>
-                    )}
-                  </tbody>
-                </Table>
-              </div>
-            </Col>
-          </Row>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        {/* <td>1</td> */}
+                        <td>{selectedHardware.HardWare_Quantity}</td>
+                        <td>{selectedHardware.HardWare_Name}</td>
+                        <td> {selectedHardware.HardWare_Base_Price}</td>
+                      </tr>
 
-          {/* Button */}
-          <Row className="my-4" style={{ backgroundColor: "" }}>
-            <Col className="d-flex justify-content-between">
-              <Button
-                className="poe_next_btn"
-                variant="dark"
-                onClick={() => navigate("/special")}
-              >
-                Next
-              </Button>
-            </Col>
-          </Row>
+                      {selectedHardware == "" ? null : (
+                        <tr>
+                          <th></th>
+                          <td>
+                            <b>Total (Price) :</b>
+                          </td>
+                          <td>
+                            <b>${selectedHardware.HardWare_Final_Price}</b>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </Table>
+                </div>
+              </Col>
+            </Row>
+
+            {/* Button */}
+            <Row className="my-4" style={{ backgroundColor: "" }}>
+              <Col className="d-flex justify-content-between">
+                <Button
+                  className="poe_next_btn"
+                  variant="dark"
+                  onClick={() => navigate("/special")}
+                >
+                  Next
+                </Button>
+              </Col>
+            </Row>
+          </Container>
         </Container>
-      </Container>
+      )}
+
       <MyVerticallyCenteredModal
         show={modalShow}
         data={data}

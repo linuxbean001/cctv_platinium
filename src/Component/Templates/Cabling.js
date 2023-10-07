@@ -15,8 +15,11 @@ import {
   setFinalData,
 } from "../../../src/app/features/counter/counterSlice";
 import { useSelector, useDispatch } from "react-redux";
+import Loader from "./Loader.js";
 
 function Cabling() {
+  const [isLoading, setIsLoading] = useState(true); // Loader State
+
   const selectedCameraNumber = useSelector(
     (state) => state.counter1.totalCamera
   );
@@ -81,6 +84,8 @@ function Cabling() {
         setCategoriesCSV(products1);
         setProductCSV(products2);
         setProductOptionCSV(products3);
+        setIsLoading(false);
+
       } catch (error) {
         console.error("Error parsing CSV files:", error);
       }
@@ -162,6 +167,9 @@ function Cabling() {
 
   return (
     <>
+     {isLoading ? (
+        <Loader />
+      ) : (
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
         <Container>
           <Row style={{ backgroundColor: "" }}>
@@ -291,6 +299,7 @@ function Cabling() {
           </Row>
         </Container>
       </Container>
+      )}
 
       {/* Modal Code - 1 */}
       <Modal

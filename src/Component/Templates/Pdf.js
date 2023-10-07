@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Row, Col, Table, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function Pdf() {
   const navigate = useNavigate();
-
   // Redux State
   const customerUserData = useSelector((state) => state.counter1.customerData);
-  console.log(customerUserData)
+  console.log(customerUserData);
   const Nvr = useSelector((state) => state.counter1.selectedNVR);
   const camera = useSelector((state) => state.counter1.selectedCamera);
   const cabling = useSelector((state) => state.counter1.selectedCabling);
@@ -19,26 +18,18 @@ function Pdf() {
   const poe = useSelector((state) => state.counter1.selectedPoE);
   const hard = useSelector((state) => state.counter1.selectedHardWare);
   const special = useSelector((state) => state.counter1.selectedSpecial);
+  const [isDownloadButtonVisible, setIsDownloadButtonVisible] = useState(false);
 
   const downloadPDF = () => {
     const input = document.getElementById("tableToConvert");
-    const downloadButton = document.getElementById("downloadButton");
-    const downloadButtons = document.getElementById("downloadButtons");
-
-    downloadButton.style.display = "none";
-    downloadButtons.style.display = "none";
-
-    const pdfWidth = 210;
-    const pdfHeight = 297;
 
     html2canvas(input).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
-      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, imgHeight);
+      const imgHeight = (canvas.height * 210) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 0, 210, imgHeight);
       pdf.save("converted.pdf");
-      downloadButton.style.display = "block";
-      downloadButtons.style.display = "block";
+      setIsDownloadButtonVisible(true);
     });
   };
 
@@ -46,73 +37,107 @@ function Pdf() {
     navigate("/");
   };
 
+  // CSS for table headings
+  const tableStyle = {
+    fontFamily: "Arial, Helvetica, sans-serif",
+    borderCollapse: "collapse",
+    width: "100%",
+  };
+
+  const tableCellStyle = {
+    border: "1px solid #ddd",
+    padding: "8px",
+  };
+
+  const evenRowStyle = {
+    backgroundColor: "#f2f2f2",
+  };
+
+  const hoverRowStyle = {
+    backgroundColor: "#ddd",
+  };
+
+  const tableHeaderStyle = {
+    paddingTop: "12px",
+    paddingBottom: "12px",
+    paddingLeft:'10px',
+    textAlign: "left",
+    backgroundColor: "#212529",
+    color: "white",
+  };
+
+
+
+  const buttonStyle = {
+    backgroundColor: "#4caf50",
+    border: "none",
+    color: "white",
+    padding: "15px 32px",
+    textAlign: "center",
+    textDecoration: "none",
+    display: "inline-block",
+    fontSize: "16px",
+    margin: "4px 2px",
+    cursor: "pointer",
+  };
+
+ 
+  const paddingTest = {
+    tr: {
+      /* Add other styles for the tr element here if needed */
+      background: "lightgray",
+    },
+    td: {
+      paddingLeft: "10px",
+    },
+  };
+
   return (
-    <div className="p-3">
-      <div id="tableToConvert">
-        <div className="border border-indigo-600 mt-5">
-          <Container fluid style={{ backgroundColor: "#212529" }}>
-            <h2 className="text-white py-3"> Platinum CCTV</h2>
-          </Container>
-          <div>
-            <Container fluid>
-              <Row>
-                <Col>
-                  <h5>Customer Details :</h5>
-                </Col>
-              </Row>
+    <>
+      <div id="tableToConvert" style={{width:'95%', backgroundColor:'', margin:'0 auto'}}>
+        <div>
+          <h4 style={{margin:'20px 0', padding:'0 10px'}}>Customer Details :</h4>
+        </div>
 
-              <Row>
+        <table style={tableStyle} id="customers">
+          <thead>
+            <tr style={{margin:'20px 0', padding:'0 10px', backgroundColor:'red'}}>
+              <th style={tableHeaderStyle}>Name</th>
+              <th style={tableHeaderStyle}>Business Details</th>
+              <th style={tableHeaderStyle}>Email</th>
+              <th style={tableHeaderStyle}>Phone</th>
+              <th style={tableHeaderStyle}>Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style={paddingTest.tr} className="paddingTest">
+              <td style={paddingTest.td}>{customerUserData.customerName}</td>
+              <td>{customerUserData.businessName}</td>
+              <td>{customerUserData.email}</td>
+              <td>{customerUserData.phoneNumber}</td>
+              <td>{customerUserData.address}</td>
+            </tr>
+          </tbody>
+        </table>
 
-              <Table striped bordered hover variant="">
-      <thead>
-        <tr>
-          <th> Name</th>
-          <th>Business Details</th>
-          <th>Email</th>
-          <th>Phone Number</th>
-          <th>Address</th>
+        <div>
+          <h4 style={{margin:'20px 0', padding:'0 10px'}}>Selected Items :</h4>
+        </div>
 
-
-        
-        </tr>
-      </thead>
-      <tbody>
-       
-        <tr>
-          <td>{customerUserData.customerName}</td>
-          <td>{customerUserData.businessName}</td>
-          <td>{customerUserData.email}</td>
-          <td>{customerUserData.phoneNumber}</td>
-          <td>{customerUserData.address}</td>
-
-
-
-
-
-        </tr>
-     
-      </tbody>
-    </Table>
-              </Row>
-
-              <Row className="my-4">
-                <Col>
-                  <h5 className="fw-bold">Selected Items :</h5>
-                  <div>
-                    <Table striped bordered hover responsive>
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Product Category:</th>
-                          <th>Product Name:</th>
-                          <th>Product QTY:</th>
-                          <th>Product Base_Price: </th>
-                          <th>Product Final_Price: </th>
-                        </tr>
-                      </thead>
-                      <tbody>
+        <table style={tableStyle} id="customers">
+          <thead>
+            <tr>
+              <th style={tableHeaderStyle}>#</th>
+              <th style={tableHeaderStyle}>Product Category</th>
+              <th style={tableHeaderStyle}>Product Name</th>
+              <th style={tableHeaderStyle}>Product QTY</th>
+              <th style={tableHeaderStyle}>Product Base Price</th>
+              <th style={tableHeaderStyle}>Product Final Price</th>
+            </tr>
+          </thead>
+          <tbody>
                         {Nvr.map((item, index) => (
-                          <tr key={index}>
+                          <tr key={index} style={paddingTest.tr} className="paddingTest" >
                             <td>{index + 1}</td>
                             <td>NVR</td>
                             <td>{item.NVR_Name}</td>
@@ -224,30 +249,15 @@ function Pdf() {
                             </td>
                           </tr> */}
                       </tbody>
-                    </Table>
-                  </div>
-                </Col>
-              </Row>
-            </Container>
-          </div>
-          <Container className="d-flex justify-content-center mb-5">
-            <Button id="downloadButton" variant="dark" onClick={downloadPDF}>
-              Download in PDF
-            </Button>
-          </Container>
-          <Row
-            className="my-4"
-            style={{ backgroundColor: "", marginRight: "15px" }}
-          >
-            <Col className="d-flex justify-content-end">
-              <Button variant="dark" onClick={handleNext} id="downloadButtons">
-                Next
-              </Button>
-            </Col>
-          </Row>
-        </div>
+        </table>
+
+       
       </div>
-    </div>
+
+      <div style={{display:'flex', justifyContent:'center', margin:'20px 0'}}>
+      <button onClick={downloadPDF} style={buttonStyle}>Download</button>
+      </div>
+    </>
   );
 }
 

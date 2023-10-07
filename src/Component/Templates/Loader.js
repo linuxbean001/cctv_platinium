@@ -1,40 +1,21 @@
 import React from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { ThreeDots } from "react-loader-spinner";
+import Spinner from "react-bootstrap/Spinner";
+
 function Loader() {
   return (
-    <>
-      <Container fluid style={{ backgroundColor: "red" }}>
-        <Row
-          style={{
-            backgroundColor: "",
-            position: "relative",
-          }}
-        >
-          <Col
-            style={{
-              backgroundColor: "",
-              width: "100%",
-              height: "100vh",
-              position: "relative",
-            }}
-          >
-            <ThreeDots
-              height="80"
-              width="80"
-              radius="9"
-              color="black"
-              ariaLabel="three-dots-loading"
-              wrapperStyle={{}}
-              wrapperClassName=""
-              visible={true}
-            />
-          </Col>
-        </Row>
-      </Container>
-    </>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh", // This ensures the spinner takes the full height of the viewport
+        backgroundColor:'gray'
+      }}
+    >
+      <Spinner animation="border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>
+    </div>
   );
 }
 

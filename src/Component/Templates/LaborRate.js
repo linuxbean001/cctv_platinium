@@ -19,8 +19,11 @@ import {
 } from "../../../src/app/features/counter/counterSlice";
 
 import { useSelector, useDispatch } from "react-redux";
+import Loader from "./Loader.js";
 
 function LaborRate() {
+  const [isLoading, setIsLoading] = useState(true); // Loader State
+
   const navigate = useNavigate();
   const [categoryCSV, setCategoryCSV] = useState([]);
   const [productCSV, setProductCSV] = useState([]);
@@ -61,6 +64,8 @@ function LaborRate() {
         setCategoryCSV(products1);
         setProductCSV(products2);
         setProductOptionCSV(products3);
+        setIsLoading(false);
+
       } catch (error) {
         console.error("Error parsing CSV files:", error);
       }
@@ -168,6 +173,9 @@ function LaborRate() {
 
   return (
     <>
+      {isLoading ? (
+        <Loader />
+      ) : (
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
         <Container>
           <Row style={{ backgroundColor: "" }}>
@@ -512,6 +520,8 @@ function LaborRate() {
           </Row>
         </Container>
       </Container>
+      )}
+
     </>
   );
 }

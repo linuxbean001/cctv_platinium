@@ -16,6 +16,7 @@ import {
   deleteNVR,
   setFinalData,
 } from "../../../app/features/counter/counterSlice";
+import Loader from "../Loader.js";
 
 function MyVerticallyCenteredModal(props) {
   console.log('final data', props)
@@ -289,6 +290,8 @@ function MyVerticallyCenteredModal(props) {
 }
 
 function Nvr(props) {
+  const [isLoading, setIsLoading] = useState(true); // Loader State
+
   const [formData1, setFormData1] = useState({});
   const [formData2, setFormData2] = React.useState({});
   const [mergedState, setMergedState] = useState({});
@@ -368,6 +371,8 @@ function Nvr(props) {
         const products2 = Papa.parse(productArray2, { header: true }).data;
         setProductCSV(products);
         setProductOptionCSV(products2);
+        setIsLoading(false);
+
       } catch (error) {
         console.error("Error parsing CSV files:", error);
       }
@@ -469,6 +474,9 @@ function Nvr(props) {
 
   return (
     <>
+     {isLoading ? (
+        <Loader />
+      ) : (
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
         <Container>
           <Row style={{ backgroundColor: "" }}>
@@ -635,7 +643,7 @@ function Nvr(props) {
           </Row>
         </Container>
       </Container>
-
+  )}
       <Modal show={show2} onHide={handleClose2}>
         <Modal.Header closeButton>
           <Modal.Title>

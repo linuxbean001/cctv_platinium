@@ -102,12 +102,10 @@ return (
                 We'll never share your info with anyone else.
               </Form.Text>
             </Form.Group>
-            <Col style={{ backgroundColor: "" }}>
+            <Col className="d-flex justify-content-between">
             <Button variant="dark" type="submit">
               Submit
             </Button>
-            </Col>
-            <Col className="d-flex justify-content-end">
             <Button variant="dark" onClick={handleClose}>
               Skip
             </Button>

@@ -15,6 +15,8 @@ import {
   setFinalData,
   deletePoe,
 } from "../../app/features/counter/counterSlice";
+import Loader from "./Loader.js";
+
 
 let globalState;
 
@@ -247,6 +249,8 @@ function MyVerticallyCenteredModal2(props) {
 //Modal Ends
 
 function PoeSwitches() {
+  const [isLoading, setIsLoading] = useState(true); // Loader State
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // Modal state-1
@@ -296,6 +300,8 @@ function PoeSwitches() {
 
         setProductCSV(products2);
         setProductOptionCSV(productsOption2);
+        setIsLoading(false);
+
       } catch (error) {
         console.error("Error parsing CSV files:", error);
       }
@@ -358,7 +364,12 @@ function PoeSwitches() {
 
   return (
     <>
-      <Container fluid className="my-4" style={{ backgroundColor: "" }}>
+
+{isLoading ? (
+        <Loader />
+      ) :
+      (
+        <Container fluid className="my-4" style={{ backgroundColor: "" }}>
         <Container>
           <Row style={{ backgroundColor: "" }}>
             <Col style={{ backgroundColor: "" }}>
@@ -513,6 +524,9 @@ function PoeSwitches() {
         </Container>
       </Container>
 
+  )}
+      
+   
       <MyVerticallyCenteredModal
         show={modalShow}
         dataForProduct={dataForProduct}

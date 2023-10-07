@@ -18,8 +18,11 @@ import {
 } from "../../../src/app/features/counter/counterSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
+import Loader from "./Loader.js";
 
 function Special() {
+  const [isLoading, setIsLoading] = useState(true); // Loader State
+
   const [categoryCSV, setCategoriesCSV] = useState([]);
   const [productCSV, setProductCSV] = useState([]);
   const [productOption, setProductOptionCSV] = useState([]);
@@ -79,6 +82,8 @@ function Special() {
         setCategoriesCSV(products1);
         setProductCSV(products2);
         setProductOptionCSV(products3);
+        setIsLoading(false);
+
       } catch (error) {
         console.error("Error parsing CSV files:", error);
       }
@@ -227,6 +232,9 @@ function Special() {
 
   return (
     <>
+     {isLoading ? (
+        <Loader />
+      ) : (
       <Container fluid className="my-4" style={{ backgroundColor: "" }}>
         <Container>
           <Row style={{ backgroundColor: "" }}>
@@ -688,6 +696,8 @@ function Special() {
           </Row>
         </Container>
       </Container>
+      )}
+
     </>
   );
 }

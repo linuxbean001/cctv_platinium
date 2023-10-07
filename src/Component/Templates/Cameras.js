@@ -21,7 +21,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Loader from "./Loader";
 
 function Cameras(props) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // Loader State
 
   const navigate = useNavigate();
   const dispatch = useDispatch();

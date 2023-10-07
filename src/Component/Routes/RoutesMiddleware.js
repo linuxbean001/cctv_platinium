@@ -12,10 +12,13 @@ import Hardware from "../Templates/Hardware";
 import NoFound from "../Templates/NoFound";
 import Pdf from "../Templates/Pdf";
 import Special from "../Templates/Special";
+import NavBar from "../../Component/Header/NavBaR";
+
 function RoutesMiddleware() {
   return (
     <div className="Routes">
       <BrowserRouter>
+      <NavBar />
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/nvr" element={<Nvr />} />
