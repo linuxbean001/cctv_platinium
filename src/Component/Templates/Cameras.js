@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -50,10 +50,22 @@ function Cameras(props) {
   const [isDisabled, setIsDisabled] = useState(false);
   const [priceList, setPriceList] = useState(0);
   const [mergedState, setMergedState] = useState({});
-  const [bracketNumber, setBracketNumber] = useState("");
   const [totalBracket, setTotalBracket] = useState(0);
   const [totalQty, setTotalQty] = useState(0);
   const countCamera = useSelector((state) => state.counter1.selectedCamera);
+
+  // Disable Input State
+
+  const [disableIt, setDisableIt] = useState("");
+  const [bracketPrice, setBracketPrice] = useState("");   // Ex: Back Box $45. it'll store 45
+  const [bracketNumber, setBracketNumber] = useState(""); // If he/she enter '10' it'll add 10
+  const [bracketFinalPrice, setBracketFinalPrice] = useState("")
+
+
+  const totalbracketPrice = bracketPrice * bracketNumber;
+
+  // console.log(totalbracketPrice)
+
   const tableData = countCamera;
 
   React.useEffect(() => {
@@ -63,14 +75,6 @@ function Cameras(props) {
     });
     setTotalQty(totalCty);
   }, [tableData]);
-
-  // React.useEffect(() => {
-  //   let totalBkt = 0;
-  //   tableData.forEach((item) => {
-  //     totalBkt += parseInt(item.Bracket_Selected, 10);
-  //   });
-  //   setTotalBracket(totalBkt);
-  // }, [tableData]);
 
   React.useEffect(() => {
     let totalBkt = 0;
@@ -219,7 +223,12 @@ function Cameras(props) {
     if (currentArray1.length > 0) {
       result1.push([...currentArray1]);
     }
-    setFinalDatas(result1)
+    setFinalDatas(result1);
+    const selectedOption = result1
+      .flat()
+      .find((option) => option.featurename === "No Brackets Needed");
+
+    setDisableIt(selectedOption.featurename);
     // Code Ends
 
     setShow2(true);
@@ -265,13 +274,15 @@ function Cameras(props) {
   //***** Below Code is responsible for filling finalNewState-2 *******//
 
   //************************** HandleChange ***************************//
+
   function handleSelectChange(e) {
     const { name, value } = e.target;
     const selectedOption = finalDatas
       .flat()
       .find((option) => option.featurename === value);
+    setDisableIt(selectedOption.featurename);
+    setBracketPrice(selectedOption.featureprice);
 
-    //
     const prevOptionPrice =
       finalNewState2[name] &&
       finalDatas
@@ -284,7 +295,6 @@ function Cameras(props) {
               .featureprice
           )
         : 0;
-    // Calculate the price difference between the new and old option
     const optionPrice = selectedOption
       ? parseFloat(selectedOption.featureprice)
       : 0;
@@ -296,9 +306,8 @@ function Cameras(props) {
       [name]: value,
     }));
   }
-  //************************** HandleChange ***************************//
 
-  //*************** Increasing & Decrease Count Value *****************//
+
   const handlePlusClick = () => {
     setCount(count + 1);
   };
@@ -308,21 +317,23 @@ function Cameras(props) {
       setCount(count - 1);
     }
   };
-  //*************** Increasing & Decrease Count Value *****************//
 
   //************************ calculate price **************************//
   const calculateTotalPrice = () => {
     setIsDisabled(true);
     const newTotalPrice = parseInt(dataProduct.price) + parseInt(totalPrice);
-    setPriceList(newTotalPrice * count);
+
+    console.log(parseInt(dataProduct.price));
+    // console.log('count',count)
+    setPriceList(parseInt(dataProduct.price) * count +totalbracketPrice);
+    
   };
-  //************************ calculate price **************************//
+
 
   //************************* Delete Camera ***************************//
   const deleteFromCamera = (index) => {
     dispatch(deleteCamera(index));
   };
-  //************************* Delete Camera ***************************//
 
   return (
     <>
@@ -666,21 +677,11 @@ function Cameras(props) {
                             {/* Add Dropdown */}
 
                             {finalDatas.map((item, index) => {
-                              // if (item[0].featurecaption === "Mounting Bracket") {
-                              //   return null;
-                              // }
-
+                              //   {
+                              // console.log(item[0].featurename == 'No Brackets Needed' ? 'true' : 'false')
+                              //   }
                               return (
                                 <>
-                                  {/* <Form.Select key={index} aria-label="Default select example" className="mb-3">
-                        <option value={2}>{item[0].featurecaption}</option>
-                        {item.map((option, optionIndex) => (
-                          <option key={optionIndex} value={option.value}>
-                            {option.featurename}
-                          </option>
-                        ))}
-                      </Form.Select> */}
-
                                   <Form.Label>
                                     {item[0].featurecaption}
                                   </Form.Label>
@@ -695,7 +696,6 @@ function Cameras(props) {
                                     }
                                     onChange={(e) => handleSelectChange(e)}
                                   >
-                                    {/* <option>Select a option</option> */}
                                     {item.map((option, optionIndex) => {
                                       return (
                                         <>
@@ -723,7 +723,7 @@ function Cameras(props) {
                               placeholder="Enter a value"
                               value={bracketNumber}
                               onChange={handleBracketChange}
-                              disabled
+                              disabled={disableIt === "No Brackets Needed"}
                             />
                             <div
                               className="d-flex align-items-end justify-content-end my-4"

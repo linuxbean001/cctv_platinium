@@ -254,7 +254,7 @@ function Special() {
               <Row>
                 <Col className="text-end">
                   Number of Drops:&nbsp;
-                  <span className="fw-bold">{selectedCameraNumber}</span>
+                  <span className="fw-bold">{}</span>
                 </Col>
               </Row>
             </Col>
