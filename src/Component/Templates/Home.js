@@ -17,11 +17,13 @@ import {
   DecrementCamera,
   IncrementOptions,
   DecrementOptions,
+  setAPIDATA,
 } from "../../app/features/counter/counterSlice";
 
 function Home() {
   // Redux
   const countCamera = useSelector((state) => state.counter1);
+
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -64,6 +66,7 @@ function Home() {
     { location_name: "Custom" },
     { location_name: "Property Mangaement" },
   ];
+  const [categories, setCategories] = useState([]);
 
   React.useEffect(() => {
     const parseCSVFiles = async () => {
@@ -76,7 +79,11 @@ function Home() {
         const categoryArray = await categoryData.text();
         const productArray = await productData.text();
         const productOptionArray = await productOptionData.text();
-        const categories = Papa.parse(categoryArray, { header: true }).data;
+        const categories2 = Papa.parse(productArray, { header: true }).data;
+          setCategories(categories2)
+          dispatch(setAPIDATA(categories2));
+
+
         categories.map(
           ({
             id,
@@ -142,6 +149,10 @@ function Home() {
     parseCSVFiles();
   }, []);
 
+  
+
+  console.log('data :', categories)
+
   const fetchInfo = () => {
     return axios
       .get("assets/CSVs/products.csv")
@@ -170,6 +181,7 @@ function Home() {
   const handleNext = () => {
     navigate("/nvr");
   };
+
 
   return (
     <>

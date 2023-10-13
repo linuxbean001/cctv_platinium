@@ -12,6 +12,7 @@ import Hardware from "../Templates/Hardware";
 import NoFound from "../Templates/NoFound";
 import Pdf from "../Templates/Pdf";
 import Special from "../Templates/Special";
+
 import NavBar from "../../Component/Header/NavBaR";
 
 function RoutesMiddleware() {
@@ -32,6 +33,9 @@ function RoutesMiddleware() {
           <Route exact path="/add_to_cart" element={<FinalCart />} />
           <Route exact path="/pdf" element={<Pdf />} />
           <Route exact path="/special" element={<Special />} />
+
+          <Route exact path="/test" element={<Test />} />
+
 
           {/* Add the 404 route at the end */}
           <Route path="*" element={<NoFound />} />

@@ -19,7 +19,7 @@ function NavBar(props) {
           <Navbar.Brand as={Link} to="/">Platinum CCTV</Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/">
-              Home
+              Homes
             </Nav.Link>
           </Nav>
           <Nav className="mr-auto">
@@ -47,6 +47,9 @@ function NavBar(props) {
               </Nav.Link>{" "}
               <Nav.Link as={Link} to="/pdf">
                 Pdf
+              </Nav.Link>{" "}
+              <Nav.Link as={Link} to="/test">
+                Test
               </Nav.Link>{" "}
             </NavDropdown>
           </Nav>

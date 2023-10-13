@@ -12,6 +12,7 @@ const initialState = {
   selectedSpecial: [],
   finalData: [],
   customerData: [],
+  apiDATA:null
 };
 
 export const counterSlice = createSlice({
@@ -100,6 +101,10 @@ export const counterSlice = createSlice({
     setCustomerData: (state, action) => {
       state.customerData = action.payload;
     },
+    // API DATA
+    setAPIDATA: (state, action) => {
+      state.apiDATA = action.payload;
+    },
   },
 });
 
@@ -116,6 +121,7 @@ export const {
   setSelectedHardWare,
   setSelectedSpecial,
   setCustomerData,
+  setAPIDATA,
   setFinalData,
   deleteCamera,
   deleteNVR,

@@ -57,10 +57,9 @@ function Cameras(props) {
   // Disable Input State
 
   const [disableIt, setDisableIt] = useState("");
-  const [bracketPrice, setBracketPrice] = useState("");   // Ex: Back Box $45. it'll store 45
+  const [bracketPrice, setBracketPrice] = useState(""); // Ex: Back Box $45. it'll store 45
   const [bracketNumber, setBracketNumber] = useState(""); // If he/she enter '10' it'll add 10
-  const [bracketFinalPrice, setBracketFinalPrice] = useState("")
-
+  const [bracketFinalPrice, setBracketFinalPrice] = useState("");
 
   const totalbracketPrice = bracketPrice * bracketNumber;
 
@@ -228,7 +227,7 @@ function Cameras(props) {
       .flat()
       .find((option) => option.featurename === "No Brackets Needed");
 
-    setDisableIt(selectedOption.featurename);
+    // setDisableIt(selectedOption.featurename);
     // Code Ends
 
     setShow2(true);
@@ -307,7 +306,6 @@ function Cameras(props) {
     }));
   }
 
-
   const handlePlusClick = () => {
     setCount(count + 1);
   };
@@ -325,10 +323,8 @@ function Cameras(props) {
 
     console.log(parseInt(dataProduct.price));
     // console.log('count',count)
-    setPriceList(parseInt(dataProduct.price) * count +totalbracketPrice);
-    
+    setPriceList(parseInt(dataProduct.price) * count + totalbracketPrice);
   };
-
 
   //************************* Delete Camera ***************************//
   const deleteFromCamera = (index) => {
@@ -677,9 +673,6 @@ function Cameras(props) {
                             {/* Add Dropdown */}
 
                             {finalDatas.map((item, index) => {
-                              //   {
-                              // console.log(item[0].featurename == 'No Brackets Needed' ? 'true' : 'false')
-                              //   }
                               return (
                                 <>
                                   <Form.Label>

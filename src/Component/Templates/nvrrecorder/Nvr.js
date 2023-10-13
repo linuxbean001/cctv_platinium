@@ -19,8 +19,6 @@ import {
 import Loader from "../Loader.js";
 
 function MyVerticallyCenteredModal(props) {
-  console.log('final data', props)
-
   const [finalNewState, setFinalNewState] = useState({});
   const [finalNewState2, setFinalNewState2] = useState({});
   const dispatch = useDispatch();
@@ -324,7 +322,6 @@ function Nvr(props) {
     }
   };
 
-
   // console.log('options', produtOption)  // Complete data from OptionsCSV
   const calculateTotalPrice = () => {
     let totalPrice = 0;
@@ -367,12 +364,12 @@ function Nvr(props) {
         );
         const productArray = await productData.text();
         const productArray2 = await productOptionData.text();
+
         const products = Papa.parse(productArray, { header: true }).data;
         const products2 = Papa.parse(productArray2, { header: true }).data;
         setProductCSV(products);
         setProductOptionCSV(products2);
         setIsLoading(false);
-
       } catch (error) {
         console.error("Error parsing CSV files:", error);
       }
@@ -401,51 +398,48 @@ function Nvr(props) {
   });
 
   const handleButtonClick = (e, val, id) => {
-   
-     // Code Starts
-     let result = [];
-     let currentArray = [];
-     for (let i = 0; i < produtOption.length; i++) {
-       const item = produtOption[i];
- 
-       if (
-         item.productid === id ||
-         (currentArray.length > 0 && item.productid === "")
-       ) {
-         currentArray.push(item);
-       } else if (currentArray.length > 0) {
-         result = currentArray;
-         currentArray = [];
-       }
-     }
-     if (currentArray.length > 0) {
-       result = [...currentArray];
-     }
- 
-     const result1 = [];
-     let currentArray1 = [];
- 
-     for (let i = 0; i < result.length; i++) {
-       const item = result[i];
- 
-       if (item.productid === id) {
-         if (currentArray1.length > 0) {
-           result1.push([...currentArray1]);
-           currentArray1 = [];
-         }
-         currentArray1.push(item);
-       } else if (currentArray1.length > 0 || i === result.length - 1) {
-         currentArray1.push(item);
-       }
-     }
- 
-     if (currentArray1.length > 0) {
-       result1.push([...currentArray1]);
-     }
-     setFinalData(result1)
-     // Code Ends
+    // Code Starts
+    let result = [];
+    let currentArray = [];
+    for (let i = 0; i < produtOption.length; i++) {
+      const item = produtOption[i];
 
-  
+      if (
+        item.productid === id ||
+        (currentArray.length > 0 && item.productid === "")
+      ) {
+        currentArray.push(item);
+      } else if (currentArray.length > 0) {
+        result = currentArray;
+        currentArray = [];
+      }
+    }
+    if (currentArray.length > 0) {
+      result = [...currentArray];
+    }
+
+    const result1 = [];
+    let currentArray1 = [];
+
+    for (let i = 0; i < result.length; i++) {
+      const item = result[i];
+
+      if (item.productid === id) {
+        if (currentArray1.length > 0) {
+          result1.push([...currentArray1]);
+          currentArray1 = [];
+        }
+        currentArray1.push(item);
+      } else if (currentArray1.length > 0 || i === result.length - 1) {
+        currentArray1.push(item);
+      }
+    }
+
+    if (currentArray1.length > 0) {
+      result1.push([...currentArray1]);
+    }
+    setFinalData(result1);
+    // Code Ends
 
     setIdforOptions(id);
     setModalShow(true);
@@ -474,39 +468,39 @@ function Nvr(props) {
 
   return (
     <>
-     {isLoading ? (
+      {isLoading ? (
         <Loader />
       ) : (
-      <Container fluid className="my-4" style={{ backgroundColor: "" }}>
-        <Container>
-          <Row style={{ backgroundColor: "" }}>
-            <Col style={{ backgroundColor: "" }}>
-              <h2>
-                NVR Recorders
-                <span className="fst-italic fs-6">(Category)</span>
-              </h2>
-            </Col>
-            <Col className="" style={{ backgroundColor: "" }}>
-              <Row>
-                <Col className="text-end">
-                  Number of Cameras:&nbsp;
-                  <span className="fw-bold">{selectedCameraNumber}</span>
-                </Col>
-              </Row>
-              <Row>
-                <Col className="text-end">
-                  Number of Licenses: &nbsp;
-                  <span className="fw-bold">{calculateTotalLicenses()}</span>
-                </Col>
-              </Row>
+        <Container fluid className="my-4" style={{ backgroundColor: "" }}>
+          <Container>
+            <Row style={{ backgroundColor: "" }}>
+              <Col style={{ backgroundColor: "" }}>
+                <h2>
+                  NVR Recorders
+                  <span className="fst-italic fs-6">(Category)</span>
+                </h2>
+              </Col>
+              <Col className="" style={{ backgroundColor: "" }}>
+                <Row>
+                  <Col className="text-end">
+                    Number of Cameras:&nbsp;
+                    <span className="fw-bold">{selectedCameraNumber}</span>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className="text-end">
+                    Number of Licenses: &nbsp;
+                    <span className="fw-bold">{calculateTotalLicenses()}</span>
+                  </Col>
+                </Row>
 
-              {/* <Row>
+                {/* <Row>
                 <Col className="text-end">
                   Number of Options: &nbsp;
                   <span className="fw-bold">{selectedCameraNumber}</span>
                 </Col>
               </Row> */}
-              {/* <Row>
+                {/* <Row>
                 <Col className="text-end">
                   <h6>
                     Number of Licenses :
@@ -514,136 +508,137 @@ function Nvr(props) {
                   </h6>
                 </Col>
               </Row> */}
-            </Col>
-          </Row>
+              </Col>
+            </Row>
 
-          <Row className="my-4">
-            {recorderData.map((val) => {
-              return (
-                <>
-                  <Col
-                    md={4}
-                    className="nvr_col my-3"
-                    onClick={(e) => {
-                      handleButtonClick(e, val, val.id);
-                      setMainPrice(val.price);
-                    }}
-                  >
-                    <Card style={{ width: "", margin: "" }}>
-                      <Card.Body>
-                        <Card.Title className="fw-bold">
-                          SKU : {val.id}
-                        </Card.Title>
-                        <Card.Text> Description : {val.name}</Card.Text>
-                        <Row>
-                          <Col xs={8}>
-                            <Card.Img
-                              variant="top"
-                              height={150}
-                              src={val.thumbnail}
-                            />
-                          </Col>
-                          <Col
-                            xs={4}
-                            className="d-flex align-items-center justify-content-center fw-bold"
-                          >
-                            $ {val.price}
-                          </Col>
-                        </Row>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                </>
-              );
-            })}
-
-            <MyVerticallyCenteredModal
-              show={modalShow}
-              onHide={() => setModalShow(false)}
-              modalTitle={modalTitle}
-              dataforProduct={dataforProduct}
-              finalData={finalData}
-              extra={extra}
-              state={setAddCart}
-              setRedux={props}
-              mainPrice={mainPrice}
-              formData1={setFormData1}
-              formDataState={formData1}
-              onTestChange1={handleTestChange}
-              onTestChange={handleTestChange1}
-              mergedState={mergedState}
-            />
-          </Row>
-
-          <Row className="my-4" style={{ padding: "8px" }}>
-            <Col>
-              <h5 className="fw-bold">Add to Cart: </h5>
-
-              <div className="table-border">
-                <Table striped bordered hover responsive>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>QTY: </th>
-                      <th>SKU: </th>
-                      <th>Total: </th>
-                      <th>Licenses: </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {tableData.map((val, index) => {
-                      return (
-                        <tr key={val}>
-                          <td>{index + 1}</td>
-                          <td>{val.NVR_Quantity}</td>
-                          <td>
-                            {val.NVR_Name} ( +
-                            {val["Hard Drive Size"].substring(0, 5)})
-                          </td>
-                          <td> $ {val.cart_final_price}</td>
-                          <td>{val["Number of IP Licenses"]}</td>
-                          <td>
-                            {" "}
-                            <Button
-                              variant="dark"
-                              onClick={() => deleteFromTable(index)}
+            <Row className="my-4">
+              {recorderData.map((val) => {
+                console.log('val are',val)
+                return (
+                  <>
+                    <Col
+                      md={4}
+                      className="nvr_col my-3"
+                      onClick={(e) => {
+                        handleButtonClick(e, val, val.id);
+                        setMainPrice(val.price);
+                      }}
+                    >
+                      <Card style={{ width: "", margin: "" }}>
+                        <Card.Body>
+                          <Card.Title className="fw-bold">
+                            SKU : {val.id}
+                          </Card.Title>
+                          <Card.Text> Description : {val.name}</Card.Text>
+                          <Row>
+                            <Col xs={8}>
+                              <Card.Img
+                                variant="top"
+                                height={150}
+                                src={val.thumbnail}
+                              />
+                            </Col>
+                            <Col
+                              xs={4}
+                              className="d-flex align-items-center justify-content-center fw-bold"
                             >
-                              Delete
-                            </Button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                    <tr>
-                      <th></th>
-                      <td></td>
-                      <td>
-                        <b>Total (Price & Licenses) :</b>
-                      </td>
-                      <td>
-                        <b>$ {calculateTotalPrice()}</b>
-                      </td>
-                      <td>
-                        <b>{calculateTotalLicenses()} Licenses</b>
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </div>
-            </Col>
-          </Row>
+                              $ {val.price}
+                            </Col>
+                          </Row>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  </>
+                );
+              })}
 
-          <Row className="my-4" style={{ backgroundColor: "" }}>
-            <Col className="d-flex justify-content-between">
-              <Button variant="dark">Previous</Button>
-              <Button variant="dark" onClick={handleShow2}>
-                Next
-              </Button>
-            </Col>
-          </Row>
+              <MyVerticallyCenteredModal
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+                modalTitle={modalTitle}
+                dataforProduct={dataforProduct}
+                finalData={finalData}
+                extra={extra}
+                state={setAddCart}
+                setRedux={props}
+                mainPrice={mainPrice}
+                formData1={setFormData1}
+                formDataState={formData1}
+                onTestChange1={handleTestChange}
+                onTestChange={handleTestChange1}
+                mergedState={mergedState}
+              />
+            </Row>
+
+            <Row className="my-4" style={{ padding: "8px" }}>
+              <Col>
+                <h5 className="fw-bold">Add to Cart: </h5>
+
+                <div className="table-border">
+                  <Table striped bordered hover responsive>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>QTY: </th>
+                        <th>SKU: </th>
+                        <th>Total: </th>
+                        <th>Licenses: </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tableData.map((val, index) => {
+                        return (
+                          <tr key={val}>
+                            <td>{index + 1}</td>
+                            <td>{val.NVR_Quantity}</td>
+                            <td>
+                              {val.NVR_Name} ( +
+                              {val["Hard Drive Size"].substring(0, 5)})
+                            </td>
+                            <td> $ {val.cart_final_price}</td>
+                            <td>{val["Number of IP Licenses"]}</td>
+                            <td>
+                              {" "}
+                              <Button
+                                variant="dark"
+                                onClick={() => deleteFromTable(index)}
+                              >
+                                Delete
+                              </Button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                      <tr>
+                        <th></th>
+                        <td></td>
+                        <td>
+                          <b>Total (Price & Licenses) :</b>
+                        </td>
+                        <td>
+                          <b>$ {calculateTotalPrice()}</b>
+                        </td>
+                        <td>
+                          <b>{calculateTotalLicenses()} Licenses</b>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+              </Col>
+            </Row>
+
+            <Row className="my-4" style={{ backgroundColor: "" }}>
+              <Col className="d-flex justify-content-between">
+                <Button variant="dark">Previous</Button>
+                <Button variant="dark" onClick={handleShow2}>
+                  Next
+                </Button>
+              </Col>
+            </Row>
+          </Container>
         </Container>
-      </Container>
-  )}
+      )}
       <Modal show={show2} onHide={handleClose2}>
         <Modal.Header closeButton>
           <Modal.Title>

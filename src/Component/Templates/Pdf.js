@@ -5,12 +5,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
+import {
+  apiDATA
+} from "../../app/features/counter/counterSlice";
 function Pdf() {
   const navigate = useNavigate();
   // Redux State
-  const customerUserData = useSelector((state) => state.counter1.customerData);
-  console.log(customerUserData);
+  const customerUserData = useSelector((state) => state.counter1.apiDATA);
+  console.log('From Redux :' ,customerUserData);
   const Nvr = useSelector((state) => state.counter1.selectedNVR);
   const camera = useSelector((state) => state.counter1.selectedCamera);
   const cabling = useSelector((state) => state.counter1.selectedCabling);
