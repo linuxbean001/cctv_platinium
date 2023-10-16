@@ -12,7 +12,9 @@ const initialState = {
   selectedSpecial: [],
   finalData: [],
   customerData: [],
-  apiDATA:null
+  apiDATA:null,
+  selectedNumberOfDrops:null,
+  totalCablesSelected:null
 };
 
 export const counterSlice = createSlice({
@@ -105,6 +107,16 @@ export const counterSlice = createSlice({
     setAPIDATA: (state, action) => {
       state.apiDATA = action.payload;
     },
+    // Number of Drops
+    setSelectedNumberOfDrops: (state, action) => {
+      state.selectedNumberOfDrops = action.payload;
+    },
+       // Total Cables Selected
+       setTotalCablesSelected: (state, action) => {
+        state.totalCablesSelected = action.payload;
+      },
+
+    
   },
 });
 
@@ -130,5 +142,7 @@ export const {
   deleteSpecial,
   deletePoe,
   ResetCounters,
+  setSelectedNumberOfDrops,
+  setTotalCablesSelected
 } = counterSlice.actions;
 export default counterSlice.reducer;

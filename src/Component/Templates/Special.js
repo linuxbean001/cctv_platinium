@@ -14,7 +14,7 @@ import * as Yup from "yup";
 import {
   setSelectedSpecial,
   deleteSpecial,
-  setFinalData,
+  setSelectedNumberOfDrops,
 } from "../../../src/app/features/counter/counterSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -22,7 +22,6 @@ import Loader from "./Loader.js";
 
 function Special() {
   const [isLoading, setIsLoading] = useState(true); // Loader State
-
   const [categoryCSV, setCategoriesCSV] = useState([]);
   const [productCSV, setProductCSV] = useState([]);
   const [productOption, setProductOptionCSV] = useState([]);
@@ -38,10 +37,28 @@ function Special() {
   const [priceCab, setPriceCab] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+
+  //
+  const [dropdownData, setDropDownData] = useState([]);
+  const [finalNewState2, setFinalNewState2] = useState({});
+  const [dropDownItemPrice, setDropDownItemPrice] = useState(0);
+
+  // Number of Drops
+
+  const [drops, setDrops] = useState(""); // <30FPS
+  const [drops2, setDrops2] = useState(""); // stored only numbers i.e. 30
+  const [drops3, setDrops3] = useState(""); // Total number of Drops with Formula
+
+
   const navigate = useNavigate();
   const selectedCameraNumber = useSelector(
     (state) => state.counter1.totalCamera
   );
+  const totalDrops = useSelector(
+    (state) => state.counter1.selectedNumberOfDrops
+  );
+
+
   const countSpecial = useSelector((state) => state.counter1.selectedSpecial);
 
   const dispatch = useDispatch();
@@ -83,7 +100,6 @@ function Special() {
         setProductCSV(products2);
         setProductOptionCSV(products3);
         setIsLoading(false);
-
       } catch (error) {
         console.error("Error parsing CSV files:", error);
       }
@@ -99,7 +115,7 @@ function Special() {
     );
   });
 
-  const handleButtonClick = (e, category_name) => {
+  const handleButtonClick = (e, val, category_name) => {
     setCategoryName(category_name);
     setShow(true);
     const specialData2 = productCSV.filter((item) => {
@@ -112,46 +128,69 @@ function Special() {
     setfilteredData(specialData2);
   };
 
-  function modal_1(e, id) {
-    setFinalData([]);
-    let firstIndex = -1;
-    let lastIndex = -1;
+// Setting Number of Drops Start
+React.useEffect(()=>{
+  const dropNumbers = drops.match(/\d+/);
+  if (dropNumbers) {
+    setDrops2(dropNumbers[0]);
+  } else {
+    console.log("No numbers found in the string.");
+  }
+},[drops])
+
+// console.log('drops2 :', drops2)   // It will show '30'
+
+// Setting Number of Drops Ends
+
+
+
+  function modal_1(e, item, id) {
+    // Code Starts
+    let result = [];
+    let currentArray = [];
     for (let i = 0; i < productOption.length; i++) {
-      if (productOption[i].productid === id && firstIndex === -1) {
-        firstIndex = i;
-      }
-      if (productOption[i].productid === id) {
-        lastIndex = i;
-      }
-    }
-    if (firstIndex !== -1 && lastIndex !== -1) {
-      const valuesBetween = [];
-      for (let i = firstIndex; i <= lastIndex; i++) {
-        if (
-          productOption[i].productid === id ||
-          productOption[i].productid === ""
-        ) {
-          valuesBetween.push(productOption[i]);
-        }
-      }
-      const separatedArrays = [];
-      let currentArray = [];
-      valuesBetween.forEach((item) => {
-        if (item.optionid !== "") {
-          if (currentArray.length > 0) {
-            separatedArrays.push([...currentArray]);
-            currentArray = [];
-          }
-        }
+      const item = productOption[i];
+
+      if (
+        item.productid === id ||
+        (currentArray.length > 0 && item.productid === "")
+      ) {
         currentArray.push(item);
-      });
-      if (currentArray.length > 0) {
-        separatedArrays.push([...currentArray]);
+      } else if (currentArray.length > 0) {
+        result = currentArray;
+        currentArray = [];
       }
-      setFinalData(separatedArrays);
-    } else {
-      console.log("No suitable data found in the data array with '83' cateId.");
     }
+    if (currentArray.length > 0) {
+      result = [...currentArray];
+    }
+
+    const result1 = [];
+    let currentArray1 = [];
+
+    for (let i = 0; i < result.length; i++) {
+      const item = result[i];
+
+      if (item.productid === id) {
+        if (currentArray1.length > 0) {
+          result1.push([...currentArray1]);
+          currentArray1 = [];
+        }
+        currentArray1.push(item);
+      } else if (currentArray1.length > 0 || i === result.length - 1) {
+        currentArray1.push(item);
+      }
+    }
+
+    if (currentArray1.length > 0) {
+      result1.push([...currentArray1]);
+    }
+    setDropDownData(result1);
+
+    // Code Ends
+
+    // Number of Drops (<30FPS) :
+    setDrops(item.extra_field_2);
 
     setShow2(true);
     setShow(false);
@@ -164,13 +203,55 @@ function Special() {
     setfilteredData2(specialData3);
   }
 
+
+
+
+  function handleSelectChange(e) {
+    const { name, value } = e.target;
+    const selectedOption = dropdownData
+      .flat()
+      .find((option) => option.featurename === value);
+
+    const prevOptionPrice =
+      finalNewState2[name] &&
+      dropdownData
+        .flat()
+        .find((option) => option.featurename === finalNewState2[name])
+        ? parseFloat(
+            dropdownData
+              .flat()
+              .find((option) => option.featurename === finalNewState2[name])
+              .featureprice
+          )
+        : 0;
+
+    const optionPrice = selectedOption
+      ? parseFloat(selectedOption.featureprice)
+      : 0;
+    const priceDifference = optionPrice - prevOptionPrice;
+    setDropDownItemPrice((prevTotalPrice) => prevTotalPrice + priceDifference);
+
+    setFinalNewState2((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  }
+
   const calculateTotalPrice = () => {
     let basePrices = filteredData2.map((item) => item.price);
     setBasePrice(basePrices);
     const priceCabling = parseFloat(basePrices) * count;
     setPriceCab(priceCabling);
-  };
 
+    const finalPriceWithDrops = selectedCameraNumber + (drops2) * count;
+
+    setDrops3(finalPriceWithDrops)
+    dispatch(setSelectedNumberOfDrops(finalPriceWithDrops));
+
+  };
+  // console.log('drops3', drops3)
+
+// selectedCameraNumber
   const handleCablingData = () => {
     setShow2(false);
     const totalPriceForItem = basePrice * count;
@@ -223,481 +304,532 @@ function Special() {
       customCost: "",
     },
     validationSchema,
-    onSubmit: (values,{ resetForm }) => {
+    onSubmit: (values, { resetForm }) => {
       console.log("Form submitted:", values);
       resetForm();
       handleCloseCustom();
     },
   });
 
+  //
+  React.useEffect(() => {
+    const initialSelectedOptions = {};
+    dropdownData.forEach((item) => {
+      if (item.length > 0) {
+        const firstOption = item[0];
+        initialSelectedOptions[firstOption.featurecaption] =
+          firstOption.featurename;
+      }
+    });
+    setFinalNewState2(initialSelectedOptions);
+  }, [dropdownData]);
+
   return (
     <>
-     {isLoading ? (
+      {isLoading ? (
         <Loader />
       ) : (
-      <Container fluid className="my-4" style={{ backgroundColor: "" }}>
-        <Container>
-          <Row style={{ backgroundColor: "" }}>
-            <Col style={{ backgroundColor: "" }}>
-              <h2>
-                Special Items{" "}
-                <span className="fst-italic fs-6">(Category)</span>
-              </h2>
-            </Col>
-            <Col className="" style={{ backgroundColor: "" }}>
-              <Row>
-                <Col className="text-end">
-                  Number of Cameras:&nbsp;
-                  <span className="fw-bold">{selectedCameraNumber}</span>
-                </Col>
-              </Row>
-              <Row>
-                <Col className="text-end">
-                  Number of Drops:&nbsp;
-                  <span className="fw-bold">{}</span>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-
-          <Row className="my-4" style={{ backgroundColor: "" }}>
-            {specialData.map((val) => {
-              return (
-                <>
-                  <Col
-                    md={4}
-                    className="mb-4"
-                    onClick={(e) => handleButtonClick(e, val.category_name)}
-                  >
-                    <Card style={{ width: "", margin: "" }}>
-                      <Card.Body>
-                        <Row>
-                          <Col xs={7}>
-                            <Card.Img
-                              variant="top"
-                              height={150}
-                              src={val.iconimage ? val.iconimage : noImage}
-                            />
-                          </Col>
-                          <Col
-                            xs={5}
-                            className=" align-items-center justify-content-center fw-bold"
-                          >
-                            <Card.Text className="fs-6">
-                              {val.category_name}
-                            </Card.Text>
-                            <p className="camera_category_title">
-                              {" "}
-                              {val.category_title
-                                ? val.category_title
-                                : "No Category Found"}{" "}
-                            </p>
-                          </Col>
-                        </Row>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                </>
-              );
-            })}
-          </Row>
-
-          <Modal
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            show={show}
-            onHide={() => setShow(false)}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>{categoryName}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Row className="my-4">
-                {filteredData.map((item) => {
-                  return (
-                    <>
-                      <Col
-                        md={4}
-                        className="nvr_col my-2"
-                        onClick={(e) => modal_1(e, item.id)}
-                      >
-                        <Card
-                          style={{
-                            width: "",
-                            backgroundColor: "",
-                            height: "300px",
-                          }}
-                        >
-                          <Card.Body>
-                            <Card.Title className="fw-bold">
-                              SKU : {item.id}
-                            </Card.Title>
-
-                            <Card.Text>
-                              Description :{" "}
-                              {item.name.split(" ").slice(0, 10).join(" ")}...
-                            </Card.Text>
-
-                            <Row>
-                              <Col xs={8}>
-                                <Card.Img
-                                  variant="top"
-                                  height={100}
-                                  src={
-                                    item.thumbnail ? item.thumbnail : noImage
-                                  }
-                                />
-                              </Col>
-                              <Col
-                                xs={4}
-                                className="d-flex align-items-center justify-content-center fw-bold"
-                              >
-                                $ {item.price}
-                              </Col>
-                            </Row>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    </>
-                  );
-                })}
-              </Row>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="dark" onClick={() => setShow(false)}>
-                Close
-              </Button>
-            </Modal.Footer>
-          </Modal>
-
-          <Modal
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            show={show2}
-            onHide={() => setShow2(false)}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>{categoryName2}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Container>
+        <Container fluid className="my-4" style={{ backgroundColor: "" }}>
+          <Container>
+            <Row style={{ backgroundColor: "" }}>
+              <Col style={{ backgroundColor: "" }}>
+                <h2>
+                  Special Items{" "}
+                  <span className="fst-italic fs-6">(Category)</span>
+                </h2>
+              </Col>
+              <Col className="" style={{ backgroundColor: "" }}>
                 <Row>
-                  {filteredData2.map((val) => {
+                  <Col className="text-end">
+                    Number of Cameras:&nbsp;
+                    <span className="fw-bold">{selectedCameraNumber}</span>
+                  </Col>
+                </Row>
+                <Row className="mb-2">
+                  <Col className="text-end">
+                    Number of Drops :{" "}
+                    <span className="fw-bold">{totalDrops}</span>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+
+            {/* Box-Click */}
+            <Row className="my-4" style={{ backgroundColor: "" }}>
+              {specialData.map((val) => {
+                return (
+                  <>
+                    <Col
+                      md={4}
+                      className="mb-4"
+                      onClick={(e) =>
+                        handleButtonClick(e, val, val.category_name)
+                      }
+                    >
+                      <Card style={{ width: "", margin: "" }}>
+                        <Card.Body>
+                          <Row>
+                            <Col xs={7}>
+                              <Card.Img
+                                variant="top"
+                                height={150}
+                                src={val.iconimage ? val.iconimage : noImage}
+                              />
+                            </Col>
+                            <Col
+                              xs={5}
+                              className=" align-items-center justify-content-center fw-bold"
+                            >
+                              <Card.Text className="fs-6">
+                                {val.category_name}
+                              </Card.Text>
+                              <p className="camera_category_title">
+                                {" "}
+                                {val.category_title
+                                  ? val.category_title
+                                  : "No Category Found"}{" "}
+                              </p>
+                            </Col>
+                          </Row>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  </>
+                );
+              })}
+            </Row>
+
+            <Modal
+              size="lg"
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+              show={show}
+              onHide={() => setShow(false)}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>{categoryName}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Row className="my-4">
+                  {filteredData.map((item) => {
                     return (
                       <>
-                        <Col md={5} style={{ backgroundColor: "" }}>
-                          <Row>
-                            <Card.Img
-                              variant="top"
-                              height={150}
-                              src={val.thumbnail}
-                            />
-                          </Row>
-                          <Row className="my-2">
-                            <Col>
-                              {" "}
-                              <Card.Img
-                                variant="top"
-                                height={40}
-                                className="camera_thumbnail_img"
-                                src={val.image1}
-                                // onClick={() => { setThumbimg({ img1: val.image1 }) }}
-                              />
-                            </Col>
-                            <Col>
-                              {" "}
-                              <Card.Img
-                                variant="top"
-                                height={40}
-                                className="camera_thumbnail_img"
-                                src={val.image2}
-                                // onClick={() => { setThumbimg({ img1: val.image2 }) }}
-                              />
-                            </Col>
-                            <Col>
-                              {" "}
-                              <Card.Img
-                                variant="top"
-                                height={40}
-                                className="camera_thumbnail_img"
-                                src={val.image3}
-                                // onClick={() => { setThumbimg({ img1: val.image3 }) }}
-                              />
-                            </Col>
-                            <Col>
-                              {" "}
-                              <Card.Img
-                                variant="top"
-                                height={40}
-                                className="camera_thumbnail_img"
-                                src={val.image4}
-                                // onClick={() => { setThumbimg({ img1: val.image4 }) }}
-                              />
-                            </Col>
-                          </Row>
-                          {/* Final Price */}
-                          <Row className="mt-5">
-                            <div className="w-100 d-flex align-items-start">
-                              <Button
-                                variant="dark"
-                                onClick={calculateTotalPrice}
-                              >
-                                Final Price
-                              </Button>
-                            </div>
-                            <div className="w-100 my-1 d-flex align-items-start">
-                              <div className="text">
-                                <Table
-                                  striped
-                                  bordered
-                                  hover
-                                  responsive
-                                  style={{ width: "14rem" }}
-                                >
-                                  <thead>
-                                    <tr>
-                                      <th>
-                                        {priceCab ? (
-                                          <b>$ {priceCab}</b>
-                                        ) : (
-                                          <b>$ 0</b>
-                                        )}
-                                      </th>
-                                    </tr>
-                                  </thead>
-                                </Table>
-                              </div>
-                            </div>
-                          </Row>
-                        </Col>
-                        <Col md={7}>
-                          <p className="fst-italic">
-                            {" "}
-                            <span className="fw-bold">
-                              Description 22:{" "}
-                            </span>{" "}
-                            {val.name}
-                          </p>
-
-                          {finalData.map((item, index) => {
-                            return (
-                              <>
-                                <Form.Select
-                                  key={index}
-                                  aria-label="Default select example"
-                                  className="mb-3"
-                                >
-                                  <option value={2}>
-                                    {item[0].featurecaption}
-                                  </option>
-                                  {item.map((option, optionIndex) => (
-                                    <option
-                                      key={optionIndex}
-                                      value={option.value}
-                                    >
-                                      {option.featurename}
-                                    </option>
-                                  ))}
-                                </Form.Select>
-                              </>
-                            );
-                          })}
-                          <div
-                            className="d-flex align-items-end justify-content-end mt-5"
-                            style={{ backgroundColor: "" }}
+                        <Col
+                          md={4}
+                          className="nvr_col my-2"
+                          onClick={(e) => modal_1(e, item, item.id)}
+                        >
+                          <Card
+                            style={{
+                              width: "",
+                              backgroundColor: "",
+                              height: "300px",
+                            }}
                           >
-                            <Button variant="dark" onClick={handlePlusClick}>
-                              +
-                            </Button>
-                            <h6 className="mx-3">{count}</h6>
-                            <Button variant="dark" onClick={handleMinusClick}>
-                              -
-                            </Button>
-                          </div>
+                            <Card.Body>
+                              <Card.Title className="fw-bold">
+                                SKU : {item.id}
+                              </Card.Title>
+
+                              <Card.Text>
+                                Description :{" "}
+                                {item.name.split(" ").slice(0, 10).join(" ")}...
+                              </Card.Text>
+
+                              <Row>
+                                <Col xs={8}>
+                                  <Card.Img
+                                    variant="top"
+                                    height={100}
+                                    src={
+                                      item.thumbnail ? item.thumbnail : noImage
+                                    }
+                                  />
+                                </Col>
+                                <Col
+                                  xs={4}
+                                  className="d-flex align-items-center justify-content-center fw-bold"
+                                >
+                                  $ {item.price}
+                                </Col>
+                              </Row>
+                            </Card.Body>
+                          </Card>
                         </Col>
                       </>
                     );
                   })}
                 </Row>
-              </Container>
-            </Modal.Body>
-            <Modal.Footer>
-              <div className="w-100 my-4 d-flex align-items-end justify-content-between">
-                <Button
-                  className="mx-3"
-                  variant="dark"
-                  onClick={() => setShow2(false)}
-                >
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="dark" onClick={() => setShow(false)}>
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
+
+            <Modal
+              size="lg"
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+              show={show2}
+              onHide={() => setShow2(false)}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>{categoryName2}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Container>
+                  <Row>
+                    {filteredData2.map((val) => {
+                      return (
+                        <>
+                          <Col md={5} style={{ backgroundColor: "" }}>
+                            <Row>
+                              <Card.Img
+                                variant="top"
+                                height={150}
+                                src={val.thumbnail}
+                              />
+                            </Row>
+                            <Row className="my-2">
+                              <Col>
+                                {" "}
+                                <Card.Img
+                                  variant="top"
+                                  height={40}
+                                  className="camera_thumbnail_img"
+                                  src={val.image1}
+                                  // onClick={() => { setThumbimg({ img1: val.image1 }) }}
+                                />
+                              </Col>
+                              <Col>
+                                {" "}
+                                <Card.Img
+                                  variant="top"
+                                  height={40}
+                                  className="camera_thumbnail_img"
+                                  src={val.image2}
+                                  // onClick={() => { setThumbimg({ img1: val.image2 }) }}
+                                />
+                              </Col>
+                              <Col>
+                                {" "}
+                                <Card.Img
+                                  variant="top"
+                                  height={40}
+                                  className="camera_thumbnail_img"
+                                  src={val.image3}
+                                  // onClick={() => { setThumbimg({ img1: val.image3 }) }}
+                                />
+                              </Col>
+                              <Col>
+                                {" "}
+                                <Card.Img
+                                  variant="top"
+                                  height={40}
+                                  className="camera_thumbnail_img"
+                                  src={val.image4}
+                                  // onClick={() => { setThumbimg({ img1: val.image4 }) }}
+                                />
+                              </Col>
+                            </Row>
+                            {/* Final Price */}
+                            <Row className="mt-5">
+                              <div className="w-100 d-flex align-items-start">
+                                <Button
+                                  variant="dark"
+                                  onClick={calculateTotalPrice}
+                                >
+                                  Final Price
+                                </Button>
+                              </div>
+                              <div className="w-100 my-1 d-flex align-items-start">
+                                <div className="text">
+                                  <Table
+                                    striped
+                                    bordered
+                                    hover
+                                    responsive
+                                    style={{ width: "14rem" }}
+                                  >
+                                    <thead>
+                                      <tr>
+                                        <th>
+                                          {priceCab ? (
+                                            <b>$ {priceCab}</b>
+                                          ) : (
+                                            <b>$ 0</b>
+                                          )}
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                  </Table>
+                                </div>
+                              </div>
+                            </Row>
+                          </Col>
+                          <Col md={7}>
+                            <p className="fst-italic">
+                              {" "}
+                              <span className="fw-bold">
+                                Description 22ssss:{" "}
+                              </span>{" "}
+                              {val.name}
+                            </p>
+
+                            {/* Code */}
+                            {dropdownData.map((item, index) => {
+                              return (
+                                <>
+                                  <Form.Label>
+                                    {" "}
+                                    {item[0].featurecaption}
+                                  </Form.Label>
+                                  <Form.Select
+                                    key={index}
+                                    aria-label="Default select example"
+                                    className="mb-3"
+                                    name={item[0].featurecaption}
+                                    value={
+                                      finalNewState2[item[0].featurecaption] ||
+                                      ""
+                                    }
+                                    onChange={(e) => handleSelectChange(e)}
+                                  >
+                                    {item.map((option, optionIndex) => {
+                                      return (
+                                        <option
+                                          name={option.featurecaption}
+                                          key={optionIndex}
+                                          value={option.featurename}
+                                        >
+                                          {option.featurename +
+                                            " " +
+                                            "  " +
+                                            "$ " +
+                                            option.featureprice}
+                                        </option>
+                                      );
+                                    })}
+                                  </Form.Select>
+                                </>
+                              );
+                            })}
+                            <div
+                              className="d-flex align-items-end justify-content-end mt-5"
+                              style={{ backgroundColor: "" }}
+                            >
+                              <Button variant="dark" onClick={handlePlusClick}>
+                                +
+                              </Button>
+                              <h6 className="mx-3">{count}</h6>
+                              <Button variant="dark" onClick={handleMinusClick}>
+                                -
+                              </Button>
+                            </div>
+                          </Col>
+                        </>
+                      );
+                    })}
+                  </Row>
+                </Container>
+              </Modal.Body>
+              <Modal.Footer>
+                <div className="w-100 my-4 d-flex align-items-end justify-content-between">
+                  <Button
+                    className="mx-3"
+                    variant="dark"
+                    onClick={() => setShow2(false)}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    variant="dark"
+                    onClick={handleCablingData}
+                    disabled={priceCab === 0}
+                  >
+                    Add
+                  </Button>
+                </div>
+              </Modal.Footer>
+            </Modal>
+
+            {/* Custom Model */}
+            <Modal show={showCustom} onHide={handleCloseCustom}>
+              <Modal.Header closeButton>
+                <Modal.Title>Custom Product</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form onSubmit={formik.handleSubmit}>
+                  {/* Quantity */}
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label>Quantity :</Form.Label>
+                    <Form.Control
+                      type="number"
+                      placeholder="SKU"
+                      name="customQuantity"
+                      value={formik.values.customQuantity}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.customQuantity &&
+                      formik.errors.customQuantity && (
+                        <div className="text-danger">
+                          {formik.errors.customQuantity}
+                        </div>
+                      )}
+                  </Form.Group>
+
+                  {/* SKU */}
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label>SKU :</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="SKU"
+                      name="customSKU"
+                      value={formik.values.customSKU}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.customSKU && formik.errors.customSKU && (
+                      <div className="text-danger">
+                        {formik.errors.customSKU}
+                      </div>
+                    )}
+                  </Form.Group>
+
+                  {/* Description */}
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlTextarea1"
+                  >
+                    <Form.Label>Description :</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      placeholder="SKU"
+                      name="customDescription"
+                      value={formik.values.customDescription}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.customDescription &&
+                      formik.errors.customDescription && (
+                        <div className="text-danger">
+                          {formik.errors.customDescription}
+                        </div>
+                      )}
+                  </Form.Group>
+
+                  {/* Cost */}
+                  <Form.Group
+                    className="mb-3"
+                    controlId="exampleForm.ControlInput1"
+                  >
+                    <Form.Label>Cost :</Form.Label>
+                    <Form.Control
+                      type="number"
+                      placeholder="$"
+                      name="customCost"
+                      value={formik.values.customCost}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.customCost && formik.errors.customCost && (
+                      <div className="text-danger">
+                        {formik.errors.customCost}
+                      </div>
+                    )}
+                  </Form.Group>
+                  <Button variant="dark" type="submit">
+                    Add
+                  </Button>
+                </Form>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="dark" onClick={handleCloseCustom}>
                   Back
                 </Button>
-                <Button
-                  variant="dark"
-                  onClick={handleCablingData}
-                  disabled={priceCab === 0}
-                >
-                  Add
-                </Button>
-              </div>
-            </Modal.Footer>
-          </Modal>
+              </Modal.Footer>
+            </Modal>
 
-          {/* Custom Model */}
-          <Modal show={showCustom} onHide={handleCloseCustom}>
-            <Modal.Header closeButton>
-              <Modal.Title>Custom Product</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-            <Form onSubmit={formik.handleSubmit}>
-      {/* Quantity */}
-      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-        <Form.Label>Quantity :</Form.Label>
-        <Form.Control
-          type="number"
-          placeholder="SKU"
-          name="customQuantity"
-          value={formik.values.customQuantity}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-        {formik.touched.customQuantity && formik.errors.customQuantity && (
-              <div className="text-danger">{formik.errors.customQuantity}</div>
-              )}
-      </Form.Group>
+            {/* Custom Model */}
 
-      {/* SKU */}
-      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-        <Form.Label>SKU :</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="SKU"
-          name="customSKU"
-          value={formik.values.customSKU}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-           {formik.touched.customSKU && formik.errors.customSKU && (
-              <div className="text-danger">{formik.errors.customSKU}</div>
-              )}
-      </Form.Group>
+            <Row className="my-4" style={{ padding: "8px" }}>
+              <Col>
+                <h5 className="fw-bold">Add to Cart: </h5>
 
-      {/* Description */}
-      <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-        <Form.Label>Description :</Form.Label>
-        <Form.Control
-          as="textarea"
-          rows={3}
-          placeholder="SKU"
-          name="customDescription"
-          value={formik.values.customDescription}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-         {formik.touched.customDescription && formik.errors.customDescription && (
-              <div className="text-danger">{formik.errors.customDescription}</div>
-              )}
-      </Form.Group>
-
-      {/* Cost */}
-      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-        <Form.Label>Cost :</Form.Label>
-        <Form.Control
-          type="number"
-          placeholder="$"
-          name="customCost"
-          value={formik.values.customCost}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-           {formik.touched.customCost && formik.errors.customCost && (
-              <div className="text-danger">{formik.errors.customCost}</div>
-              )}
-      </Form.Group>
-      <Button variant="dark" type="submit">
-        Add
-      </Button>
-    </Form>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="dark" onClick={handleCloseCustom}>
-                Back
-              </Button>
-            
-            </Modal.Footer>
-          </Modal>
-
-          {/* Custom Model */}
-
-          <Row className="my-4" style={{ padding: "8px" }}>
-            <Col>
-              <h5 className="fw-bold">Add to Cart: </h5>
-
-              <div className="table-border">
-                <Table striped bordered hover responsive>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Product Name: </th>
-                      <th>QTY: </th>
-                      <th>Product Price: </th>
-                      <th>Total: </th>
-                      <th>Action:</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cartItems.map((item, index) => (
-                      <tr key={index}>
-                        <td>{index + 1}</td>
-                        <td>{item.id}</td>
-                        <td>{item.quantity}</td>
-                        <td>$ {item.pricePerItem}</td>
-                        <td>$ {item.totalPriceForItem.toFixed(2)}</td>
-                        <td>
-                          <Button
-                            variant="dark"
-                            onClick={() => handleDelete(index)}
-                          >
-                            Delete
-                          </Button>
-                        </td>
+                <div className="table-border">
+                  <Table striped bordered hover responsive>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Product Name: </th>
+                        <th>QTY: </th>
+                        <th>Product Price: </th>
+                        <th>Total: </th>
+                        <th>Action:</th>
                       </tr>
-                    ))}
-                    <tr>
-                      <th></th>
-                      <td></td>
-                      <td></td>
-                      <td>
-                        <b>Total Price :</b>
-                      </td>
-                      <td>$ {totalPrice.toFixed(2)}</td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </div>
-            </Col>
-          </Row>
+                    </thead>
+                    <tbody>
+                      {cartItems.map((item, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{item.id}</td>
+                          <td>{item.quantity}</td>
+                          <td>$ {item.pricePerItem}</td>
+                          <td>$ {item.totalPriceForItem.toFixed(2)}</td>
+                          <td>
+                            <Button
+                              variant="dark"
+                              onClick={() => handleDelete(index)}
+                            >
+                              Delete
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                      <tr>
+                        <th></th>
+                        <td></td>
+                        <td></td>
+                        <td>
+                          <b>Total Price :</b>
+                        </td>
+                        <td>$ {totalPrice.toFixed(2)}</td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+              </Col>
+            </Row>
 
-          <Row
-            className="my-4 d-flex justify-content-between"
-            style={{ backgroundColor: "" }}
-          >
-            <Col className="">
-              <Button variant="dark" onClick={handleShowCustom}>
-                Custom
-              </Button>
-            </Col>
-            <Col className="d-flex justify-content-end">
-              <Button variant="dark" onClick={handleNext}>
-                Next
-              </Button>
-            </Col>
-          </Row>
+            <Row
+              className="my-4 d-flex justify-content-between"
+              style={{ backgroundColor: "" }}
+            >
+              <Col className="">
+                <Button variant="dark" onClick={handleShowCustom}>
+                  Custom
+                </Button>
+              </Col>
+              <Col className="d-flex justify-content-end">
+                <Button variant="dark" onClick={handleNext}>
+                  Next
+                </Button>
+              </Col>
+            </Row>
+          </Container>
         </Container>
-      </Container>
       )}
-
     </>
   );
 }

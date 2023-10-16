@@ -43,3 +43,7 @@ body {
 
 /* Loader */
 
+.remove_padding
+{
+  padding: 0;
+}

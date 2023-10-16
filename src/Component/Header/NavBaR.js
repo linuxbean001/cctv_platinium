@@ -9,7 +9,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 function NavBar(props) {
   const handleClearState = () => {
     persistor.purge();
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (

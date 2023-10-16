@@ -9,10 +9,13 @@ import Modal from "react-bootstrap/Modal";
 import Papa from "papaparse";
 import { Navigate, useNavigate } from "react-router-dom";
 import noImage from "../../no_Image.jpg";
+
 import {
   setSelectedCabling,
   deleteCabling,
   setFinalData,
+  setTotalCablesSelected,
+  setSelectedNumberOfDrops,
 } from "../../../src/app/features/counter/counterSlice";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "./Loader.js";
@@ -23,8 +26,22 @@ function Cabling() {
   const selectedCameraNumber = useSelector(
     (state) => state.counter1.totalCamera
   );
+
+  // Numbner of Drops :
+  const totalDrops = useSelector(
+    (state) => state.counter1.selectedNumberOfDrops
+  );
+
+  // Numbner of Drops :
+  const totalOfCablesNumbers = useSelector(
+    (state) => state.counter1.totalCablesSelected
+  );
+
+  console.log("totalssss :", totalOfCablesNumbers);
+
   const countCabling = useSelector((state) => state.counter1.selectedCabling);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [totalQuantity, setTotalQuantity] = useState(0); // How many cables you have selected
   const [categoryCSV, setCategoriesCSV] = useState([]);
   const [productCSV, setProductCSV] = useState([]);
   const [productOption, setProductOptionCSV] = useState([]);
@@ -33,13 +50,17 @@ function Cabling() {
   const [filteredData, setfilteredData] = useState([]);
   const [filteredData2, setfilteredData2] = useState([]);
   const [show, setShow] = useState(false);
-  const [show2, setShow2] = useState(false);
-  const handleClose2 = () => setShow2(false);
-  const handleShow2 = () => {
-    setShow2(true);
-    navigate("/labor_rate");
+
+  //warning modal
+  const [lgShow, setLgShow] = useState(false);
+
+  const cableNextPage = () => {
+    if (totalOfCablesNumbers < selectedCameraNumber + totalDrops) {
+      setLgShow(true);
+    } else {
+      navigate("/labor_rate");
+    }
   };
-  const [categoryName, setCategoryName] = useState([]);
 
   const [dataforProduct, setdataForProduct] = useState([]);
   const [priceCab, setPriceCab] = useState(0);
@@ -55,6 +76,20 @@ function Cabling() {
     });
     setTotalPrice(totalPrice);
   }, []);
+
+  // Total Cables Selected Quantity
+  React.useEffect(() => {
+    setCartItems(countCabling || []);
+    let quantity = 0;
+    countCabling.forEach((item) => {
+      quantity += item.quantity;
+    });
+    setTotalQuantity(quantity);
+  }, []);
+
+  React.useEffect(() => {
+    dispatch(setTotalCablesSelected(totalQuantity));
+  }, [totalQuantity]);
 
   const handlePlusClicks = () => {
     setCount(count + 1);
@@ -85,7 +120,6 @@ function Cabling() {
         setProductCSV(products2);
         setProductOptionCSV(products3);
         setIsLoading(false);
-
       } catch (error) {
         console.error("Error parsing CSV files:", error);
       }
@@ -143,6 +177,7 @@ function Cabling() {
     dispatch(setFinalData(newItem));
     setCartItems((prevCartItems) => [...prevCartItems, newItem]);
     setTotalPrice((prevTotalPrice) => prevTotalPrice + totalPriceForItem);
+    setTotalQuantity((prevTotalPrice) => prevTotalPrice + count);
     setCount(1);
     setPriceCab(0);
   };
@@ -158,147 +193,169 @@ function Cabling() {
     const updatedCartItems = [...cartItems];
     const itemToRemove = updatedCartItems[index];
     const newTotalPrice = totalPrice - itemToRemove.totalPriceForItem;
+    const TotalQuantity = totalQuantity - itemToRemove.quantity;
 
     updatedCartItems.splice(index, 1);
 
     setCartItems(updatedCartItems);
     setTotalPrice(newTotalPrice);
+    setTotalQuantity(TotalQuantity);
   };
 
   return (
     <>
-     {isLoading ? (
+      {isLoading ? (
         <Loader />
       ) : (
-      <Container fluid className="my-4" style={{ backgroundColor: "" }}>
-        <Container>
-          <Row style={{ backgroundColor: "" }}>
-            <Col style={{ backgroundColor: "" }}>
-              <h2>
-                Cables <span className="fst-italic fs-6">(Category)</span>
-              </h2>
-            </Col>
-            {/* Right */}
-            <Col className="" style={{ backgroundColor: "" }}>
-              <Row className="mb-2">
-                <Col className="text-end">
-                  Number of Cameras :{" "}
-                  <span className="fw-bold">{selectedCameraNumber}</span>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-
-          {/* Box*/}
-
-          <Row className="my-4">
-            {cablingData.map((val) => {
-              return (
-                <>
-                  <Col
-                    style={{ backgroundColor: "" }}
-                    md={4}
-                    className="nvr_col my-3"
-                    onClick={(e) =>
-                      handleButtonClick(
-                        e,
-                        val.id,
-                        val.name,
-                        val.thumbnail,
-                        val.iamge1,
-                        val.image2,
-                        val.image3
-                      )
-                    }
-                  >
-                    <Card style={{ width: "", margin: "", height: "300px" }}>
-                      <Card.Body>
-                        <Card.Title className="fw-bold">
-                          SKU : {val.id}{" "}
-                        </Card.Title>
-                        <Card.Text>{val.name}</Card.Text>
-                        <Row>
-                          <Col xs={8}>
-                            <Card.Img
-                              variant="top"
-                              height={150}
-                              // src={hardware.thumbnail === '' ? noImage : ''}
-                              src={val.thumbnail}
-                            />
-                          </Col>
-                          <Col
-                            xs={4}
-                            className="d-flex align-items-center justify-content-center fw-bold"
-                          >
-                            $ {val.price}
-                          </Col>
-                        </Row>
-                      </Card.Body>
-                    </Card>
+        <Container fluid className="my-4" style={{ backgroundColor: "" }}>
+          <Container>
+            <Row style={{ backgroundColor: "" }}>
+              <Col style={{ backgroundColor: "" }}>
+                <h2>
+                  Cables <span className="fst-italic fs-6">(Category)</span>
+                </h2>
+              </Col>
+              {/* Right */}
+              <Col className="" style={{ backgroundColor: "" }}>
+                <Row className="mb-2">
+                  <Col className="text-end">
+                    Number of Cameras :{" "}
+                    <span className="fw-bold">{selectedCameraNumber}</span>
                   </Col>
-                </>
-              );
-            })}
-          </Row>
+                </Row>
+                <Row className="mb-2">
+                  <Col className="text-end">
+                    Number of Drops :{" "}
+                    <span className="fw-bold">{totalDrops}</span>
+                  </Col>
+                </Row>
+                <Row className="mb-2">
+                  <Col className="text-end">
+                    Total Needed Cables :{" "}
+                    <span className="fw-bold">
+                      {selectedCameraNumber + totalDrops}
+                    </span>
+                  </Col>
+                </Row>
+                <Row className="mb-2">
+                  <Col className="text-end">
+                    Total Cables Selected:{" "}
+                    <span className="fw-bold">{totalOfCablesNumbers}</span>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
 
-          <Row className="my-4" style={{ padding: "8px" }}>
-            <Col>
-              <h5 className="fw-bold">Add to Cart: </h5>
+            {/* Box*/}
 
-              <div className="table-border">
-                <Table striped bordered hover responsive>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>SKU: </th>
-                      <th>QTY: </th>
-                      <th>CableCard Price: </th>
-                      <th>Total: </th>
-                      <th>Action:</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cartItems.map((item, index) => (
-                      <tr key={index}>
-                        <td>{index + 1}</td>
-                        <td>{item.id}</td>
-                        <td>{item.quantity}</td>
-                        <td>{item.pricePerItem}</td>
-                        <td>$ {item.totalPriceForItem.toFixed(2)}</td>
-                        <td>
-                          <Button
-                            variant="dark"
-                            onClick={() => handleDelete(index)}
-                          >
-                            Delete
-                          </Button>
-                        </td>
+            <Row className="my-4">
+              {cablingData.map((val) => {
+                return (
+                  <>
+                    <Col
+                      style={{ backgroundColor: "" }}
+                      md={4}
+                      className="nvr_col my-3"
+                      onClick={(e) =>
+                        handleButtonClick(
+                          e,
+                          val.id,
+                          val.name,
+                          val.thumbnail,
+                          val.iamge1,
+                          val.image2,
+                          val.image3
+                        )
+                      }
+                    >
+                      <Card style={{ width: "", margin: "", height: "300px" }}>
+                        <Card.Body>
+                          <Card.Title className="fw-bold">
+                            SKU : {val.id}{" "}
+                          </Card.Title>
+                          <Card.Text>{val.name}</Card.Text>
+                          <Row>
+                            <Col xs={8}>
+                              <Card.Img
+                                variant="top"
+                                height={150}
+                                // src={hardware.thumbnail === '' ? noImage : ''}
+                                src={val.thumbnail}
+                              />
+                            </Col>
+                            <Col
+                              xs={4}
+                              className="d-flex align-items-center justify-content-center fw-bold"
+                            >
+                              $ {val.price}
+                            </Col>
+                          </Row>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  </>
+                );
+              })}
+            </Row>
+
+            <Row className="my-4" style={{ padding: "8px" }}>
+              <Col>
+                <h5 className="fw-bold">Add to Cart: </h5>
+
+                <div className="table-border">
+                  <Table striped bordered hover responsive>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>SKU: </th>
+                        <th>QTY: </th>
+                        <th>CableCard Price: </th>
+                        <th>Total: </th>
+                        <th>Action:</th>
                       </tr>
-                    ))}
-                    <tr>
-                      <th></th>
-                      <td></td>
-                      <td></td>
-                      <td>
-                        <b>Total Price :</b>
-                      </td>
-                      <td>$ {totalPrice.toFixed(2)}</td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </div>
-            </Col>
-          </Row>
-          <Row className="my-4" style={{ backgroundColor: "" }}>
-            <Col className="d-flex justify-content-end">
-              <Button variant="dark" onClick={handleShow2}>
-                Next
-              </Button>
-            </Col>
-          </Row>
+                    </thead>
+                    <tbody>
+                      {cartItems.map((item, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{item.id}</td>
+                          <td>{item.quantity}</td>
+                          <td>{item.pricePerItem}</td>
+                          <td>$ {item.totalPriceForItem.toFixed(2)}</td>
+                          <td>
+                            <Button
+                              variant="dark"
+                              onClick={() => handleDelete(index)}
+                            >
+                              Delete
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                      <tr>
+                        <th></th>
+                        <td></td>
+                        <td>{totalQuantity}</td>
+                        <td>
+                          <b>Total Price :</b>
+                        </td>
+                        <td>$ {totalPrice.toFixed(2)}</td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+              </Col>
+            </Row>
+            <Row className="my-4" style={{ backgroundColor: "" }}>
+              <Col className="d-flex justify-content-end">
+                <Button variant="dark" onClick={cableNextPage}>
+                  Next
+                </Button>
+              </Col>
+            </Row>
+          </Container>
         </Container>
-      </Container>
       )}
 
       {/* Modal Code - 1 */}
@@ -419,6 +476,27 @@ function Cabling() {
             disabled={priceCab === 0}
           >
             Add
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Warning Modal*/}
+
+      <Modal show={lgShow} onHide={() => setLgShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <h6> Warning ! There are less cables added to cart than Total Needed Cables</h6>
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>Are you sure want to continue ?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="dark" onClick={() => setLgShow(false)}>
+            No
+          </Button>
+          {/* <Button variant="dark" onClick={() => navigate("/labor_rate")}> */}
+          <Button variant="dark" onClick={() => navigate("/labor_rate")}>
+            Yes
           </Button>
         </Modal.Footer>
       </Modal>

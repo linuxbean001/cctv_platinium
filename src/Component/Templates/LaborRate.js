@@ -31,6 +31,11 @@ function LaborRate() {
   const selectedCameraNumber = useSelector(
     (state) => state.counter1.totalCamera
   );
+  // Numbner of Drops :
+  const totalDrops = useSelector(
+    (state) => state.counter1.selectedNumberOfDrops
+  );
+
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
@@ -65,7 +70,6 @@ function LaborRate() {
         setProductCSV(products2);
         setProductOptionCSV(products3);
         setIsLoading(false);
-
       } catch (error) {
         console.error("Error parsing CSV files:", error);
       }
@@ -167,8 +171,22 @@ function LaborRate() {
     setTotalPrice(newTotalPrice);
   };
 
-  const handleNext = () => {
-    navigate("/pdf");
+  const LABOR_NUMBER = cartItems.reduce((accumulator, item) => {
+    return accumulator + item.quantity;
+  }, 0);
+
+  //warning modal
+  const [lgShow, setLgShow] = useState(false);
+  const laborNextPage = () => {
+    
+    if (LABOR_NUMBER < totalDrops) {
+      setLgShow(true);
+    } else {
+      navigate("/pdf");
+
+    }
+
+    // navigate("/pdf");
   };
 
   return (
@@ -176,352 +194,384 @@ function LaborRate() {
       {isLoading ? (
         <Loader />
       ) : (
-      <Container fluid className="my-4" style={{ backgroundColor: "" }}>
-        <Container>
-          <Row style={{ backgroundColor: "" }}>
-            <Col style={{ backgroundColor: "" }}>
-              <h2>
-                Labor <span className="fst-italic fs-6">(Category)</span>
-              </h2>
-            </Col>
-            <Col className="" style={{ backgroundColor: "" }}>
-              <Row>
-                <Col className="text-end">
-                  Number of Cameras :{" "}
-                  <span className="fw-bold">{selectedCameraNumber}</span>
-                </Col>
-              </Row>
-              <Row>
-                <Col className="text-end">
-                  <Link to="/">
-                    <h6>
-                      Edit here <span className="fw-bold"></span>
-                    </h6>
-                  </Link>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-
-          <Row className="my-4" style={{ backgroundColor: "" }}>
-            {laborData.map((item) => {
-              return (
-                <>
-                  <Col
-                    md={4}
-                    className="mb-4"
-                    onClick={(e) => handleButtonClick(e, item.category_name)}
-                  >
-                    <Card style={{ width: "", margin: "" }}>
-                      <Card.Body>
-                        <Row>
-                          <Col xs={7}>
-                            <Card.Img
-                              variant="top"
-                              height={150}
-                              src={item.iconimage ? item.iconimage : noImage}
-                            />
-                          </Col>
-                          <Col
-                            xs={5}
-                            className=" align-items-center justify-content-center fw-bold"
-                          >
-                            <Card.Text className="fs-6">
-                              {item.category_name}
-                            </Card.Text>
-                            <p className="camera_category_title">
-                              {" "}
-                              {item.category_title
-                                ? item.category_title
-                                : "No Title Found"}
-                            </p>
-                          </Col>
-                        </Row>
-                      </Card.Body>
-                    </Card>
+        <Container fluid className="my-4" style={{ backgroundColor: "" }}>
+          <Container>
+            <Row style={{ backgroundColor: "" }}>
+              <Col style={{ backgroundColor: "" }}>
+                <h2>
+                  Labor <span className="fst-italic fs-6">(Category)</span>
+                </h2>
+              </Col>
+              <Col className="" style={{ backgroundColor: "" }}>
+                <Row style={{ backgroundColor: "" }}>
+                  <Col className="text-end">
+                    Number of Cameras :{" "}
+                    <span className="fw-bold">{selectedCameraNumber}</span>
                   </Col>
-                </>
-              );
-            })}
-          </Row>
-
-          <Modal
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            show={show}
-            onHide={() => setShow(false)}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>{categoryName}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Row className="my-4">
-                {filteredData.map((item) => {
-                  return (
-                    <>
-                      <Col
-                        md={4}
-                        className="nvr_col my-2"
-                        onClick={(e) => modal_1(e, item.id)}
-                        key={item.id}
-                      >
-                        <Card
-                          style={{
-                            width: "",
-                            backgroundColor: "",
-                            height: "300px",
-                          }}
-                        >
-                          <Card.Body>
-                            <Card.Title className="fw-bold">
-                              SKU : {item.id}
-                            </Card.Title>
-                            <Card.Text>
-                              {" "}
-                              {item.name.split(" ").slice(0, 10).join(" ")}...
-                            </Card.Text>
-
-                            <Row>
-                              <Col xs={8}>
-                                <Card.Img
-                                  variant="top"
-                                  height={100}
-                                  src={
-                                    item.thumbnail ? item.thumbnail : noImage
-                                  }
-                                />
-                              </Col>
-                              <Col
-                                xs={4}
-                                className="d-flex align-items-center justify-content-center fw-bold"
-                              >
-                                $ {item.price}
-                              </Col>
-                            </Row>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    </>
-                  );
-                })}
-              </Row>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="dark" onClick={() => setShow(false)}>
-                Close
-              </Button>
-            </Modal.Footer>
-          </Modal>
-
-          <Modal
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            show={show2}
-            onHide={() => setShow2(false)}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>{categoryName2}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Container>
+                </Row>
+                <Row style={{ backgroundColor: "" }}>
+                  <Col className="text-end">
+                    <Link to="/" className="remove_padding">
+                      <h6>
+                        Edit here <span className="fw-bold"></span>
+                      </h6>
+                    </Link>
+                  </Col>
+                </Row>
                 <Row>
-                  {filteredData2.map((val) => {
+                  <Col className="text-end">
+                    Number of Drops :{" "}
+                    <span className="fw-bold">{totalDrops}</span>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className="text-end">
+                    Labor Number :{" "}
+                    <span className="fw-bold">{LABOR_NUMBER}</span>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+
+            <Row className="my-4" style={{ backgroundColor: "" }}>
+              {laborData.map((item) => {
+                return (
+                  <>
+                    <Col
+                      md={4}
+                      className="mb-4"
+                      onClick={(e) => handleButtonClick(e, item.category_name)}
+                    >
+                      <Card style={{ width: "", margin: "" }}>
+                        <Card.Body>
+                          <Row>
+                            <Col xs={7}>
+                              <Card.Img
+                                variant="top"
+                                height={150}
+                                src={item.iconimage ? item.iconimage : noImage}
+                              />
+                            </Col>
+                            <Col
+                              xs={5}
+                              className=" align-items-center justify-content-center fw-bold"
+                            >
+                              <Card.Text className="fs-6">
+                                {item.category_name}
+                              </Card.Text>
+                              <p className="camera_category_title">
+                                {" "}
+                                {item.category_title
+                                  ? item.category_title
+                                  : "No Title Found"}
+                              </p>
+                            </Col>
+                          </Row>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  </>
+                );
+              })}
+            </Row>
+
+            <Modal
+              size="lg"
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+              show={show}
+              onHide={() => setShow(false)}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>{categoryName}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Row className="my-4">
+                  {filteredData.map((item) => {
                     return (
                       <>
-                        <Col md={5} style={{ backgroundColor: "" }}>
-                          <Row>
-                            <Card.Img
-                              variant="top"
-                              height={150}
-                              src={val.thumbnail ? val.thumbnail : noImage}
-                            />
-                          </Row>
-                          <Row className="my-2">
-                            <Col>
-                              {" "}
-                              <Card.Img
-                                variant="top"
-                                height={40}
-                                className="camera_thumbnail_img"
-                                src={val.image1 ? val.imgae1 : noImage}
-                                // onClick={() => { setThumbimg({ img1: onlineImg }) }}
-                              />
-                            </Col>
-                            <Col>
-                              {" "}
-                              <Card.Img
-                                variant="top"
-                                height={40}
-                                className="camera_thumbnail_img"
-                                src={val.image2 ? val.imgae2 : noImage}
-                                // onClick={() => { setThumbimg({ img1: onlineImg }) }}
-                              />
-                            </Col>
-                            <Col>
-                              {" "}
-                              <Card.Img
-                                variant="top"
-                                height={40}
-                                className="camera_thumbnail_img"
-                                src={val.image3 ? val.imgae3 : noImage}
-                                // onClick={() => { setThumbimg({ img1: onlineImg }) }}
-                              />
-                            </Col>
-                            <Col>
-                              {" "}
-                              <Card.Img
-                                variant="top"
-                                height={40}
-                                className="camera_thumbnail_img"
-                                src={val.image4 ? val.imgae4 : noImage}
-                                // onClick={() => { setThumbimg({ img1: image4 }) }}
-                              />
-                            </Col>
-                          </Row>
-                        </Col>
-                        <Col md={7}>
-                          <p className="fst-italic">
-                            {" "}
-                            <span className="fw-bold">
-                              Description 22:{" "}
-                            </span>{" "}
-                            {val.name}
-                          </p>
-                          <div
-                            className="d-flex align-items-end justify-content-end my-4"
-                            style={{ backgroundColor: "" }}
+                        <Col
+                          md={4}
+                          className="nvr_col my-2"
+                          onClick={(e) => modal_1(e, item.id)}
+                          key={item.id}
+                        >
+                          <Card
+                            style={{
+                              width: "",
+                              backgroundColor: "",
+                              height: "300px",
+                            }}
                           >
-                            <Button variant="dark" onClick={handleClickPlus}>
-                              +
-                            </Button>
-                            <h6 className="mx-3">{count}</h6>
-                            <Button variant="dark" onClick={handleClickMinus}>
-                              -
-                            </Button>
-                          </div>
+                            <Card.Body>
+                              <Card.Title className="fw-bold">
+                                SKU : {item.id}
+                              </Card.Title>
+                              <Card.Text>
+                                {" "}
+                                {item.name.split(" ").slice(0, 10).join(" ")}...
+                              </Card.Text>
+
+                              <Row>
+                                <Col xs={8}>
+                                  <Card.Img
+                                    variant="top"
+                                    height={100}
+                                    src={
+                                      item.thumbnail ? item.thumbnail : noImage
+                                    }
+                                  />
+                                </Col>
+                                <Col
+                                  xs={4}
+                                  className="d-flex align-items-center justify-content-center fw-bold"
+                                >
+                                  $ {item.price}
+                                </Col>
+                              </Row>
+                            </Card.Body>
+                          </Card>
                         </Col>
-                        <Row className="mt-5 justify-content-start">
-                          <div className="w-100 d-flex justify-content-start">
-                            <Button
-                              variant="dark"
-                              onClick={calculateFinalPrice}
-                            >
-                              Final Price
-                            </Button>
-                          </div>
-                          <div className="w-100 my-1 d-flex justify-content-start">
-                            <div className="text">
-                              <Table
-                                striped
-                                bordered
-                                hover
-                                responsive
-                                style={{ width: "14rem" }}
-                              >
-                                <thead>
-                                  <tr>
-                                    <th>
-                                      {basePrice1 ? (
-                                        <b>$ {basePrice1.toFixed(2)}</b>
-                                      ) : (
-                                        <b>$ 0</b>
-                                      )}
-                                    </th>
-                                  </tr>
-                                </thead>
-                              </Table>
-                            </div>
-                          </div>
-                        </Row>
                       </>
                     );
                   })}
                 </Row>
-              </Container>
-            </Modal.Body>
-            <Modal.Footer>
-              <div className="w-100 my-4 d-flex align-items-end justify-content-between">
-                <Button
-                  className="mx-3"
-                  variant="dark"
-                  onClick={() => setShow2(false)}
-                >
-                  Back
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="dark" onClick={() => setShow(false)}>
+                  Close
                 </Button>
-                <Button
-                  variant="dark"
-                  onClick={handleCablingData}
-                  disabled={basePrice1 === 0}
-                >
-                  Add
-                </Button>
-              </div>
-            </Modal.Footer>
-          </Modal>
+              </Modal.Footer>
+            </Modal>
 
-          <Row className="my-4" style={{ padding: "8px" }}>
-            <Col>
-              <h5 className="fw-bold">Add to Cart: </h5>
+            <Modal
+              size="lg"
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+              show={show2}
+              onHide={() => setShow2(false)}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>{categoryName2}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Container>
+                  <Row>
+                    {filteredData2.map((val) => {
+                      return (
+                        <>
+                          <Col md={5} style={{ backgroundColor: "" }}>
+                            <Row>
+                              <Card.Img
+                                variant="top"
+                                height={150}
+                                src={val.thumbnail ? val.thumbnail : noImage}
+                              />
+                            </Row>
+                            <Row className="my-2">
+                              <Col>
+                                {" "}
+                                <Card.Img
+                                  variant="top"
+                                  height={40}
+                                  className="camera_thumbnail_img"
+                                  src={val.image1 ? val.imgae1 : noImage}
+                                  // onClick={() => { setThumbimg({ img1: onlineImg }) }}
+                                />
+                              </Col>
+                              <Col>
+                                {" "}
+                                <Card.Img
+                                  variant="top"
+                                  height={40}
+                                  className="camera_thumbnail_img"
+                                  src={val.image2 ? val.imgae2 : noImage}
+                                  // onClick={() => { setThumbimg({ img1: onlineImg }) }}
+                                />
+                              </Col>
+                              <Col>
+                                {" "}
+                                <Card.Img
+                                  variant="top"
+                                  height={40}
+                                  className="camera_thumbnail_img"
+                                  src={val.image3 ? val.imgae3 : noImage}
+                                  // onClick={() => { setThumbimg({ img1: onlineImg }) }}
+                                />
+                              </Col>
+                              <Col>
+                                {" "}
+                                <Card.Img
+                                  variant="top"
+                                  height={40}
+                                  className="camera_thumbnail_img"
+                                  src={val.image4 ? val.imgae4 : noImage}
+                                  // onClick={() => { setThumbimg({ img1: image4 }) }}
+                                />
+                              </Col>
+                            </Row>
+                          </Col>
+                          <Col md={7}>
+                            <p className="fst-italic">
+                              {" "}
+                              <span className="fw-bold">
+                                Description 22:{" "}
+                              </span>{" "}
+                              {val.name}
+                            </p>
+                            <div
+                              className="d-flex align-items-end justify-content-end my-4"
+                              style={{ backgroundColor: "" }}
+                            >
+                              <Button variant="dark" onClick={handleClickPlus}>
+                                +
+                              </Button>
+                              <h6 className="mx-3">{count}</h6>
+                              <Button variant="dark" onClick={handleClickMinus}>
+                                -
+                              </Button>
+                            </div>
+                          </Col>
+                          <Row className="mt-5 justify-content-start">
+                            <div className="w-100 d-flex justify-content-start">
+                              <Button
+                                variant="dark"
+                                onClick={calculateFinalPrice}
+                              >
+                                Final Price
+                              </Button>
+                            </div>
+                            <div className="w-100 my-1 d-flex justify-content-start">
+                              <div className="text">
+                                <Table
+                                  striped
+                                  bordered
+                                  hover
+                                  responsive
+                                  style={{ width: "14rem" }}
+                                >
+                                  <thead>
+                                    <tr>
+                                      <th>
+                                        {basePrice1 ? (
+                                          <b>$ {basePrice1.toFixed(2)}</b>
+                                        ) : (
+                                          <b>$ 0</b>
+                                        )}
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                </Table>
+                              </div>
+                            </div>
+                          </Row>
+                        </>
+                      );
+                    })}
+                  </Row>
+                </Container>
+              </Modal.Body>
+              <Modal.Footer>
+                <div className="w-100 my-4 d-flex align-items-end justify-content-between">
+                  <Button
+                    className="mx-3"
+                    variant="dark"
+                    onClick={() => setShow2(false)}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    variant="dark"
+                    onClick={handleCablingData}
+                    disabled={basePrice1 === 0}
+                  >
+                    Add
+                  </Button>
+                </div>
+              </Modal.Footer>
+            </Modal>
 
-              <div className="table-border">
-                <Table striped bordered hover responsive>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>QTY: </th>
-                      <th>SKU: </th>
-                      <th>Labor Base Price: </th>
-                      <th>Total: </th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cartItems.map((item, index) => (
-                      <tr key={index}>
-                        <td>{index + 1}</td>
-                        <td>{item.quantity}</td>
-                        <td>{item.id}</td>
-                        <td>{item.pricePerItem}</td>
-                        <td>$ {item.totalPriceForItem.toFixed(2)}</td>
-                        <td>
-                          <Button
-                            variant="dark"
-                            onClick={() => handleDelete(index)}
-                          >
-                            Delete
-                          </Button>
-                        </td>
+            <Row className="my-4" style={{ padding: "8px" }}>
+              <Col>
+                <h5 className="fw-bold">Add to Cart: </h5>
+
+                <div className="table-border">
+                  <Table striped bordered hover responsive>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>QTY: </th>
+                        <th>SKU: </th>
+                        <th>Labor Base Price: </th>
+                        <th>Total: </th>
+                        <th></th>
                       </tr>
-                    ))}
-                    <tr>
-                      <th></th>
-                      <td></td>
-                      <td></td>
+                    </thead>
+                    <tbody>
+                      {cartItems.map((item, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{item.quantity}</td>
+                          <td>{item.id}</td>
+                          <td>{item.pricePerItem}</td>
+                          <td>$ {item.totalPriceForItem.toFixed(2)}</td>
+                          <td>
+                            <Button
+                              variant="dark"
+                              onClick={() => handleDelete(index)}
+                            >
+                              Delete
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                      <tr>
+                        <th></th>
+                        <td></td>
+                        <td></td>
 
-                      <td>
-                        <b>Total Price :</b>
-                      </td>
-                      <td>$ {totalPrice.toFixed(2)}</td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </div>
-            </Col>
-          </Row>
-          <Row className="my-4" style={{ backgroundColor: "" }}>
-            <Col className="d-flex justify-content-end">
-              <Button variant="dark" onClick={handleNext}>
-                Next
-              </Button>
-            </Col>
-          </Row>
+                        <td>
+                          <b>Total Price :</b>
+                        </td>
+                        <td>$ {totalPrice.toFixed(2)}</td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+              </Col>
+            </Row>
+            <Row className="my-4" style={{ backgroundColor: "" }}>
+              <Col className="d-flex justify-content-end">
+                <Button variant="dark" onClick={laborNextPage}>
+                  Next
+                </Button>
+              </Col>
+            </Row>
+          </Container>
         </Container>
-      </Container>
       )}
 
+      {/* Warning Modal*/}
+
+      <Modal show={lgShow} onHide={() => setLgShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <h6> Warning ! Labor Count is less than Drops </h6>
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>Are you sure want to continue ?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="dark" onClick={() => setLgShow(false)}>
+            No
+          </Button>
+          {/* <Button variant="dark" onClick={() => navigate("/labor_rate")}> */}
+          <Button variant="dark" onClick={() => navigate("/pdf")}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

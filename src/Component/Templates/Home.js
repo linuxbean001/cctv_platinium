@@ -149,9 +149,6 @@ function Home() {
     parseCSVFiles();
   }, []);
 
-  
-
-  console.log('data :', categories)
 
   const fetchInfo = () => {
     return axios

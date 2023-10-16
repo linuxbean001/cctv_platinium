@@ -23,7 +23,7 @@ function MyVerticallyCenteredModal(props) {
   const [finalNewState2, setFinalNewState2] = useState({});
   const dispatch = useDispatch();
   const [count, setCount] = useState(1);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);  // Dropdown item price 1+2+3 = 6
   const [finalPrice, setFinalPrice] = useState(0);
 
   const [priceList, setPriceList] = useState(0);
@@ -73,11 +73,13 @@ function MyVerticallyCenteredModal(props) {
     setFinalNewState2(initialSelectedOptions);
   }, [props.finalData]);
 
+
   function handleSelectChange(e) {
     const { name, value } = e.target;
     const selectedOption = props.finalData
       .flat()
       .find((option) => option.featurename === value);
+      // console.log('selected', selectedOption)
 
     const prevOptionPrice =
       finalNewState2[name] &&
@@ -92,10 +94,12 @@ function MyVerticallyCenteredModal(props) {
           )
         : 0;
 
+
     const optionPrice = selectedOption
       ? parseFloat(selectedOption.featureprice)
       : 0;
     const priceDifference = optionPrice - prevOptionPrice;
+
 
     setTotalPrice((prevTotalPrice) => prevTotalPrice + priceDifference);
     setFinalNewState2((prevData) => ({
@@ -103,6 +107,8 @@ function MyVerticallyCenteredModal(props) {
       [name]: value,
     }));
   }
+
+  console.log('pricessss :', totalPrice)
 
   const handlePlusClick = () => {
     setCount(count + 1);
@@ -118,7 +124,7 @@ function MyVerticallyCenteredModal(props) {
     setIsDisabled(true);
     const newTotalPrice =
       parseInt(props.dataforProduct.price) + parseInt(totalPrice);
-
+    
     setPriceList(newTotalPrice * count);
   };
 
@@ -230,7 +236,7 @@ function MyVerticallyCenteredModal(props) {
                     >
                       {item.map((option, optionIndex) => {
                         return (
-                          <>
+                          
                             <option
                               name={option.featurecaption}
                               key={optionIndex}
@@ -242,7 +248,7 @@ function MyVerticallyCenteredModal(props) {
                                 "$ " +
                                 option.featureprice}
                             </option>
-                          </>
+                          
                         );
                       })}
                     </Form.Select>
@@ -322,7 +328,6 @@ function Nvr(props) {
     }
   };
 
-  // console.log('options', produtOption)  // Complete data from OptionsCSV
   const calculateTotalPrice = () => {
     let totalPrice = 0;
     tableData.forEach((val) => {
@@ -398,6 +403,7 @@ function Nvr(props) {
   });
 
   const handleButtonClick = (e, val, id) => {
+
     // Code Starts
     let result = [];
     let currentArray = [];
@@ -456,6 +462,8 @@ function Nvr(props) {
     setExtra(isIdInRecorderData2);
   };
 
+
+
   const isIdInRecorderData2 = recorderData2.filter((item) => {
     if (item.productid == idforOptions) {
       return idforOptions.includes(item.productid);
@@ -493,27 +501,12 @@ function Nvr(props) {
                     <span className="fw-bold">{calculateTotalLicenses()}</span>
                   </Col>
                 </Row>
-
-                {/* <Row>
-                <Col className="text-end">
-                  Number of Options: &nbsp;
-                  <span className="fw-bold">{selectedCameraNumber}</span>
-                </Col>
-              </Row> */}
-                {/* <Row>
-                <Col className="text-end">
-                  <h6>
-                    Number of Licenses :
-                    <span className="fw-bold">{selectedCameraNumber.totalCamera}</span>
-                  </h6>
-                </Col>
-              </Row> */}
               </Col>
             </Row>
 
+{/* Box Click */}
             <Row className="my-4">
               {recorderData.map((val) => {
-                console.log('val are',val)
                 return (
                   <>
                     <Col
@@ -639,6 +632,8 @@ function Nvr(props) {
           </Container>
         </Container>
       )}
+
+      {/* Warinng Model */}
       <Modal show={show2} onHide={handleClose2}>
         <Modal.Header closeButton>
           <Modal.Title>
