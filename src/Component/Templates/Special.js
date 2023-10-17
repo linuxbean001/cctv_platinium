@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -43,12 +43,13 @@ function Special() {
   const [finalNewState2, setFinalNewState2] = useState({});
   const [dropDownItemPrice, setDropDownItemPrice] = useState(0);
 
+// console.log('dropdown',dropDownItemPrice)
+
   // Number of Drops
 
   const [drops, setDrops] = useState(""); // <30FPS
   const [drops2, setDrops2] = useState(""); // stored only numbers i.e. 30
   const [drops3, setDrops3] = useState(""); // Total number of Drops with Formula
-
 
   const navigate = useNavigate();
   const selectedCameraNumber = useSelector(
@@ -57,7 +58,6 @@ function Special() {
   const totalDrops = useSelector(
     (state) => state.counter1.selectedNumberOfDrops
   );
-
 
   const countSpecial = useSelector((state) => state.counter1.selectedSpecial);
 
@@ -128,23 +128,22 @@ function Special() {
     setfilteredData(specialData2);
   };
 
-// Setting Number of Drops Start
-React.useEffect(()=>{
-  const dropNumbers = drops.match(/\d+/);
-  if (dropNumbers) {
-    setDrops2(dropNumbers[0]);
-  } else {
-    console.log("No numbers found in the string.");
-  }
-},[drops])
+  // Setting Number of Drops Start
+  React.useEffect(() => {
+    const dropNumbers = drops.match(/\d+/);
+    if (dropNumbers) {
+      setDrops2(dropNumbers[0]);
+    } else {
+      console.log("No numbers found in the string.");
+    }
+  }, [drops]);
 
-// console.log('drops2 :', drops2)   // It will show '30'
+  // console.log('drops2 :', drops2)   // It will show '30'
 
-// Setting Number of Drops Ends
-
-
+  // Setting Number of Drops Ends
 
   function modal_1(e, item, id) {
+    
     // Code Starts
     let result = [];
     let currentArray = [];
@@ -185,10 +184,6 @@ React.useEffect(()=>{
     if (currentArray1.length > 0) {
       result1.push([...currentArray1]);
     }
-    setDropDownData(result1);
-
-    // Code Ends
-
     // Number of Drops (<30FPS) :
     setDrops(item.extra_field_2);
 
@@ -201,6 +196,22 @@ React.useEffect(()=>{
       }
     });
     setfilteredData2(specialData3);
+    const sumDefault = []
+    result1 && result1.map((item,index)=>{
+      sumDefault.push(Number(item[0].featureprice))
+    }) 
+    console.log('sun', sumDefault)
+    const sum = sumDefault.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue;
+    }, 0);
+    let basePrices = specialData3.map((item) => item.price);
+    const priceCabling = parseFloat(basePrices) * count + sum;  // 245 Price
+    console.log('yy',priceCabling)
+    setDropDownData(result1);
+
+    // Code Ends
+
+    
   }
 
 
@@ -212,7 +223,7 @@ React.useEffect(()=>{
       .flat()
       .find((option) => option.featurename === value);
 
-    const prevOptionPrice =
+      const prevOptionPrice =
       finalNewState2[name] &&
       dropdownData
         .flat()
@@ -237,21 +248,21 @@ React.useEffect(()=>{
     }));
   }
 
-  const calculateTotalPrice = () => {
+
+
+  const calculateTotalPrice = () => {   // Final Button Click
     let basePrices = filteredData2.map((item) => item.price);
-    setBasePrice(basePrices);
+    setBasePrice(basePrices); 
     const priceCabling = parseFloat(basePrices) * count;
     setPriceCab(priceCabling);
+    const finalPriceWithDrops = selectedCameraNumber + drops2 * count;
 
-    const finalPriceWithDrops = selectedCameraNumber + (drops2) * count;
-
-    setDrops3(finalPriceWithDrops)
+    setDrops3(finalPriceWithDrops);
     dispatch(setSelectedNumberOfDrops(finalPriceWithDrops));
-
   };
   // console.log('drops3', drops3)
 
-// selectedCameraNumber
+  // selectedCameraNumber
   const handleCablingData = () => {
     setShow2(false);
     const totalPriceForItem = basePrice * count;

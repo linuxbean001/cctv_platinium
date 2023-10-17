@@ -108,7 +108,6 @@ function MyVerticallyCenteredModal(props) {
     }));
   }
 
-  console.log('pricessss :', totalPrice)
 
   const handlePlusClick = () => {
     setCount(count + 1);
@@ -124,7 +123,6 @@ function MyVerticallyCenteredModal(props) {
     setIsDisabled(true);
     const newTotalPrice =
       parseInt(props.dataforProduct.price) + parseInt(totalPrice);
-    
     setPriceList(newTotalPrice * count);
   };
 
@@ -142,6 +140,8 @@ function MyVerticallyCenteredModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
+
+    
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           {props.dataforProduct.id}
@@ -185,6 +185,7 @@ function MyVerticallyCenteredModal(props) {
                 </Col>
               </Row>
 
+           <h2>{props.dataforProduct.price}</h2>
               <Row className="tops">
                 <div className="w-100 d-flex align-items-start">
                   <Button variant="dark" onClick={calculateTotalPrice}>
