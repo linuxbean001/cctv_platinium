@@ -19,6 +19,7 @@ import {
 } from "../../../src/app/features/counter/counterSlice";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "./Loader.js";
+import { useEffect } from "react";
 
 function Cabling() {
   const [isLoading, setIsLoading] = useState(true); // Loader State
@@ -36,8 +37,6 @@ function Cabling() {
   const totalOfCablesNumbers = useSelector(
     (state) => state.counter1.totalCablesSelected
   );
-
-  console.log("totalssss :", totalOfCablesNumbers);
 
   const countCabling = useSelector((state) => state.counter1.selectedCabling);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -101,6 +100,12 @@ function Cabling() {
     }
   };
 
+  // Use a useEffect hook to update priceCab whenever count changes
+useEffect(() => {
+  const priceCabling = parseFloat(dataforProduct.price) * count;
+  setPriceCab(priceCabling);
+}, [count, dataforProduct.price]);
+
   React.useEffect(() => {
     const parseCSVFiles2 = async () => {
       try {
@@ -155,15 +160,13 @@ function Cabling() {
         price: selectedProduct.price,
       });
       setBasePrice(parseFloat(selectedProduct.price));
+      const priceCabling = parseFloat(selectedProduct.price) * count;
+      setPriceCab(priceCabling);
     }
   }
 
-  const calculatePrice = () => {
-    const priceCabling = basePrice * count;
-    setPriceCab(priceCabling);
-  };
 
-  const handleCablingData = () => {
+  const addButtonClick = () => {
     setShow(false);
     const totalPriceForItem = basePrice * count;
     const newItem = {
@@ -437,12 +440,7 @@ function Cabling() {
             </Row>
             <Row className="mt-5 justify-content-start">
               {" "}
-              <div className="w-100 d-flex justify-content-start">
-                {" "}
-                <Button variant="dark" onClick={calculatePrice}>
-                  Final Price
-                </Button>
-              </div>
+              
               <div className="w-100 my-1 d-flex justify-content-start">
                 {" "}
                 <div className="text">
@@ -472,8 +470,8 @@ function Cabling() {
           </Button>
           <Button
             variant="dark"
-            onClick={handleCablingData}
-            disabled={priceCab === 0}
+            onClick={addButtonClick}
+            // disabled={priceCab === 0}
           >
             Add
           </Button>
@@ -485,7 +483,11 @@ function Cabling() {
       <Modal show={lgShow} onHide={() => setLgShow(false)}>
         <Modal.Header closeButton>
           <Modal.Title>
-            <h6> Warning ! There are less cables added to cart than Total Needed Cables</h6>
+            <h6>
+              {" "}
+              Warning ! There are less cables added to cart than Total Needed
+              Cables
+            </h6>
           </Modal.Title>
         </Modal.Header>
 

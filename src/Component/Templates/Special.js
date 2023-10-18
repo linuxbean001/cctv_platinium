@@ -208,14 +208,8 @@ function Special() {
     const priceCabling = parseFloat(basePrices) * count + sum;  // 245 Price
     console.log('yy',priceCabling)
     setDropDownData(result1);
-
     // Code Ends
-
-    
   }
-
-
-
 
   function handleSelectChange(e) {
     const { name, value } = e.target;

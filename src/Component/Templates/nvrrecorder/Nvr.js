@@ -23,7 +23,7 @@ function MyVerticallyCenteredModal(props) {
   const [finalNewState2, setFinalNewState2] = useState({});
   const dispatch = useDispatch();
   const [count, setCount] = useState(1);
-  const [totalPrice, setTotalPrice] = useState(0);  // Dropdown item price 1+2+3 = 6
+  const [totalPrice, setTotalPrice] = useState(0); // Dropdown item price 1+2+3 = 6
   const [finalPrice, setFinalPrice] = useState(0);
 
   const [priceList, setPriceList] = useState(0);
@@ -38,6 +38,10 @@ function MyVerticallyCenteredModal(props) {
   }, [finalNewState2]);
 
   React.useEffect(() => {
+    const newTotalPrice =
+      parseInt(props.dataforProduct.price) + parseInt(totalPrice);
+    setPriceList(newTotalPrice * count);
+    
     setFinalNewState({
       NVR_Name: props.dataforProduct.id,
       NVR_Base_Price: props.mainPrice,
@@ -73,13 +77,12 @@ function MyVerticallyCenteredModal(props) {
     setFinalNewState2(initialSelectedOptions);
   }, [props.finalData]);
 
-
   function handleSelectChange(e) {
     const { name, value } = e.target;
     const selectedOption = props.finalData
       .flat()
       .find((option) => option.featurename === value);
-      // console.log('selected', selectedOption)
+    // console.log('selected', selectedOption)
 
     const prevOptionPrice =
       finalNewState2[name] &&
@@ -94,20 +97,20 @@ function MyVerticallyCenteredModal(props) {
           )
         : 0;
 
-
     const optionPrice = selectedOption
       ? parseFloat(selectedOption.featureprice)
       : 0;
     const priceDifference = optionPrice - prevOptionPrice;
-
 
     setTotalPrice((prevTotalPrice) => prevTotalPrice + priceDifference);
     setFinalNewState2((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+    const newTotalPrice =
+      parseInt(props.dataforProduct.price) + parseInt(totalPrice);
+    setPriceList(newTotalPrice * count);
   }
-
 
   const handlePlusClick = () => {
     setCount(count + 1);
@@ -119,12 +122,6 @@ function MyVerticallyCenteredModal(props) {
     }
   };
 
-  const calculateTotalPrice = () => {
-    setIsDisabled(true);
-    const newTotalPrice =
-      parseInt(props.dataforProduct.price) + parseInt(totalPrice);
-    setPriceList(newTotalPrice * count);
-  };
 
   function addNvrQuantity() {
     dispatch(setSelectedNVR(props.mergedState));
@@ -140,8 +137,6 @@ function MyVerticallyCenteredModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-
-    
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           {props.dataforProduct.id}
@@ -185,13 +180,10 @@ function MyVerticallyCenteredModal(props) {
                 </Col>
               </Row>
 
-           <h2>{props.dataforProduct.price}</h2>
+              {/* OnChange Price */}
+
               <Row className="tops">
-                <div className="w-100 d-flex align-items-start">
-                  <Button variant="dark" onClick={calculateTotalPrice}>
-                    Final Price
-                  </Button>
-                </div>
+               
                 <div className="w-100 my-1 d-flex align-items-start">
                   <div className="text">
                     <Table
@@ -204,7 +196,12 @@ function MyVerticallyCenteredModal(props) {
                       <thead>
                         <tr>
                           <th>
-                            <b>$</b> {priceList}
+                            <b>$</b>{" "}
+                            {`${(
+                              (parseFloat(props.dataforProduct.price) +
+                                parseFloat(totalPrice)) *
+                              count
+                            ).toFixed(2)}`}
                           </th>
                         </tr>
                       </thead>
@@ -237,19 +234,17 @@ function MyVerticallyCenteredModal(props) {
                     >
                       {item.map((option, optionIndex) => {
                         return (
-                          
-                            <option
-                              name={option.featurecaption}
-                              key={optionIndex}
-                              value={option.featurename}
-                            >
-                              {option.featurename +
-                                " " +
-                                "  " +
-                                "$ " +
-                                option.featureprice}
-                            </option>
-                          
+                          <option
+                            name={option.featurecaption}
+                            key={optionIndex}
+                            value={option.featurename}
+                          >
+                            {option.featurename +
+                              " " +
+                              "  " +
+                              "$ " +
+                              option.featureprice}
+                          </option>
                         );
                       })}
                     </Form.Select>
@@ -303,6 +298,7 @@ function Nvr(props) {
 
   const dispatch = useDispatch();
   const selectedNvrDetails = useSelector((state) => state.counter1.selectedNVR);
+
   const selectedCameraNumber = useSelector(
     (state) => state.counter1.totalCamera
   );
@@ -320,7 +316,9 @@ function Nvr(props) {
   const [extra, setExtra] = useState([]);
   const [finalData, setFinalData] = useState([]);
   const [show2, setShow2] = useState(false);
+
   const handleClose2 = () => setShow2(false);
+
   const handleShow2 = () => {
     if (selectedCameraNumber > calculateTotalLicenses()) {
       setShow2(true);
@@ -357,6 +355,8 @@ function Nvr(props) {
 
   const tableData = selectedNvrDetails;
 
+  console.log("tableData", tableData);
+
   useEffect(() => {
     updateMergedState();
   }, [formData1, formData2]);
@@ -391,6 +391,8 @@ function Nvr(props) {
     setFormData1(newValue);
   };
 
+  console.log("mergedState", mergedState.cart_final_price);
+
   // useEffect(() => {
   //   dispatch(setSelectedNVR(mergedState));
   // }, [dispatch, mergedState]);
@@ -404,7 +406,6 @@ function Nvr(props) {
   });
 
   const handleButtonClick = (e, val, id) => {
-
     // Code Starts
     let result = [];
     let currentArray = [];
@@ -463,8 +464,6 @@ function Nvr(props) {
     setExtra(isIdInRecorderData2);
   };
 
-
-
   const isIdInRecorderData2 = recorderData2.filter((item) => {
     if (item.productid == idforOptions) {
       return idforOptions.includes(item.productid);
@@ -505,7 +504,7 @@ function Nvr(props) {
               </Col>
             </Row>
 
-{/* Box Click */}
+            {/* Box Click */}
             <Row className="my-4">
               {recorderData.map((val) => {
                 return (

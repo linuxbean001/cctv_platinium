@@ -39,7 +39,13 @@ function MyVerticallyCenteredModal(props) {
 
   // (2) When User Click on Any Box, its values get stored in State
   const [finalNewState, setFinalNewState] = useState({}); // state-1
+
   React.useEffect(() => {
+    const basePrice = props.dataForProduct.price;
+    const countQuantity = count;
+    const countPlusBasePrice = basePrice * count;
+    setPoeFinalPrice(countPlusBasePrice);
+    //
     setFinalNewState({
       Port_Name: props.dataForProduct.id,
       Port_Base_Price: props.dataForProduct.price,
@@ -57,10 +63,7 @@ function MyVerticallyCenteredModal(props) {
   // (3)
   const [poeFinalPrice, setPoeFinalPrice] = useState([]);
   const calculateTotalPrice = () => {
-    const basePrice = props.dataForProduct.price;
-    const countQuantity = count;
-    const countPlusBasePrice = basePrice * count;
-    setPoeFinalPrice(countPlusBasePrice);
+
   };
 
   //(4) Adding Two state (my state + finalPrice) into > mergedState
@@ -386,13 +389,7 @@ function PoeSwitches() {
                   <span className="fw-bold">{selectedCameraNumber}</span>
                 </Col>
               </Row>
-              {/* <Row>
-                  <Col className="text-end">
-                    <h6>
-                      Toal Number of Ports : <span className="fw-bold">?</span>
-                    </h6>
-                  </Col>
-                </Row> */}
+          
             </Col>
           </Row>
 

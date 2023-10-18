@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -135,10 +135,12 @@ function LaborRate() {
     }
   };
 
-  const calculateFinalPrice = () => {
-    const data = basePrice * count;
-    setBasePrice1(data);
-  };
+useEffect(()=>{
+  const data = basePrice * count;
+  setBasePrice1(data);
+},[basePrice,count])
+
+  
 
   const handleCablingData = () => {
     setShow2(false);
@@ -433,14 +435,7 @@ function LaborRate() {
                             </div>
                           </Col>
                           <Row className="mt-5 justify-content-start">
-                            <div className="w-100 d-flex justify-content-start">
-                              <Button
-                                variant="dark"
-                                onClick={calculateFinalPrice}
-                              >
-                                Final Price
-                              </Button>
-                            </div>
+                         
                             <div className="w-100 my-1 d-flex justify-content-start">
                               <div className="text">
                                 <Table

@@ -38,6 +38,11 @@ function MyVerticallyCenteredModal(props) {
 
   const [finalNewState, setFinalNewState] = useState({});
   React.useEffect(() => {
+
+    const basePrice = props.data.price;
+    const countQuantity = count;
+    const countPlusBasePrice = basePrice * count;
+    setHardWare_Final_Price(countPlusBasePrice);
     setFinalNewState({
       HardWare_Name: props.data.id,
       HardWare_Base_Price: props.data.price,
@@ -47,12 +52,8 @@ function MyVerticallyCenteredModal(props) {
   }, [props.data.id, props.data.price, count]);
 
   const [HardWare_Final_Price, setHardWare_Final_Price] = useState([]);
-  const calculateTotalPrice = () => {
-    const basePrice = props.data.price;
-    const countQuantity = count;
-    const countPlusBasePrice = basePrice * count;
-    setHardWare_Final_Price(countPlusBasePrice);
-  };
+
+
 
   const [mergedState, setMergedState] = useState({});
   const updateMergedState = () => {
@@ -136,11 +137,7 @@ function MyVerticallyCenteredModal(props) {
               </Row>
 
               <Row>
-                <div className="w-100 d-flex align-items-start">
-                  <Button variant="dark" onClick={calculateTotalPrice}>
-                    Final Price
-                  </Button>
-                </div>
+           
                 <div className="w-100 my-1 d-flex align-items-start">
                   <div className="text">
                     <Table
