@@ -1,34 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from 'react'
+import { useSelector, useDispatch } from "react-redux";
 
 function Test() {
-  const [select, setSelect] = useState(""); 
-  const [options, setOptions] = useState([]);
-
-  useEffect(() => {
-    const fetchedOptions = [ 'UAE' ,"Sri Lanka", "Australia", "India", "Pakistan"];
-    setOptions(fetchedOptions);
-    if (fetchedOptions.length > 0) {
-      setSelect(fetchedOptions[0]);
-    }
-  }, []);
-
-  const handleSelectChange = (e) => {
-    setSelect(e.target.value);
-  };
-
+  const selectedNvrDetails = useSelector((state) => state.counter1.customData);
+  console.log('mera redux',selectedNvrDetails)
   return (
-    <>
-      <h2>You Selected : {select}</h2>
-
-      <select value={select} onChange={handleSelectChange}>
-        {options.map((option, index) => (
-          <option key={index} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-    </>
-  );
+    <div>Test</div>
+  )
 }
 
-export default Test;
+export default Test

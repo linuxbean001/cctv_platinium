@@ -19,6 +19,7 @@ import {
 import Loader from "../Loader.js";
 
 function MyVerticallyCenteredModal(props) {
+console.log('propssss',props)
   const [finalNewState, setFinalNewState] = useState({});
   const [finalNewState2, setFinalNewState2] = useState({});
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ function MyVerticallyCenteredModal(props) {
     const newTotalPrice =
       parseInt(props.dataforProduct.price) + parseInt(totalPrice);
     setPriceList(newTotalPrice * count);
-    
+
     setFinalNewState({
       NVR_Name: props.dataforProduct.id,
       NVR_Base_Price: props.mainPrice,
@@ -122,13 +123,15 @@ function MyVerticallyCenteredModal(props) {
     }
   };
 
-
   function addNvrQuantity() {
     dispatch(setSelectedNVR(props.mergedState));
     dispatch(setFinalData(props.mergedState));
     props.onHide(false);
-    setPriceList(0);
+    // setPriceList(0);
   }
+
+// Your desired order of headings
+const desiredOrder = ['CPU', 'RAM', 'M2 Drive (OS Drive)', 'Number of IP Licenses', 'Hard Drive Size'];
 
   return (
     <Modal
@@ -183,7 +186,6 @@ function MyVerticallyCenteredModal(props) {
               {/* OnChange Price */}
 
               <Row className="tops">
-               
                 <div className="w-100 my-1 d-flex align-items-start">
                   <div className="text">
                     <Table
@@ -212,58 +214,56 @@ function MyVerticallyCenteredModal(props) {
             </Col>
 
             <Col md={8}>
-              <p>
-                Description:
-                {props.dataforProduct.description
-                  ? props.dataforProduct.description
-                  : "No Description found"}
-              </p>
-              <p className="fw-bold">Choose Options :</p>
+      <p>
+        Description:
+        {props.dataforProduct.description
+          ? props.dataforProduct.description
+          : "No Description found"}
+      </p>
+      <p className="fw-bold">Choose Options :</p>
 
-              {props.finalData.map((item, index) => {
-                return (
-                  <>
-                    <Form.Label> {item[0].featurecaption}</Form.Label>
-                    <Form.Select
-                      key={index}
-                      aria-label="Default select example"
-                      className="mb-3"
-                      name={item[0].featurecaption}
-                      value={finalNewState2[item[0].featurecaption] || ""}
-                      onChange={(e) => handleSelectChange(e)}
-                    >
-                      {item.map((option, optionIndex) => {
-                        return (
-                          <option
-                            name={option.featurecaption}
-                            key={optionIndex}
-                            value={option.featurename}
-                          >
-                            {option.featurename +
-                              " " +
-                              "  " +
-                              "$ " +
-                              option.featureprice}
-                          </option>
-                        );
-                      })}
-                    </Form.Select>
-                  </>
-                );
-              })}
-              <div
-                className="d-flex align-items-end justify-content-end my-4"
-                style={{ backgroundColor: "" }}
+      {desiredOrder.map((caption, index) => {
+        // Find the item in finalData that matches the desired caption
+        const item = props.finalData.find(data => data[0].featurecaption === caption);
+
+        if (item) {
+          return (
+            <div key={index}>
+              <Form.Label>{item[0].featurecaption}</Form.Label>
+              <Form.Select
+                aria-label="Default select example"
+                className="mb-3"
+                name={item[0].featurecaption}
+                value={finalNewState2[item[0].featurecaption] || ""}
+                onChange={(e) => handleSelectChange(e)}
               >
-                <Button variant="dark" onClick={handlePlusClick}>
-                  +
-                </Button>
-                <h6 className="mx-3">{count}</h6>
-                <Button variant="dark" onClick={handleMinusClick}>
-                  -
-                </Button>
-              </div>
-            </Col>
+                {item.map((option, optionIndex) => {
+                  return (
+                    <option
+                      name={option.featurecaption}
+                      key={optionIndex}
+                      value={option.featurename}
+                    >
+                      {option.featurename + " " + "$ " + option.featureprice}
+                    </option>
+                  );
+                })}
+              </Form.Select>
+            </div>
+          );
+        }
+        return null; // If the caption is not found in finalData
+      })}
+      <div className="d-flex align-items-end justify-content-end my-4">
+        <Button variant="dark" onClick={handlePlusClick}>
+          +
+        </Button>
+        <h6 className="mx-3">{count}</h6>
+        <Button variant="dark" onClick={handleMinusClick}>
+          -
+        </Button>
+      </div>
+    </Col>
           </Row>
         </Container>
       </Modal.Body>
@@ -276,11 +276,7 @@ function MyVerticallyCenteredModal(props) {
           >
             Back
           </Button>
-          <Button
-            variant="dark"
-            onClick={addNvrQuantity}
-            disabled={priceList === 0}
-          >
+          <Button variant="dark" onClick={addNvrQuantity}>
             Add
           </Button>
         </div>
@@ -316,6 +312,10 @@ function Nvr(props) {
   const [extra, setExtra] = useState([]);
   const [finalData, setFinalData] = useState([]);
   const [show2, setShow2] = useState(false);
+
+  // edit quanity state
+
+  const [editQuantity, setEditQuantity] = useState(1);
 
   const handleClose2 = () => setShow2(false);
 
@@ -355,8 +355,6 @@ function Nvr(props) {
 
   const tableData = selectedNvrDetails;
 
-  console.log("tableData", tableData);
-
   useEffect(() => {
     updateMergedState();
   }, [formData1, formData2]);
@@ -391,8 +389,6 @@ function Nvr(props) {
     setFormData1(newValue);
   };
 
-  console.log("mergedState", mergedState.cart_final_price);
-
   // useEffect(() => {
   //   dispatch(setSelectedNVR(mergedState));
   // }, [dispatch, mergedState]);
@@ -401,9 +397,12 @@ function Nvr(props) {
     return item.id && item.id.includes("NVR");
   });
 
+
   const recorderData2 = produtOption.filter((item) => {
     return item.productid && item.productid.includes("NVR");
   });
+
+
 
   const handleButtonClick = (e, val, id) => {
     // Code Starts
@@ -474,6 +473,30 @@ function Nvr(props) {
     dispatch(deleteNVR(index));
   }
 
+  function quantityChange(e) {
+    // console.log('merdee', mergedState.NVR_Quantity)
+    setEditQuantity(e.target.value);
+  }
+
+  function updateQuantity(e) {
+    console.log('newQuantity :',editQuantity)
+    setEditQuantity(editQuantity);
+
+    // Update formData2 with the new quantity
+    setFormData2((prevFormData2) => {
+      console.log('prev', prevFormData2);
+    
+      return {
+        ...prevFormData2,
+        NVR_Quantity: parseInt(editQuantity),
+        // cart_final_price: prevFormData2.NVR_Base_Price * parseInt(newQuantity),
+      };
+    });
+    
+
+    console.log('new' ,formData2)
+  }
+
   return (
     <>
       {isLoading ? (
@@ -514,7 +537,7 @@ function Nvr(props) {
                       className="nvr_col my-3"
                       onClick={(e) => {
                         handleButtonClick(e, val, val.id);
-                        setMainPrice(val.price);
+                        setMainPrice(val.saleprice);
                       }}
                     >
                       <Card style={{ width: "", margin: "" }}>
@@ -535,7 +558,7 @@ function Nvr(props) {
                               xs={4}
                               className="d-flex align-items-center justify-content-center fw-bold"
                             >
-                              $ {val.price}
+                              $ {val.saleprice}
                             </Col>
                           </Row>
                         </Card.Body>
@@ -576,6 +599,9 @@ function Nvr(props) {
                         <th>SKU: </th>
                         <th>Total: </th>
                         <th>Licenses: </th>
+                        <th>Edit Quantity: </th>
+                        <th> </th>
+                        <th>Delete: </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -590,6 +616,25 @@ function Nvr(props) {
                             </td>
                             <td> $ {val.cart_final_price}</td>
                             <td>{val["Number of IP Licenses"]}</td>
+
+                            <td>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <input
+                                  type="number"
+                                  value={editQuantity}
+                                  onChange={quantityChange}
+                                  style={{ marginRight: "10px" }}
+                                />
+                                <Button onClick={updateQuantity}>Update</Button>
+                              </div>
+                            </td>
+
+                            <td></td>
                             <td>
                               {" "}
                               <Button

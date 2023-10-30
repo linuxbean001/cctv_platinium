@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   totalOptions: 0,
   totalCamera: 0,
+
+
   selectedNVR: [],
   selectedCamera: [],
   selectedCabling: [],
@@ -14,25 +16,46 @@ const initialState = {
   customerData: [],
   apiDATA:null,
   selectedNumberOfDrops:null,
-  totalCablesSelected:null
+  totalCablesSelected:null,
+  customData:[]
 };
 
 export const counterSlice = createSlice({
   name: "counter",
   initialState,
   reducers: {
+
+// Increment and Deceremnt Camera and Options Starts
+
     IncrementCamera: (state) => {
       state.totalCamera += 1;
     },
     DecrementCamera: (state) => {
       state.totalCamera -= 1;
     },
+
+    IncrementCameraByFive: (state) => {
+      state.totalCamera += 5;
+    },
+    IncrementCameraByTen: (state) => {
+      state.totalCamera += 10;
+    },
+
+    
+    deleteCameraByTen: (state) => {
+      state.totalCamera -= 10;
+    },
+
+
     IncrementOptions: (state) => {
       state.totalOptions += 1;
     },
     DecrementOptions: (state) => {
       state.totalOptions -= 1;
     },
+
+// Increment and Deceremnt Camera and Options Ends
+
     ResetCounters: (state) => {
       state.totalOptions = state.initialOptions;
       state.totalCamera = state.initialCamera;
@@ -116,13 +139,22 @@ export const counterSlice = createSlice({
         state.totalCablesSelected = action.payload;
       },
 
-    
+    //Custom Data
+    setCustomData: (state, action) => {
+      state.customData = action.payload;
+    },
   },
 });
 
 export const {
   IncrementCamera,
   DecrementCamera,
+
+  IncrementCameraByFive,
+  IncrementCameraByTen,
+
+  deleteCameraByTen,
+
   IncrementOptions,
   DecrementOptions,
   setSelectedNVR,
@@ -143,6 +175,7 @@ export const {
   deletePoe,
   ResetCounters,
   setSelectedNumberOfDrops,
-  setTotalCablesSelected
+  setTotalCablesSelected,
+  setCustomData
 } = counterSlice.actions;
 export default counterSlice.reducer;

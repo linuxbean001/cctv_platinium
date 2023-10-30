@@ -15,6 +15,11 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   IncrementCamera,
   DecrementCamera,
+
+  IncrementCameraByFive,
+  IncrementCameraByTen,
+  deleteCameraByTen,
+
   IncrementOptions,
   DecrementOptions,
   setAPIDATA,
@@ -58,6 +63,22 @@ function Home() {
     }
   };
 
+  // Incrase by +5
+  
+  const handleCameraIncreByFive = () => {
+    dispatch(IncrementCameraByFive());
+  };
+
+  const handleCameraIncreByTen = () => {
+    dispatch(IncrementCameraByTen());
+  };
+
+  const deleteCameraIncreByTen = () => {
+    dispatch(deleteCameraByTen());
+  };
+  
+
+
   const cameraOptions = [
     { location_name: "Home" },
     { location_name: "Restaurant" },
@@ -80,9 +101,8 @@ function Home() {
         const productArray = await productData.text();
         const productOptionArray = await productOptionData.text();
         const categories2 = Papa.parse(productArray, { header: true }).data;
-          setCategories(categories2)
-          dispatch(setAPIDATA(categories2));
-
+        setCategories(categories2);
+        dispatch(setAPIDATA(categories2));
 
         categories.map(
           ({
@@ -149,7 +169,6 @@ function Home() {
     parseCSVFiles();
   }, []);
 
-
   const fetchInfo = () => {
     return axios
       .get("assets/CSVs/products.csv")
@@ -178,7 +197,6 @@ function Home() {
   const handleNext = () => {
     navigate("/nvr");
   };
-
 
   return (
     <>
@@ -277,7 +295,7 @@ function Home() {
           <Modal.Body>
             <Row className="my-2">
               <Col md={8} style={{ backgroundColor: "" }}>
-                Total Number Of Cameras
+                Total Number Of Cameras :
               </Col>
               <Col md={4} style={{ backgroundColor: "" }}>
                 <div
@@ -293,6 +311,17 @@ function Home() {
                   </Button>
                 </div>
               </Col>
+
+              <Row className="mt-3 p-0" style={{ backgroundColor: "" }}>
+                <Col md={4}></Col>
+                <Col md={8} className="d-flex justify-content-between p-0" style={{ backgroundColor: "" }}>
+                  {" "}
+                  <Button onClick={handleCameraIncreByFive} variant='dark'>Add +5</Button>
+                  <Button onClick={handleCameraIncreByTen} variant="dark">Add +10</Button>
+                  <Button onClick={deleteCameraIncreByTen} variant="dark">Delete -10</Button>
+
+                </Col>
+              </Row>
             </Row>
           </Modal.Body>
           <Modal.Footer>

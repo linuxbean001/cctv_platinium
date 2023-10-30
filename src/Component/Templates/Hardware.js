@@ -37,6 +37,7 @@ function MyVerticallyCenteredModal(props) {
   };
 
   const [finalNewState, setFinalNewState] = useState({});
+  
   React.useEffect(() => {
 
     const basePrice = props.data.price;
@@ -150,7 +151,7 @@ function MyVerticallyCenteredModal(props) {
                       <thead>
                         <tr>
                           <th>
-                            <b>$</b>
+                            <b></b>
                             {HardWare_Final_Price}
                           </th>
                         </tr>

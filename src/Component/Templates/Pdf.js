@@ -11,8 +11,10 @@ import {
 function Pdf() {
   const navigate = useNavigate();
   // Redux State
-  const customerUserData = useSelector((state) => state.counter1.apiDATA);
+  const customerUserData = useSelector((state) => state.counter1.customerData);
   console.log('From Redux :' ,customerUserData);
+
+
   const Nvr = useSelector((state) => state.counter1.selectedNVR);
   const camera = useSelector((state) => state.counter1.selectedCamera);
   const cabling = useSelector((state) => state.counter1.selectedCabling);

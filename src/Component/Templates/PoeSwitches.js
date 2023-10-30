@@ -62,9 +62,7 @@ function MyVerticallyCenteredModal(props) {
 
   // (3)
   const [poeFinalPrice, setPoeFinalPrice] = useState([]);
-  const calculateTotalPrice = () => {
 
-  };
 
   //(4) Adding Two state (my state + finalPrice) into > mergedState
   const [mergedState, setMergedState] = useState({});
@@ -157,11 +155,7 @@ function MyVerticallyCenteredModal(props) {
 
               {/* Final Price */}
               <Row className="my-5">
-                <div className="w-100 d-flex align-items-start">
-                  <Button variant="dark" onClick={calculateTotalPrice}>
-                    Final Price
-                  </Button>
-                </div>
+              
                 <div className="w-100 my-3 d-flex align-items-start">
                   <div>
                     <Table

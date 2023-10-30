@@ -15,6 +15,7 @@ import {
   setSelectedSpecial,
   deleteSpecial,
   setSelectedNumberOfDrops,
+  setCustomData,
 } from "../../../src/app/features/counter/counterSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -43,13 +44,19 @@ function Special() {
   const [finalNewState2, setFinalNewState2] = useState({});
   const [dropDownItemPrice, setDropDownItemPrice] = useState(0);
 
-// console.log('dropdown',dropDownItemPrice)
-
   // Number of Drops
 
   const [drops, setDrops] = useState(""); // <30FPS
   const [drops2, setDrops2] = useState(""); // stored only numbers i.e. 30
   const [drops3, setDrops3] = useState(""); // Total number of Drops with Formula
+  const [drops4, setDrops4] = useState(""); // Total number of Drops with Formula
+
+
+  // Today
+  const [basePrice2, setBasePrice2] = useState(0);
+  const [displayPrice, setDisplayPrice] = useState(0);
+  const [dropdownFirstValue, setdropdownFirstValue] = useState(0);
+  const [dropDownChangePrice, setDropDownChangePrice] = useState(0);
 
   const navigate = useNavigate();
   const selectedCameraNumber = useSelector(
@@ -60,6 +67,8 @@ function Special() {
   );
 
   const countSpecial = useSelector((state) => state.counter1.selectedSpecial);
+  //
+  const customDataDetails = useSelector((state) => state.counter1.customData);
 
   const dispatch = useDispatch();
 
@@ -143,7 +152,7 @@ function Special() {
   // Setting Number of Drops Ends
 
   function modal_1(e, item, id) {
-    
+    setBasePrice2(item.price);
     // Code Starts
     let result = [];
     let currentArray = [];
@@ -185,7 +194,14 @@ function Special() {
       result1.push([...currentArray1]);
     }
     // Number of Drops (<30FPS) :
-    setDrops(item.extra_field_2);
+    if (item.extra_field_2) {
+      console.log("drops are :", item.extra_field_2);
+      setDrops(item.extra_field_2);
+      setDrops4(item.extra_field_2)
+    } else {
+      console.log("No drops found");
+      setDrops4(0)
+    }
 
     setShow2(true);
     setShow(false);
@@ -196,20 +212,26 @@ function Special() {
       }
     });
     setfilteredData2(specialData3);
-    const sumDefault = []
-    result1 && result1.map((item,index)=>{
-      sumDefault.push(Number(item[0].featureprice))
-    }) 
-    console.log('sun', sumDefault)
+    const sumDefault = [];
+    result1 &&
+      result1.map((item, index) => {
+        sumDefault.push(Number(item[0].featureprice));
+      });
     const sum = sumDefault.reduce((accumulator, currentValue) => {
       return accumulator + currentValue;
     }, 0);
     let basePrices = specialData3.map((item) => item.price);
-    const priceCabling = parseFloat(basePrices) * count + sum;  // 245 Price
-    console.log('yy',priceCabling)
+    const priceCabling = parseFloat(basePrices) * count + sum; // 245 Price
     setDropDownData(result1);
+
+    setdropdownFirstValue(sumDefault);
+
     // Code Ends
   }
+
+  React.useEffect(() => {
+    setDisplayPrice((Number(basePrice2) + Number(dropdownFirstValue)) * count);
+  }, [basePrice2, count, dropdownFirstValue]);
 
   function handleSelectChange(e) {
     const { name, value } = e.target;
@@ -217,7 +239,9 @@ function Special() {
       .flat()
       .find((option) => option.featurename === value);
 
-      const prevOptionPrice =
+    setdropdownFirstValue(selectedOption.featureprice);
+
+    const prevOptionPrice =
       finalNewState2[name] &&
       dropdownData
         .flat()
@@ -242,31 +266,38 @@ function Special() {
     }));
   }
 
+  // const finalClickButton = () => {
+  //   // Final Button Click
+  //   let basePrices = filteredData2.map((item) => item.price);
+  //   setBasePrice(basePrices);
 
+  //   const priceCabling = parseFloat(basePrices) * count;
+  //   setPriceCab(priceCabling);
 
-  const calculateTotalPrice = () => {   // Final Button Click
-    let basePrices = filteredData2.map((item) => item.price);
-    setBasePrice(basePrices); 
-    const priceCabling = parseFloat(basePrices) * count;
-    setPriceCab(priceCabling);
-    const finalPriceWithDrops = selectedCameraNumber + drops2 * count;
-
-    setDrops3(finalPriceWithDrops);
-    dispatch(setSelectedNumberOfDrops(finalPriceWithDrops));
-  };
+  //   // const finalPriceWithDrops = selectedCameraNumber + drops2 * count;
+  //   // console.log('selectedCameraNumber',count)
+  //   // setDrops3(finalPriceWithDrops);
+  //   // dispatch(setSelectedNumberOfDrops(finalPriceWithDrops));
+  // };
   // console.log('drops3', drops3)
 
   // selectedCameraNumber
-  const handleCablingData = () => {
+  const addButton = () => {
     setShow2(false);
-    const totalPriceForItem = basePrice * count;
+    const totalPriceForItem = basePrice2 * count;
     const newItem = {
       id: categoryName2,
       name: filteredData2[0]?.name || "Unknown",
       quantity: count,
-      pricePerItem: basePrice,
-      totalPriceForItem: totalPriceForItem,
+      pricePerItem: basePrice2,
+      totalPriceForItem: displayPrice,
     };
+
+    //
+    const finalPriceWithDrops = selectedCameraNumber + drops2 * count;
+    setDrops3(finalPriceWithDrops);
+    dispatch(setSelectedNumberOfDrops(finalPriceWithDrops));
+    //
     dispatch(setSelectedSpecial(newItem));
     setCartItems((prevCartItems) => [...prevCartItems, newItem]);
     setTotalPrice((prevTotalPrice) => prevTotalPrice + totalPriceForItem);
@@ -282,6 +313,15 @@ function Special() {
     updatedCartItems.splice(index, 1);
     setCartItems(updatedCartItems);
     setTotalPrice(newTotalPrice);
+    console.log("total price :", totalPrice);
+  };
+
+  const calculateTotalPrice = () => {
+    let totalPrice3 = 0;
+    cartItems.forEach((val) => {
+      totalPrice3 += parseFloat(val.totalPriceForItem);
+    });
+    return totalPrice3.toFixed(2);
   };
 
   const handleNext = () => {
@@ -311,6 +351,8 @@ function Special() {
     validationSchema,
     onSubmit: (values, { resetForm }) => {
       console.log("Form submitted:", values);
+      dispatch(setCustomData(values));
+
       resetForm();
       handleCloseCustom();
     },
@@ -356,12 +398,18 @@ function Special() {
                     <span className="fw-bold">{totalDrops}</span>
                   </Col>
                 </Row>
+                <Row className="mb-2">
+                  <Col className="text-end" style={{color:'red'}}>
+                    Number of Drops :{" "}
+                    <span className="fw-bold">{drops4} </span>
+                  </Col>
+                </Row>
               </Col>
             </Row>
 
             {/* Box-Click */}
             <Row className="my-4" style={{ backgroundColor: "" }}>
-              {specialData.map((val) => {
+              {specialData.reverse().map((val) => {
                 return (
                   <>
                     <Col
@@ -541,16 +589,10 @@ function Special() {
                             </Row>
                             {/* Final Price */}
                             <Row className="mt-5">
-                              <div className="w-100 d-flex align-items-start">
-                                <Button
-                                  variant="dark"
-                                  onClick={calculateTotalPrice}
-                                >
-                                  Final Price
-                                </Button>
-                              </div>
                               <div className="w-100 my-1 d-flex align-items-start">
                                 <div className="text">
+                                  {/* <h2 style={{color:'red'}}>$ {displayPrice.toFixed(2)}</h2> */}
+
                                   <Table
                                     striped
                                     bordered
@@ -560,13 +602,7 @@ function Special() {
                                   >
                                     <thead>
                                       <tr>
-                                        <th>
-                                          {priceCab ? (
-                                            <b>$ {priceCab}</b>
-                                          ) : (
-                                            <b>$ 0</b>
-                                          )}
-                                        </th>
+                                        <th>{displayPrice.toFixed(2)}</th>
                                       </tr>
                                     </thead>
                                   </Table>
@@ -578,7 +614,7 @@ function Special() {
                             <p className="fst-italic">
                               {" "}
                               <span className="fw-bold">
-                                Description 22ssss:{" "}
+                                Description:{" "}
                               </span>{" "}
                               {val.name}
                             </p>
@@ -649,11 +685,7 @@ function Special() {
                   >
                     Back
                   </Button>
-                  <Button
-                    variant="dark"
-                    onClick={handleCablingData}
-                    disabled={priceCab === 0}
-                  >
+                  <Button variant="dark" onClick={addButton}>
                     Add
                   </Button>
                 </div>
@@ -675,7 +707,7 @@ function Special() {
                     <Form.Label>Quantity :</Form.Label>
                     <Form.Control
                       type="number"
-                      placeholder="SKU"
+                      placeholder="Enter Quantity"
                       name="customQuantity"
                       value={formik.values.customQuantity}
                       onChange={formik.handleChange}
@@ -719,7 +751,7 @@ function Special() {
                     <Form.Control
                       as="textarea"
                       rows={3}
-                      placeholder="SKU"
+                      placeholder="Enter Some Description"
                       name="customDescription"
                       value={formik.values.customDescription}
                       onChange={formik.handleChange}
@@ -753,16 +785,21 @@ function Special() {
                       </div>
                     )}
                   </Form.Group>
-                  <Button variant="dark" type="submit">
-                    Add
-                  </Button>
+                  <Row>
+                    <Col className="d-flex flex-row-reverse justify-content-between">
+                      <Button variant="dark" type="submit">
+                        Add Custom Data
+                      </Button>
+                      <Button variant="dark" onClick={handleCloseCustom}>
+                        Back
+                      </Button>
+                    </Col>
+                    <p className="mt-2 fst-italic">
+                      Custom Data will be added in Table{" "}
+                    </p>
+                  </Row>
                 </Form>
               </Modal.Body>
-              <Modal.Footer>
-                <Button variant="dark" onClick={handleCloseCustom}>
-                  Back
-                </Button>
-              </Modal.Footer>
             </Modal>
 
             {/* Custom Model */}
@@ -808,7 +845,7 @@ function Special() {
                         <td>
                           <b>Total Price :</b>
                         </td>
-                        <td>$ {totalPrice.toFixed(2)}</td>
+                        <td>$ {calculateTotalPrice()}</td>
                         <td></td>
                       </tr>
                     </tbody>
@@ -816,6 +853,44 @@ function Special() {
                 </div>
               </Col>
             </Row>
+
+            {/* Custom Model Table*/}
+
+            <Row className="my-4" style={{ padding: "8px" }}>
+              <Col>
+                <h5 className="fw-bold">Custom Data: </h5>
+              </Col>
+
+              <div className="table-border">
+                <Table striped bordered hover responsive>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Cost : </th>
+                      <th>SKU:</th>
+                      <th>Dsecription: </th>
+                      <th>Quantity: </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <td>1</td>
+                    <td>{customDataDetails.customCost}</td>
+                    <td>{customDataDetails.customSKU}</td>
+                    <td>{customDataDetails.customDescription}</td>
+                    <td>{customDataDetails.customQuantity}</td>
+                    {/* <td>
+                            <Button
+                              variant="dark"
+                            >
+                              Delete
+                            </Button>
+                          </td> */}
+                  </tbody>
+                </Table>
+              </div>
+            </Row>
+
+            {/* Custom  and Next Button */}
 
             <Row
               className="my-4 d-flex justify-content-between"

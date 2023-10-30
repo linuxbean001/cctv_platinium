@@ -54,16 +54,25 @@ function Cameras(props) {
   const [totalQty, setTotalQty] = useState(0);
   const countCamera = useSelector((state) => state.counter1.selectedCamera);
 
+
+
   // Disable Input State
 
   const [disableIt, setDisableIt] = useState("");
   const [bracketPrice, setBracketPrice] = useState(""); // Ex: Back Box $45. it'll store 45
-  const [bracketNumber, setBracketNumber] = useState(""); // If he/she enter '10' it'll add 10
-  const [bracketFinalPrice, setBracketFinalPrice] = useState("");
+  const [bracketNumber, setBracketNumber] = useState(0); // If he/she enter '10' it'll add 10
 
-  const totalbracketPrice = bracketPrice * bracketNumber;
+  
+  const totalbracketPrice =  bracketPrice * bracketNumber;
 
-  // console.log(totalbracketPrice)
+
+// Code Debugging
+const [one, setOne] = useState('')
+const [two, setTwo] = useState('')
+const [three, setThree] = useState('')
+
+
+// Code Debugging
 
   const tableData = countCamera;
 
@@ -104,7 +113,16 @@ function Cameras(props) {
   }, [tableData]);
 
   const handleBracketChange = (event) => {
-    setBracketNumber(event.target.value);
+
+    if (event.target.value > 0) {
+      setBracketNumber(event.target.value);
+      const priceDifference = bracketPrice * event.target.value;
+      // setTotalPrice(
+      //   (prevTotalPrice) => prevTotalPrice + priceDifference - bracketPrice
+      // );
+    }
+
+   
   };
 
   const updateMergedState = () => {
@@ -114,22 +132,7 @@ function Cameras(props) {
     });
   };
 
-  const resetState = () => {
-    setBracketNumber("");
-    setFinalNewState({});
-    setFinalNewState2({});
-    setTotalPrice(0);
-    setIsDisabled(false);
-    setPriceList(0);
-    setCount(1);
-  };
 
-  React.useEffect(() => {
-    updateMergedState();
-    if (!show2) {
-      resetState();
-    }
-  }, [show2]);
 
   React.useEffect(() => {
     updateMergedState();
@@ -167,6 +170,7 @@ function Cameras(props) {
     parseCSVFiles2();
   }, []);
 
+  // Modal-1 Open
   const handleButtonClick = (e, category_name) => {
     setCategoryName(category_name);
     setShow(true);
@@ -181,7 +185,10 @@ function Cameras(props) {
     setfilteredData(cameraData2);
   };
 
+
   function modal_1(e, item, id) {
+    setOne(item.price) // Main Price
+
     // Code Starts
     let result = [];
     let currentArray = [];
@@ -222,7 +229,11 @@ function Cameras(props) {
     if (currentArray1.length > 0) {
       result1.push([...currentArray1]);
     }
+
+
     setFinalDatas(result1);
+    console.log('Other DropDown First Price :' ,result1[0][0].featureprice)
+
     const selectedOption = result1
       .flat()
       .find((option) => option.featurename === "No Brackets Needed");
@@ -240,12 +251,16 @@ function Cameras(props) {
     });
     setfilteredData2(cameraData3);
     setdataProduct(item);
+    // setPriceList((parseInt(dataProduct.price) + totalPrice + totalbracketPrice - bracketPrice) * count);
   }
+
   //****************************** Modal_1 ****************************//
 
   const cameraData = categoryCSV.filter((item) => {
     return item.category_parent && item.category_parent.includes("45");
   });
+
+  console.log('camera data :', cameraData)
 
   React.useEffect(() => {
     // storing data
@@ -270,6 +285,8 @@ function Cameras(props) {
     });
     setFinalNewState2(initialSelectedOptions);
   }, [finalDatas]);
+
+
   //***** Below Code is responsible for filling finalNewState-2 *******//
 
   //************************** HandleChange ***************************//
@@ -279,8 +296,17 @@ function Cameras(props) {
     const selectedOption = finalDatas
       .flat()
       .find((option) => option.featurename === value);
-    setDisableIt(selectedOption.featurename);
-    setBracketPrice(selectedOption.featureprice);
+     setDisableIt(selectedOption.featurename);
+
+    console.log('tetst',selectedOption.featureprice)
+
+    if (name === 'Mounting Bracket') {
+      setBracketPrice(selectedOption.featureprice);
+    }
+    if (name === 'Audio') {
+      setTwo(selectedOption.featureprice);
+    }
+    
 
     const prevOptionPrice =
       finalNewState2[name] &&
@@ -306,6 +332,8 @@ function Cameras(props) {
     }));
   }
 
+
+
   const handlePlusClick = () => {
     setCount(count + 1);
   };
@@ -317,22 +345,53 @@ function Cameras(props) {
   };
 
   //************************ calculate price **************************//
-  const calculateTotalPrice = () => {
-    setIsDisabled(true);
-    const newTotalPrice = parseInt(dataProduct.price) + parseInt(totalPrice);
+  // const finalPriceButton = () => {
+  //   setIsDisabled(true);
 
-    console.log(parseInt(dataProduct.price));
-    // console.log('count',count)
-    setPriceList(parseInt(dataProduct.price) * count + totalbracketPrice);
+  // };
+
+  useEffect(() => {
+
+    setPriceList((parseInt(dataProduct.price) + totalPrice + totalbracketPrice - bracketPrice) * count);
+    // setPriceList((parseInt(dataProduct.price)));
+  }, [dataProduct.price, totalPrice, count, totalPrice,totalbracketPrice, bracketNumber]);
+
+  
+  //
+
+  const resetState = () => {
+    // setPriceList(0);
+    setBracketNumber("");
+    setFinalNewState({});
+    setFinalNewState2({});
+    // setTotalPrice(0);
+    setIsDisabled(true);
+    setCount(1);
+    setBracketPrice(0)
+    
   };
 
+  React.useEffect(() => {
+    updateMergedState();
+    if (!show2) {
+      resetState();
+    }
+    if (!shows) {
+      resetState();
+    }
+  }, [show2,shows]);
+  
   //************************* Delete Camera ***************************//
+   
   const deleteFromCamera = (index) => {
     dispatch(deleteCamera(index));
   };
 
+
+
   return (
     <>
+
       {isLoading ? (
         <Loader />
       ) : (
@@ -483,6 +542,7 @@ function Cameras(props) {
               size="lg"
               aria-labelledby="contained-modal-title-vcenter"
               centered
+              
               show={show}
               onHide={() => setShow(false)}
             >
@@ -558,6 +618,7 @@ function Cameras(props) {
               size="lg"
               aria-labelledby="contained-modal-title-vcenter"
               centered
+              // backdrop="static"
               show={show2}
               onHide={() => setShow2(false)}
             >
@@ -628,18 +689,18 @@ function Cameras(props) {
                                 />
                               </Col>
                             </Row>
-
                             {/* Final Price */}
                             <Row className="tops">
-                              <div className="w-100 d-flex align-items-start">
-                                <Button
-                                  variant="dark"
-                                  onClick={calculateTotalPrice}
-                                >
-                                  Final Price
-                                </Button>
-                              </div>
+                            <p className="fw-bold demo_txt">Main Price : {one}</p>
+                            <p className="fw-bold demo_txt">Mounting Bracket Price : {bracketPrice}</p>
+                            <p className="fw-bold demo_txt"> Bracket Number : {bracketNumber}</p>
+                            <p className="fw-bold demo_txt"> B_Price * B_Number : {bracketPrice * bracketNumber}</p>
+
+
+                            {/* <h2>One : {one}</h2> */}
+
                               <div className="w-100 my-1 d-flex align-items-start">
+                              
                                 <div className="text">
                                   <Table
                                     striped
@@ -651,7 +712,8 @@ function Cameras(props) {
                                     <thead>
                                       <tr>
                                         <th>
-                                          <b>$</b> {priceList}
+                                          <b style={{color:'red'}} >$ {priceList} </b>  
+                                          <br/>
                                         </th>
                                       </tr>
                                     </thead>
@@ -665,7 +727,7 @@ function Cameras(props) {
                             <p className="fst-italic">
                               {" "}
                               <span className="fw-bold">
-                                Description :{" "}
+                                Descriptionsss :{" "}
                               </span>{" "}
                               {val.name}
                             </p>
@@ -710,14 +772,21 @@ function Cameras(props) {
                                 </>
                               );
                             })}
-                            <Form.Label>Mounting Bracket Numbers</Form.Label>
-                            <Form.Control
-                              type="number"
-                              placeholder="Enter a value"
-                              value={bracketNumber}
-                              onChange={handleBracketChange}
-                              disabled={disableIt === "No Brackets Needed"}
-                            />
+                            {finalDatas.map((item, index) => {
+                              return(
+                                item[0].featurecaption === 'Mounting Bracket' ?
+                                <>
+                                <Form.Label>Mounting Bracket Numbers</Form.Label>
+                                <Form.Control
+                                  type="number"
+                                  placeholder="Enter a value"
+                                  value={bracketNumber}
+                                  onChange={handleBracketChange}
+                               />
+                               </>
+                               : ''
+                              )
+                            })}
                             <div
                               className="d-flex align-items-end justify-content-end my-4"
                               style={{ backgroundColor: "" }}
@@ -746,11 +815,7 @@ function Cameras(props) {
                   >
                     Back
                   </Button>
-                  <Button
-                    variant="dark"
-                    onClick={modal_3}
-                    disabled={priceList === 0}
-                  >
+                  <Button variant="dark" onClick={modal_3}>
                     Add
                   </Button>
                 </div>
@@ -763,6 +828,7 @@ function Cameras(props) {
               aria-labelledby="contained-modal-title-vcenter"
               centered
               show={show3}
+             
               onHide={() => setShow3(false)}
             >
               <Modal.Header closeButton>
